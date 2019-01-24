@@ -1,5 +1,6 @@
 package com.example.exp_1;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Toast.makeText(getApplicationContext(), "Hello Android !", Toast.LENGTH_LONG).show();
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(i);
             }
         });
 

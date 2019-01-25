@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MakeAGui</string>
+    <string name="edit_message">Food to lookup</string>
+    <string name="button_label">Search</string>
+</resources>

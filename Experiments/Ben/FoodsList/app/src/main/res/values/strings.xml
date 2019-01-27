@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FoodsList</string>
+    <string name="edit_message">Add A Location</string>
 </resources>

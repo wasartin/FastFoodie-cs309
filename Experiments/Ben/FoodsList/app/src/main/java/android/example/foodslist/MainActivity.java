@@ -10,6 +10,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -20,7 +21,12 @@ public class MainActivity extends AppCompatActivity {
             FoodTextView.append(location + "\n\n\n");
         }
 
-        
 
+
+    }
+
+    public void addLocation(){
+        //FoodTextView.append(findViewById(R.id.editText3).toString());
+        //try{FoodTextView.append("McDanks");}catch(Exception E){E.printStackTrace();}
     }
 }

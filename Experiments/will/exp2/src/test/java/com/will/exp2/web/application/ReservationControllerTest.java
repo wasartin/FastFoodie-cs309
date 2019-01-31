@@ -28,30 +28,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ReservationControllerTest {
 
 	@MockBean//Take an interface from the class and builds a mock around
-	private ReservationService reservationService;
-	@Autowired
-	private MockMvc mockMvc;
-	
-	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-	
-	@Test
-	public void getReservations() throws Exception{
-		Date date = DATE_FORMAT.parse("2017-01-01");
-		List<RoomReservation> mockReservationList = new ArrayList<>();
-		RoomReservation mockRoomReservation = new RoomReservation();
-		mockRoomReservation.setLastName("Test");
-		mockRoomReservation.setFirstName("JUnit");
-		mockRoomReservation.setDate(date);
-		mockRoomReservation.setGuestId(1);
-		mockRoomReservation.setRoomNumber("J1");
-		mockRoomReservation.setRoomId(100);
-		mockRoomReservation.setRoomName("JUnit Room");
-		mockReservationList.add(mockRoomReservation);
-		
-		given(reservationService.getRoomReservationsForDate(date)).willReturn
-		(mockReservationList);
-		this.mockMvc.perform(get("/reservations?date=2017-01-01")).andExpect
-		(status().isOk()).andExpect(content().string(containsString("Test, JUnit")));
-		
+	 private ReservationService reservationService;
+    @Autowired
+    private MockMvc mockMvc;
+
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
+    @Test
+    public void getReservations() throws Exception{
+        Date date = DATE_FORMAT.parse("2017-01-01");
+        List<RoomReservation> mockReservationList = new ArrayList<>();
+        RoomReservation mockRoomReservation = new RoomReservation();
+        mockRoomReservation.setLastName("Test");
+        mockRoomReservation.setFirstName("JUnit");
+        mockRoomReservation.setDate(date);
+        mockRoomReservation.setGuestId(1);
+        mockRoomReservation.setRoomNumber("J1");
+        mockRoomReservation.setRoomId(100);
+        mockRoomReservation.setRoomName("JUnit Room");
+        mockReservationList.add(mockRoomReservation);
+
+        given(reservationService.getRoomReservationsForDate("2017-01-01")).willReturn(mockReservationList);
+        this.mockMvc.perform(get("/reservations?date=2017-01-01")).andExpect(status().isOk()).andExpect(content().string(containsString("Test, JUnit")));
 	}
 }

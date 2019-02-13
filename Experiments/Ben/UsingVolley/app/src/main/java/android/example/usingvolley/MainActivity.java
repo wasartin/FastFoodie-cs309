@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     mUserDietaryDisp.append(dietary + "\n\n\n\n\n");
                     String fact = user.getString("fact");
                     mUserInfoDisp.append(fact+"\n");
-                    mUserDietaryDisp.append("\n JSON Provided by https://api.myjson.com/bins/ft6se");   //citing my sources
+                    mUserDietaryDisp.append("\n JSON Provided by https://api.myjson.com/bins/biv8e");   //citing my sources
                 } catch (JSONException e) { //incase of error
                     e.printStackTrace();
                 }

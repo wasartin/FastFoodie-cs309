@@ -25,11 +25,6 @@ public class UserController {
 		this.userRepo = userRepo;
 	}
 	
-	//@GetMapping("users")
-	//List<User> get(){
-	//	return userService.getAll();
-	//}
-	
 	@RequestMapping("/users")
 	public List<User> getAllUsers(){
 		return userService.getAllUsers();

@@ -1,51 +1,39 @@
 package entities.controller;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import entities.data.User;
-import entities.repository.UserRepository;
 import entities.service.UserService;
 
-@RequestMapping("users")
 @RestController
+@RequestMapping(path="/users")
 public class UserController {
-	private final UserRepository userRepo;
+	@Autowired
+	private final UserService userService;
 	
-	private UserService userService;
-	
-	UserController(UserRepository userRepo){
-		this.userRepo = userRepo;
+	UserController(UserService userService){
+		this.userService = userService;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> createUser(@RequestBody User user){
-		Map<String, Object> response = new HashMap<>();
-		//Optional<User> temp = userRepo.findByEmail(user.getEmail());
-		//TODO
-		return response;
-	}
-	
-	@RequestMapping("/users")
+	@GetMapping(path="/all")
 	public List<User> getAllUsers(){
-		return userService.getAllUsers();
+		Iterable<User> iter = userService.getAllUsers();
+		List<User> userList = new ArrayList<>();
+		iter.forEach(userList::add);//first argument is the target, second is the action
+		return userList;
 	}
 		
-	@RequestMapping(method = RequestMethod.POST, value="/users")
+	@RequestMapping(method = RequestMethod.POST, value="/create")
 	public void addUser(@RequestBody User user) {
-		userService.addUser(user);
+		Map<String, Object> response = userService.create(user);
 	}
-	
-
-		
 }

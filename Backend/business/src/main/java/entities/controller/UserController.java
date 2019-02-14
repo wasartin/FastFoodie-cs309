@@ -28,14 +28,13 @@ public class UserController {
 	
 	@GetMapping(path="/all")
 	public List<User> getAllUsers(){
-		Iterable<User> iter = getAllUsersHelp();
 		List<User> userList = new ArrayList<>();
-		iter.forEach(userList::add);//first argument is the target, second is the action
+		userRepo.findAll().forEach(userList::add);//first argument is the target, second is the action
 		return userList;
 	}
 		
 	@RequestMapping(method = RequestMethod.POST, value="/create")
-	public Map addUser(@RequestBody User user) {
+	public Map<String, Object> addUser(@RequestBody User user) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			//check if user is in DB?
@@ -52,12 +51,6 @@ public class UserController {
 			response.put("message", "Server might be down now. Try again");
 		}
 		return response;//auto fill?
-	}
-	
-
-
-	private Iterable<User> getAllUsersHelp() {
-		return userRepo.findAll();
 	}
 
 }

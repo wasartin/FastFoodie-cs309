@@ -65,8 +65,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private RequestQueue r;
     private ConstraintLayout user_singed_in;
 
+    /**
+     * Required Constructor
+     */
     public ProfileFragment() {
-        // Required empty public constructor
     }
 
 
@@ -139,6 +141,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         updateUI(account);
     }
 
+    /**
+     * Toggles between signed in and signed out Guis
+     * @param _account account being handled
+     */
     public void updateUI(GoogleSignInAccount _account) {
         if (_account == null) { // User is not signed in
             signOutButton.setVisibility(View.INVISIBLE);
@@ -159,11 +165,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Uses Google Api To Sign In
+     */
     private void signIn() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    /**
+     * Uses Google Api To Sign Out
+     */
     private void signOut() {
         googleSignInClient.signOut()
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
@@ -187,6 +199,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Handles Sign in, passes account etc
+     * @param completedTask
+     */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             account = completedTask.getResult(ApiException.class);

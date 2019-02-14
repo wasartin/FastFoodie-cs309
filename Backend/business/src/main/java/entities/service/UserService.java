@@ -1,29 +1,45 @@
 package entities.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import entities.data.User;
 import entities.repository.UserRepository;
 
-@Service
-public class UserService {
 
+@Service
+@ComponentScan("entities")
+public class UserService {
 	@Autowired
-	private UserRepository userRepository;
+	UserRepository userRepo;
 	
-	public List<User> getAllUsers(){
-		List<User> users = new ArrayList<>();
-		userRepository.findAll().forEach(users::add);
-		return users;
+	//TODO
+	public Map<String, Object> create(User newUser) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			//check if user is in DB?
+			userRepo.save(newUser);
+			response.put("status", 200);
+			response.put("message", HttpStatus.OK);
+		}catch (IllegalArgumentException e) {
+			response.put("status", 400);
+			response.put("error", HttpStatus.BAD_REQUEST);
+			response.put("message", "User might already exist, or your fields are incorrect, double check your request");
+		}catch (Exception e) {
+			response.put("status", 500);
+			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
+			response.put("message", "Server might be down now. Try again");
+		}
+		return response;//auto fill?
 	}
-	
-	public void addUser(User user) {
-		userRepository.save(user);
+
+	public Iterable<User> getAllUsers() {
+		return userRepo.findAll();
 	}
+
 }

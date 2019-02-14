@@ -10,16 +10,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="RESTAURANTS")
+@Table(name="restaurants")
 public class Restaurant {
 	
 	@Id
-	@Column(name="RESTAURANT_ID")
+	@Column(name="restaurant_id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
-	@Column(name="RESTAURANT_NAME")
+	@Column(name="restaurant_name")
 	private String name;
-	@Column(name="LAST_UPDATED")
+	@Column(name="last_updated")
 	private Date lastUpdated;
 	
 	public Restaurant(long restaurantId, String restaurantName, Date lastUpdated) {

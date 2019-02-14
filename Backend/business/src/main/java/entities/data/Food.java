@@ -4,27 +4,39 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="FOODS")
+@Table(name="foods")
 public class Food {
 	@Id
-	@Column(name="FOOD_ID")
+	@Column(name="food_id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
-	@Column(name="NAME")
+	
+	@Column(name="food_name")
 	private String name;
-	@Column(name="PROTEIN_TOTAL")
+	
+	@Column(name="protein_total")
 	private int protein;
-	@Column(name="CARB_TOTAL")
+	
+	@Column(name="carb_total")
 	private int carb;
-	@Column(name="FAT_TOTAL")
+	
+	@Column(name="fat_total")
 	private int fat;
-	@Column(name="CALORIES_TOTAL")
-	private int calories_total;//"
-	@Column(name="WEIGHT_OZ_TOTAL")
+	
+	@Column(name="calories_total")
+	private int calories_total;
+	
+	@Column(name="weight_oz_total")
 	private int weight_oz_total;
+	
+	@Column(name="price")
+	private float price;
+	
+	@ManyToOne 
 	@Column(name="LOCATED_AT_RESTAURANT_ID")
 	private int located_at_restaurant_id;
 	
@@ -44,7 +56,6 @@ public class Food {
 		this.weight_oz_total = weightInOz;
 		this.located_at_restaurant_id = located_at_restaurant_id;
 	}
-
 
 	public int getFat() {
 		return fat;

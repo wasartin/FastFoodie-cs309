@@ -3,4 +3,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--  For User Profile -->
+    <string name="menu_user_ticket">Submit a ticket</string>
+    <string name="menu_user_editData">Edit User Data</string>
+    <string name="layout_Dietary_Preferences">Dietary Preferences</string>
+    <string name="layout_user_info">User Info</string>
+    <string name="button_text">Retrieve Data</string>
 </resources>

@@ -1,4 +1,5 @@
-CREATE TABLE users(user_email VARCHAR(50),
+CREATE TABLE users(
+user_email VARCHAR(50),
 	user_type VARCHAR(10),
 	PRIMARY KEY(user_email)
 );

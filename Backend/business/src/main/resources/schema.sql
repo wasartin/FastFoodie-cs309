@@ -1,9 +1,7 @@
 CREATE TABLE users(
-	user_id INT,
 	user_email VARCHAR(50),
-	password VARCHAR(50),
-	user_type INT,
-	PRIMARY KEY(user_id)
+	user_type VARCHAR(10),
+	PRIMARY KEY(user_email)
 );
 
 CREATE TABLE foods(

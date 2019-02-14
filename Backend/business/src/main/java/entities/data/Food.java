@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,20 +14,29 @@ public class Food {
 	@Column(name="food_id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
+	
 	@Column(name="food_name")
 	private String name;
+	
 	@Column(name="protein_total")
 	private int protein;
+	
 	@Column(name="carb_total")
 	private int carb;
+	
 	@Column(name="fat_total")
 	private int fat;
+	
 	@Column(name="calories_total")
-	private int calories_total;//"
+	private int calories_total;
+	
 	@Column(name="weight_oz_total")
 	private int weight_oz_total;
+	
 	@Column(name="price")
 	private float price;
+	
+	@ManyToOne 
 	@Column(name="LOCATED_AT_RESTAURANT_ID")
 	private int located_at_restaurant_id;
 	

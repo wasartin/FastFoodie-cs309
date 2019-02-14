@@ -55,7 +55,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private TextView nameTextView;
 
     private boolean toggled;
-    private TextView mUserNameDisp;
     private TextView mUserInfoDisp;
     private TextView mUserDietaryDisp;
     private TextView mJsonDisp;
@@ -90,7 +89,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         //Initialize Variables and point to correct XML objects
         toggled = false;
-        mUserNameDisp = (TextView) getView().findViewById(R.id.user_name_display);
         mUserInfoDisp = (TextView) getView().findViewById(R.id.user_info_display);
         mUserDietaryDisp = (TextView) getView().findViewById(R.id.user_dietary_display);
         mJsonDisp =(TextView) getView().findViewById(R.id.DisplayJson);
@@ -145,6 +143,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         if (_account == null) { // User is not signed in
             signOutButton.setVisibility(View.INVISIBLE);
             signInButton.setVisibility(View.VISIBLE);
+            user_singed_in.setVisibility(View.INVISIBLE);
             avatarImageView.setImageBitmap(null);
             nameTextView.setText("Not signed in");
         } else { // User is signed in
@@ -249,7 +248,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void onResponse(JSONObject response) {
                 try {
                     mUserInfoDisp.setText("");
-                    mUserNameDisp.setText("");
                     mUserDietaryDisp.setText("");
                     mJsonDisp.setText("");
                     JSONArray jsonArray = response.getJSONArray("users"); //Retrieves data from employees section of json
@@ -257,7 +255,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     JSONObject user = jsonArray.getJSONObject(i); //Each individual user in the json file
                     //Pulling data from json to variables
                     String firstName = user.getString("firstname"); //pull data out to a string
-                    mUserNameDisp.append(firstName); //add to the correct box
                     int age = user.getInt("age");
                     mUserInfoDisp.append("Age: " + age +".\n");
                     String mail = user.getString("mail");

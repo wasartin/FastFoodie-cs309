@@ -16,7 +16,7 @@ import entities.data.User;
 import entities.repository.UserRepository;
 import entities.service.UserService;
 
-@RequestMapping("users")
+//@RequestMapping("users")
 @RestController
 public class UserController {
 	private final UserRepository userRepo;

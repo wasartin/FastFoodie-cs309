@@ -9,20 +9,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import entities.data.User;
-import entities.repository.UserRepository;
 import entities.service.UserService;
 
 @RequestMapping("users")
 @RestController
 public class UserController {
-	@SuppressWarnings("unused")
 	@Autowired
-	private final UserRepository userRepo;
+	private final UserService userService;
 	
-	private UserService userService;
-	
-	UserController(UserRepository userRepo){
-		this.userRepo = userRepo;
+	UserController(UserService userService){
+		this.userService = userService;
 	}
 	
 	@RequestMapping("/users")

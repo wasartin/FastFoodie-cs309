@@ -58,7 +58,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private boolean toggled;
     private TextView mUserInfoDisp;
     private TextView mUserDietaryDisp;
-    private TextView mJsonDisp;
     private Button but;
     private Button mMenuTicket;
     private Button mMenuEdit;
@@ -94,7 +93,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         toggled = false;
         mUserInfoDisp = (TextView) getView().findViewById(R.id.user_info_display);
         mUserDietaryDisp = (TextView) getView().findViewById(R.id.user_dietary_display);
-        mJsonDisp =(TextView) getView().findViewById(R.id.DisplayJson);
         but = getView().findViewById(R.id.button);
         r = Volley.newRequestQueue(getContext());
         mMenuTicket =(Button) getView().findViewById(R.id.TicketButton);
@@ -268,7 +266,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 try {
                     mUserInfoDisp.setText("");
                     mUserDietaryDisp.setText("");
-                    mJsonDisp.setText("");
                     JSONArray jsonArray = response.getJSONArray("users"); //Retrieves data from employees section of json
                     int i = new Random(System.currentTimeMillis()).nextInt(jsonArray.length());
                     JSONObject user = jsonArray.getJSONObject(i); //Each individual user in the json file
@@ -282,7 +279,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     mUserDietaryDisp.append(dietary + "\n\n\n\n\n");
                     String fact = user.getString("fact");
                     mUserInfoDisp.append("My Fun Fact:" +fact + "\n");
-                    mJsonDisp.append("\n JSON Provided by https://api.myjson.com/bins/biv8e");   //citing my sources
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

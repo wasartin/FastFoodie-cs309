@@ -169,6 +169,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         updateUI(null);
+                        toggleMenuVisible();
                     }
                 });
     }

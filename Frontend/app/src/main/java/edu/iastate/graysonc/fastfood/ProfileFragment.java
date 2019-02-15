@@ -152,6 +152,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             avatarImageView.setImageBitmap(null);
             nameTextView.setText("Not signed in");
         } else { // User is signed in
+            //TODO fetchUserData(_account.getEmail());
             signInButton.setVisibility(View.INVISIBLE);
             user_singed_in.setVisibility(View.VISIBLE);
             nameTextView.setText(_account.getDisplayName());
@@ -252,6 +253,44 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void createWarning(String message){
         Context context = getContext();
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Creates a new user
+     * @param UUID
+     */
+    private void createUserData(String UUID){
+        //TODO
+    }
+    /**Requests user data from server
+     *
+     * @param UUID UUID
+     */
+    private void fetchUserData(String UUID){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "cs309-bs-1.misc.iastate.edu/users/"+UUID, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    mUserInfoDisp.setText("");
+                    mUserDietaryDisp.setText("");
+                    JSONArray jsonArray = response.getJSONArray("USERNAMEHERE"); //TODO Retrieves data from employees section of json
+                    int i = new Random(System.currentTimeMillis()).nextInt(jsonArray.length());
+
+                    JSONObject user = jsonArray.getJSONObject(i); //TODO Format this for back end
+                    int age = user.getInt("age");
+                    mUserInfoDisp.append("Age: " + age +".\n");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        r.add(request); //Actually processes request
     }
 
     /**

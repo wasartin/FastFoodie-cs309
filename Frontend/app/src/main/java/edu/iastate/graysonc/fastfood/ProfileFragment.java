@@ -154,7 +154,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             avatarImageView.setImageBitmap(null);
             nameTextView.setText("Not signed in");
         } else { // User is signed in
-            signOutButton.setVisibility(View.VISIBLE);
             signInButton.setVisibility(View.INVISIBLE);
             user_singed_in.setVisibility(View.VISIBLE);
             nameTextView.setText(_account.getDisplayName());
@@ -183,6 +182,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         updateUI(null);
+                        toggleMenuVisible();
                     }
                 });
     }
@@ -237,9 +237,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             mMenuTicket.setVisibility(View.INVISIBLE);
             mMenuEdit.setVisibility(View.INVISIBLE);
             but.setVisibility(View.INVISIBLE);
+            signOutButton.setVisibility(View.INVISIBLE);
         }else{
             mMenuTicket.setVisibility(View.VISIBLE);
             mMenuEdit.setVisibility(View.VISIBLE);
+            signOutButton.setVisibility(View.VISIBLE);
             but.setVisibility(View.VISIBLE);
         }
         toggled=!toggled;

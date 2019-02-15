@@ -7,4 +7,5 @@ import entities.data.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long>{
+	
 }

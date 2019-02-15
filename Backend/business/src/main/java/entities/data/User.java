@@ -10,29 +10,29 @@ import javax.persistence.Table;
 public class User {
 	@Id //specifies that this is a primary key
 	@Column(name="user_email")
-	private String email;
+	private String user_email;
 	@Column(name="user_type")
-	private int userType;
+	private int user_type;
 	
 	public User(String user_email, int user_type) {
 		super();
-		this.email = user_email;
-		this.userType = user_type;
+		this.user_email = user_email;
+		this.user_type = user_type;
 	}
 	
 	public String getEmail() {
-		return email;
+		return user_email;
 	}
 	
 	public void setEmail(String user_email) {
-		this.email = user_email;
+		this.user_email = user_email;
 	}
 	
 	public int getUserType() {
-		return userType;
+		return user_type;
 	}
 	
 	public void setUserType(int user_type) {
-		this.userType = user_type;
+		this.user_type = user_type;
 	}
 }

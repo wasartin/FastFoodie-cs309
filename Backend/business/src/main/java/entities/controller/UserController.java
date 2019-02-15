@@ -1,14 +1,10 @@
 package entities.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,40 +13,20 @@ import entities.data.User;
 import entities.repository.UserRepository;
 
 @RestController
-@RequestMapping(path="/users")
+@RequestMapping(path = "/users")
 public class UserController {
+	
 	@Autowired
-	private final UserRepository userRepo;
+	private final UserRepository userRepoistory;
 	
-	UserController(UserRepository userRepo){
-		this.userRepo = userRepo;
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
+	
+	public UserController(UserRepository userRepoistory){
+		this.userRepoistory = userRepoistory;
 	}
 	
-	@GetMapping(path="/all")
+	@RequestMapping(method = RequestMethod.GET, path = "/users")
 	public List<User> getAllUsers(){
-		List<User> userList = new ArrayList<>();
-		userRepo.findAll().forEach(userList::add);//first argument is the target, second is the action
-		return userList;
+		return (List<User>) userRepoistory.findAll();
 	}
-		
-	@RequestMapping(method = RequestMethod.POST, value="/create")
-	public Map<String, Object> addUser(@RequestBody User user) {
-		Map<String, Object> response = new HashMap<>();
-		try {
-			//check if user is in DB?
-			userRepo.save(user);
-			response.put("status", 200);
-			response.put("message", HttpStatus.OK);
-		}catch (IllegalArgumentException e) {
-			response.put("status", 400);
-			response.put("error", HttpStatus.BAD_REQUEST);
-			response.put("message", "User might already exist, or your fields are incorrect, double check your request");
-		}catch (Exception e) {
-			response.put("status", 500);
-			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
-			response.put("message", "Server might be down now. Try again");
-		}
-		return response;//auto fill?
-	}
-
 }

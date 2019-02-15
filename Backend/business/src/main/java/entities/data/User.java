@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="users")
+@Table(name="user")
 public class User {
 	@Id //specifies that this is a primary key
 	@Column(name="user_email")

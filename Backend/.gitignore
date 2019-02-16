@@ -12,6 +12,10 @@
 .sts4-cache
 .bin
 .recommenders
+.metadata
+application.log
+*.apk
+*.ap_
 
 
 ### NetBeans ###

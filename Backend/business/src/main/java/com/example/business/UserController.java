@@ -1,4 +1,4 @@
-package entities.controller;
+package com.example.business;
 
 import java.util.List;
 
@@ -10,20 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import entities.data.User;
-import entities.repository.UserRepository;
+import com.example.business.data.entities.User;
+import com.example.business.data.repositories.UserRepository;
 
 @RestController
 public class UserController {
 	
 	@Autowired
-	private final UserRepository userRepository;
+	UserRepository userRepository;
 	
 	private Logger logger = LoggerFactory.getLogger(UserController.class);
-	
-	public UserController(UserRepository userRepoistory){
-		this.userRepository = userRepoistory;
-	}
 	
 	@RequestMapping(method = RequestMethod.GET, path = "/users")
 	public List<User> getAllUsers(){

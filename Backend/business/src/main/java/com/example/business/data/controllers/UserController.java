@@ -1,4 +1,4 @@
-package com.example.business;
+package com.example.business.data.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,6 @@ public class UserController {
 		return userRepository.findAll();
 	}
 	
-	//POST is for new things, while PUT is for updating
 	@RequestMapping(method = RequestMethod.POST, path = "/create")
 	@ResponseBody
 	private Map<String,Object> createUser(@RequestBody User newUser) {
@@ -54,6 +53,28 @@ public class UserController {
 			response.put("status", 400);
 			response.put("error", HttpStatus.BAD_REQUEST);
 			response.put("message", "User might already exists, or your fields are incorrect, double check your request");
+		}catch (Exception e) {
+			response.put("status", 500);
+			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
+			response.put("message", "Server might be down now. Try again");
+		}
+		return response;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/delete")
+	@ResponseBody
+	private Map<String,Object> deleteUser(@RequestBody User userSelectedToPerish) {
+		HashMap<String,Object> response = new HashMap<>();
+		try {
+			if(userRepository.findById(userSelectedToPerish.getEmail()) != null)//Checks to see if User is even in the DB
+				throw new IllegalArgumentException();
+			userRepository.deleteById(userSelectedToPerish.getEmail());
+			response.put("status", 200);
+			response.put("message", HttpStatus.OK);
+		}catch (IllegalArgumentException e) {
+			response.put("status", 400);
+			response.put("error", HttpStatus.BAD_REQUEST);
+			response.put("message", "Could not find that user in the database, or your fields are incorrect, double check your request");
 		}catch (Exception e) {
 			response.put("status", 500);
 			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);

@@ -261,13 +261,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
      */
     private void createUserData(String UUID){
         //TODO
+
     }
     /**Requests user data from server
      *
      * @param UUID UUID
      */
     private void fetchUserData(String UUID){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "cs309-bs-1.misc.iastate.edu/users/"+UUID, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "http://cs309-bs-1.misc.iastate.edu:8080/users/"+UUID, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

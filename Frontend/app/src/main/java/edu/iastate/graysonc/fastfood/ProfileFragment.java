@@ -208,6 +208,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
+            fetchUserData(account.getEmail());
             updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -262,31 +263,27 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private void createUserData(String UUID){
         //TODO
     }
-    /**Requests user data from server
-     *
-     * @param UUID UUID
+    /**
+     * Fetches user data
+     * @param UID The Unique Id to poll for
      */
-    private void fetchUserData(String UUID){
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "cs309-bs-1.misc.iastate.edu/users/"+UUID, null, new Response.Listener<JSONObject>() {
+    private void fetchUserData(String UID){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "http://cs309-bs-1.misc.iastate.edu:8080/users/" + UID  , null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+
                     mUserInfoDisp.setText("");
                     mUserDietaryDisp.setText("");
-                    JSONArray jsonArray = response.getJSONArray("USERNAMEHERE"); //TODO Retrieves data from employees section of json
-                    int i = new Random(System.currentTimeMillis()).nextInt(jsonArray.length());
-
-                    JSONObject user = jsonArray.getJSONObject(i); //TODO Format this for back end
-                    int age = user.getInt("age");
-                    mUserInfoDisp.append("Age: " + age +".\n");
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    mUserDietaryDisp.append(""+response.toString());
+                } catch (Exception e) {
+                    mUserDietaryDisp.append(e.toString());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                mUserDietaryDisp.append(error.toString() + "\n");
             }
         });
 

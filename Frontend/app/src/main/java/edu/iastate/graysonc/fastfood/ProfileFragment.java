@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -39,7 +40,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -59,7 +63,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private boolean toggled;
     private TextView mUserInfoDisp;
     private TextView mUserDietaryDisp;
-    private Button but;
     private Button mMenuTicket;
     private Button mMenuEdit;
     private Button forceSignOn;
@@ -96,7 +99,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         toggled = false;
         mUserInfoDisp = (TextView) getView().findViewById(R.id.user_info_display);
         mUserDietaryDisp = (TextView) getView().findViewById(R.id.user_dietary_display);
-        but = getView().findViewById(R.id.button);
         r = Volley.newRequestQueue(getContext());
         mMenuTicket =(Button) getView().findViewById(R.id.TicketButton);
         mMenuEdit = (Button) getView().findViewById(R.id.ButtonEdit);
@@ -135,11 +137,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 toggleMenuVisible();
             }
         });
-        but.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                jsonParse("https://api.myjson.com/bins/ft6se"); //We should change this to our site
-            }
-        }); //When button clicked call json parse
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -252,13 +249,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         if(toggled){
             mMenuTicket.setVisibility(View.INVISIBLE);
             mMenuEdit.setVisibility(View.INVISIBLE);
-            but.setVisibility(View.INVISIBLE);
             signOutButton.setVisibility(View.INVISIBLE);
         }else{
             mMenuTicket.setVisibility(View.VISIBLE);
             mMenuEdit.setVisibility(View.VISIBLE);
             signOutButton.setVisibility(View.VISIBLE);
-            but.setVisibility(View.VISIBLE);
         }
         toggled=!toggled;
     }
@@ -283,7 +278,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
      * Fetches user data
      * @param UID The Unique Id to poll for
      */
-    private void fetchUserData(String UID){
+    /**
+     * Fetches user data
+     * @param UID The Unique Id to poll for
+     */
+    private void fetchUserData(final String UID){
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "http://cs309-bs-1.misc.iastate.edu:8080/users/" + UID  , null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -293,12 +292,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     mUserDietaryDisp.setText("");
                     mUserDietaryDisp.append(""+response.toString());
                 } catch (Exception e) {
-                    mUserDietaryDisp.append(e.toString());
+                    mUserDietaryDisp.append(e.getMessage());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if(error.toString().startsWith("com.android.volley.ParseError:")){
+                    createUser(UID);
+                    try {
+                        TimeUnit.SECONDS.sleep(1); //TODO Not this
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    fetchUserData(UID);
+                }
                 mUserDietaryDisp.append(error.toString() + "\n");
             }
         });
@@ -343,5 +351,47 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
 
         r.add(request); //Actually processes request
+    }
+    private void createUser(String UID) {
+        JSONObject js = new JSONObject();
+        try {
+            js.put("email", UID);
+            js.put("userType", "registered");
+        } catch (Exception e) {
+            createWarning(e.getMessage());
+        }
+        createWarning(js.toString());
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, "http://cs309-bs-1.misc.iastate.edu:8080/users/create",js,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // response
+                        mUserDietaryDisp.setText(response.toString());
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mUserDietaryDisp.setText(error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        r.add(postRequest);
     }
 }

@@ -8,6 +8,7 @@ import android.os.health.UidHealthStats;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,8 +33,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         but.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                   //jsonParse("https://api.myjson.com/bins/ft6se"); //We should change this to our site
-                    fetchUser("cowman@Springs.com");
-                    //createUser("newunusedname@gmail.com");
+                    fetchUserData("fake1@Fakester.com");
+                    //createUser("bjpierre@iastate.edu");
             }
         }); //When button clicked call json parse
 
@@ -121,39 +125,12 @@ public class MainActivity extends AppCompatActivity {
         Context context = MainActivity.this;
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        //Creates a menu, note main refers to a menu created in the menus resource folder
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) { //When menu selected do this
-//        int itemThatWasClickedId = item.getItemId(); //Get clicked button
-//        if (itemThatWasClickedId == R.id.action_ticket) { //Refers to a menu item in the 'main' menu file
-//            String textToShow = "Open Submit Ticket Page";
-//            createWarning(textToShow);
-//            // Creates a popup in the context of main page,
-//            // with the string set, and a short length
-//            return true;
-//        }
-//
-//        //All this is the same but for the other page/button
-//        if (itemThatWasClickedId == R.id.action_edit) {
-//            String textToShow = "Open Edit User Page";
-//            createWarning(textToShow);
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-
 
     /**
      * Fetches user data
      * @param UID The Unique Id to poll for
      */
-    private void fetchUserData(String UID){
+    private void fetchUserData(final String UID){
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "http://cs309-bs-1.misc.iastate.edu:8080/users/" + UID  , null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -165,13 +142,22 @@ public class MainActivity extends AppCompatActivity {
                     mJsonDisp.setText("");
                     mUserDietaryDisp.append(""+response.toString());
                 } catch (Exception e) {
-                    mUserDietaryDisp.append(e.toString());
+                    mUserDietaryDisp.append(e.getMessage());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mUserDietaryDisp.append(error.toString() + "\n");
+                if(error.toString().startsWith("com.android.volley.ParseError:")){
+                    createUser(UID);
+                    try {
+                        TimeUnit.SECONDS.sleep(1); //TODO Not this
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    fetchUserData(UID);
+                }
+                mUserDietaryDisp.append(error.toString() + "lolol\n");
             }
         });
 
@@ -180,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void createUser(String UID) {
-        createWarning("Made call");
         JSONObject js = new JSONObject();
         try {
             js.put("email", UID);
@@ -188,20 +173,39 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             createWarning(e.getMessage());
         }
-        createWarning("Made " + js.toString());
-
-            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://cs309-bs-1.misc.iastate.edu:8080/users/create", js, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    mUserInfoDisp.setText(response.toString());
+        createWarning(js.toString());
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, "http://cs309-bs-1.misc.iastate.edu:8080/users/create",js,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // response
+                        mUserDietaryDisp.setText(response.toString());
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mUserDietaryDisp.setText(error.getMessage());
+                    }
                 }
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    mUserDietaryDisp.setText(error.getMessage());
-                }
-            });
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        r.add(postRequest);
     }
 
     /**

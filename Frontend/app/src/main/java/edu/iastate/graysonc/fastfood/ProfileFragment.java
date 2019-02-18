@@ -290,7 +290,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
                     mUserInfoDisp.setText("");
                     mUserDietaryDisp.setText("");
-                    mUserDietaryDisp.append(""+response.toString());
+                    mUserInfoDisp.append(""+response.toString());
                 } catch (Exception e) {
                     mUserDietaryDisp.append(e.getMessage());
                 }

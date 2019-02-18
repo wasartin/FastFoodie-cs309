@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,9 +62,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private Button but;
     private Button mMenuTicket;
     private Button mMenuEdit;
+    private Button forceSignOn;
     private ImageButton mMenuExpand;
     private RequestQueue r;
     private ConstraintLayout user_singed_in;
+    private EditText UIDIn;
 
     /**
      * Required Constructor
@@ -99,8 +102,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mMenuEdit = (Button) getView().findViewById(R.id.ButtonEdit);
         mMenuExpand = (ImageButton) getView().findViewById(R.id.MenuButton);
         user_singed_in = (ConstraintLayout) getView().findViewById(R.id.user_signed_in);
+        forceSignOn= getView().findViewById(R.id.ForceLogin);
+        UIDIn = getView().findViewById(R.id.UID);
 
 
+        forceSignOn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                user_singed_in.setVisibility(View.VISIBLE);
+                signInButton.setVisibility(View.INVISIBLE);
+                fetchUserData(UIDIn.getText().toString());
+                UIDIn.setVisibility(View.INVISIBLE);
+                forceSignOn.setVisibility(View.INVISIBLE);
+
+            }
+        });
         //Create Click Listeners
         mMenuEdit.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -156,6 +172,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             signInButton.setVisibility(View.INVISIBLE);
             user_singed_in.setVisibility(View.VISIBLE);
             nameTextView.setText(_account.getDisplayName());
+            fetchUserData(account.getEmail());
             Uri avatarUri = _account.getPhotoUrl();
             if (avatarUri != null) {
                 DownloadImageTask imageDownloader = new DownloadImageTask(avatarImageView); // Downloads the user's avatar asynchronously
@@ -207,8 +224,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         try {
             account = completedTask.getResult(ApiException.class);
 
-            // Signed in successfully, show authenticated UI.
-            fetchUserData(account.getEmail());
+            // Signed in successfully, show authenticated UI
             updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

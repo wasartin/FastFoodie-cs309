@@ -35,13 +35,14 @@ public class Food {
 		super();
 	}
 	
-	public Food(String food_name, int protein, int carbs, int fat, int calories, int weight) {
+	public Food(String food_name, int protein, int carbs, int fat, int calories, int weight, int price) {
 		this.food_name = food_name;
 		this.protein_total = protein;
 		this.carb_total = carbs;
 		this.fat_total = fat;
 		this.calorie_total =calories;
 		this.weight_oz_total = weight;
+		this.price_total = price;
 	}
 	
 	public int getPrice_total() {

@@ -26,7 +26,11 @@ public class Food {
 	private int calorie_total;
 	@Column(name="weight_oz_total")
 	private int weight_oz_total;
+	@Column (name="price_total")
+	private int price_total;
 	
+
+
 	public Food() {
 		super();
 	}
@@ -38,6 +42,14 @@ public class Food {
 		this.fat_total = fat;
 		this.calorie_total =calories;
 		this.weight_oz_total = weight;
+	}
+	
+	public int getPrice_total() {
+		return price_total;
+	}
+
+	public void setPrice_total(int price_total) {
+		this.price_total = price_total;
 	}
 
 	public String getFood_name() {

@@ -9,8 +9,6 @@ import javax.persistence.Table;
 @Table(name="food")
 public class Food {
 	
-	//I tried to add the food entity by matching stuff from our google doc
-	//feel free to change whatever
 
 	@Id //specifies primary key
 	//column names match variable names

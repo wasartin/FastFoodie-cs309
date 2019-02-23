@@ -39,6 +39,7 @@ public class UserController {
 		return userRepository.findById(user_email);
 	}
 	*/
+	
 	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}")
 	@ResponseBody
 	public JSONObject getUserJSONObject(@PathVariable String user_email) {
@@ -77,12 +78,12 @@ public class UserController {
 		return toReturn;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, path = "/create")
+	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private Map<String,Object> createUser(@RequestBody User newUser) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
-			if(userRepository.findById(newUser.getEmail()) != null) {//Checks to see if User is already in DB
+			if(userRepository.findById(newUser.getEmail()) != null) {//User already exists
 				throw new IllegalArgumentException();
 			}
 			userRepository.save(newUser);
@@ -100,14 +101,45 @@ public class UserController {
 		return response;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, path = "/delete")
+	@RequestMapping(method = RequestMethod.POST, path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
 	private Map<String,Object> deleteUser(@RequestBody User userSelectedToPerish) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
-			if(userRepository.findById(userSelectedToPerish.getEmail()) != null)//Checks to see if User is even in the DB
+			if(userRepository.findById(userSelectedToPerish.getEmail()) == null) {//Checks to see if User is even in the DB
 				throw new IllegalArgumentException();
+			}
+
 			userRepository.deleteById(userSelectedToPerish.getEmail());
+			response.put("status", 200);
+			response.put("message", HttpStatus.OK);
+		}catch (IllegalArgumentException e) {
+			response.put("status", 400);
+			response.put("error", HttpStatus.BAD_REQUEST);
+			response.put("message", "Could not find that user in the database, or your fields are incorrect, double check your request");
+		}catch (Exception e) {
+			response.put("status", 500);
+			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
+			response.put("message", "Server might be down now. Try again");
+		}
+		return response;
+	}
+	
+	/**
+	 * The argument given will simply be the way the new user wants to be changed.
+	 * Might need to implement userId****
+	 * @param userToEdit
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, path = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	private Map<String,Object> editUser(@RequestBody User userToEdit) {
+		HashMap<String,Object> response = new HashMap<>();
+		try {
+			if(userRepository.findById(userToEdit.getEmail()) == null) {
+				throw new IllegalArgumentException();
+			}
+			userRepository.deleteById(userToEdit.getEmail());
 			response.put("status", 200);
 			response.put("message", HttpStatus.OK);
 		}catch (IllegalArgumentException e) {

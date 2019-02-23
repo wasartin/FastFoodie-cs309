@@ -48,7 +48,7 @@ public class RestaurantController {
 		} catch(IllegalArgumentException e) {
 			response.put("status", 400);
 			response.put("error", HttpStatus.BAD_REQUEST);
-			response.put("message", "User might already exists, or your fields are incorrect, double check your request");
+			response.put("message", "Restaurant might already exists or your fields are incorrect. Double check your request");
 		}catch (Exception e) {
 			response.put("status", 500);
 			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -70,7 +70,7 @@ public class RestaurantController {
 		}catch (IllegalArgumentException e) {
 			response.put("status", 400);
 			response.put("error", HttpStatus.BAD_REQUEST);
-			response.put("message", "Could not find that user in the database, or your fields are incorrect, double check your request");
+			response.put("message", "Could not find that restaurant in the database or your fields are incorrect. Double check your request");
 		}catch (Exception e) {
 			response.put("status", 500);
 			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);

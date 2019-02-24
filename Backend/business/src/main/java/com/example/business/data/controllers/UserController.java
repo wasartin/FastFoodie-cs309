@@ -32,14 +32,6 @@ public class UserController {
 	
 	private Logger logger = LoggerFactory.getLogger(UserController.class);
 	
-	/*
-	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}")
-	@ResponseBody
-	public Optional<User> getUser(@PathVariable String user_email){
-		return userRepository.findById(user_email);
-	}
-	*/
-	
 	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getUserJSONObject(@PathVariable String user_email) {
@@ -126,6 +118,11 @@ public class UserController {
 		return toReturn;
 	}
 
+	/**
+	 * Currently just takes user Object. Will might need to be a JSONObject I parse if more info is required.
+	 * @param newUser
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private Map<String,Object> createUser(@RequestBody User newUser) {
@@ -149,15 +146,16 @@ public class UserController {
 		return response;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
+	@RequestMapping(method = RequestMethod.DELETE, path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private Map<String,Object> deleteUser(@RequestBody User userSelectedToPerish) {
+	private Map<String,Object> deleteUser(@RequestBody JSONObject sentJSONObj) {
 		HashMap<String,Object> response = new HashMap<>();
+		User selectedToPerish = new User((String)sentJSONObj.get("email"), (String)sentJSONObj.get("userType"));
 		try {
-			if(!userRepository.existsById(userSelectedToPerish.getEmail())) {//Checks to see if User is even in the DB
+			if(!userRepository.existsById(selectedToPerish.getEmail())) {//Checks to see if User is even in the DB
 				throw new IllegalArgumentException();
 			}
-			userRepository.deleteById(userSelectedToPerish.getEmail());
+			userRepository.deleteById(selectedToPerish.getEmail());
 			response.put("status", 200);
 			response.put("message", HttpStatus.OK);
 		}catch (IllegalArgumentException e) {
@@ -179,15 +177,17 @@ public class UserController {
 	 * @param userToEdit
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.PUT, path = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> editUser(@RequestBody User userToEdit) {
+	private Map<String,Object> editUser(@RequestBody JSONObject userToEdit) {
 		HashMap<String,Object> response = new HashMap<>();
+		User toEdit = new User((String)userToEdit.get("email"), (String)userToEdit.get("userType"));
 		try {
-			if(!userRepository.existsById(userToEdit.getEmail())) {//pretty sure that is how I want to do this.
+			if(!userRepository.existsById(toEdit.getEmail())) {//pretty sure that is how I want to do this.
 				throw new IllegalArgumentException();
 			}
-			userRepository.save(userToEdit);//this will edit the user
+			
+			userRepository.save(toEdit);//this will edit the user
 			response.put("status", 200);
 			response.put("message", HttpStatus.OK);
 		}catch (IllegalArgumentException e) {

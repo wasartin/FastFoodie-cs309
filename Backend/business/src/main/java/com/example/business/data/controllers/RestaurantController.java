@@ -70,14 +70,14 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/{restaurant_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public JSONObject getUserJSONObject(@PathVariable int restaurant_id) throws JSONException {
+	public JSONObject getRestaurantJSONObject(@PathVariable int restaurant_id) throws JSONException {
 		Optional<Restaurant> temp = restaurantRepo.findById(restaurant_id);
 		JSONObject toReturn = new JSONObject();
 		JSONObject restaurantInfo = new JSONObject();
 		restaurantInfo.put("id", temp.get().getRestaurant_id());
 		restaurantInfo.put("name", temp.get().getRestaurant_name());
 		restaurantInfo.put("last_updated", temp.get().getLast_updated());
-		toReturn.put("User", restaurantInfo);
+		toReturn.put("Restaurant", restaurantInfo);
 		return toReturn;
 	}
 
@@ -113,7 +113,7 @@ public class RestaurantController {
 	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id ) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
-			if(!restaurantRepo.existsById(restaurant_id))//Checks to see if User is even in the DB
+			if(!restaurantRepo.existsById(restaurant_id))//Checks to see if restaurant is even in the DB
 				throw new IllegalArgumentException();
 			restaurantRepo.deleteById(restaurant_id);
 			response.put("status", 200);

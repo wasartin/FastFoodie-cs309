@@ -14,7 +14,7 @@
 .bin
 .recommenders
 .metadata
-/app/runtime/application.log*
+application.log
 *.apk
 *.ap_
 

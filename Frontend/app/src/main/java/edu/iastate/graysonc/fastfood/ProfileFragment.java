@@ -30,7 +30,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,7 +37,6 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,17 +69,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ConstraintLayout user_singed_in;
     private EditText UIDIn;
 
+    private ProfileViewModel viewModel;
+
     /**
      * Required Constructor
      */
     public ProfileFragment() {
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
@@ -107,7 +104,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         forceSignOn= getView().findViewById(R.id.ForceLogin);
         UIDIn = getView().findViewById(R.id.UID);
 
-
         forceSignOn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -116,7 +112,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 fetchUserData(UIDIn.getText().toString());
                 UIDIn.setVisibility(View.INVISIBLE);
                 forceSignOn.setVisibility(View.INVISIBLE);
-
             }
         });
         //Create Click Listeners
@@ -138,23 +133,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+        super.onActivityCreated(savedInstanceState);
+        viewModel.getUser().observe(this, user -> {
+            updateUI(user);
+        });
 
-        // Build a GoogleSignInClient with the options specified by gso.
-        googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
-
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        account = GoogleSignIn.getLastSignedInAccount(getContext());
-        updateUI(account);
     }
 
     /**
-     * Toggles between signed in and signed out Guis
+     * Toggles between signed in and signed out GUI's
      * @param _account account being handled
      */
     public void updateUI(GoogleSignInAccount _account) {
@@ -181,7 +168,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     /**
      * Uses Google Api To Sign In
      */
-    private void signIn() {
+    public void signIn() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -189,7 +176,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     /**
      * Uses Google Api To Sign Out
      */
-    private void signOut() {
+    public void signOut() {
         googleSignInClient.signOut()
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                     @Override

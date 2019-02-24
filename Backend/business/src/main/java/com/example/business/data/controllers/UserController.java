@@ -40,7 +40,7 @@ public class UserController {
 	}
 	*/
 	
-	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}")
+	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getUserJSONObject(@PathVariable String user_email) {
 		Optional<User> temp = userRepository.findById(user_email);
@@ -52,7 +52,6 @@ public class UserController {
 		return toReturn;
 	}
 	
-
 	private List<User> getUsers(){
 		Iterable<User> uIters = userRepository.findAll();
 		List<User> uList = new ArrayList<User>();
@@ -60,12 +59,15 @@ public class UserController {
 		return uList;
 	}
 	
-	//returning a JSON Obect of key = users and value = JSON array of the results
+	/**
+	 * 
+	 * @return JSONObject that has key1-> "Users": value1->JSONArray of users in System
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value ="/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JSONObject getAllUsersJson()  {
+	public JSONObject getAllUsersJSONObject()  {
 		JSONObject toReturn = new JSONObject();
-		String label = "Users";
+		String key1 = "Users";//May become a final
 		JSONArray listOfUsers = new JSONArray();
 		List<User> uList = getUsers();
 		for(int i = 0; i < uList.size(); i++) {
@@ -74,7 +76,53 @@ public class UserController {
 			temp.put("role", uList.get(i).getUserType());
 			listOfUsers.add(temp);
 		}
-		toReturn.put(label, listOfUsers);
+		toReturn.put(key1, listOfUsers);
+		return toReturn;
+	}
+	
+	/**TODO finish
+	 * 
+	 * @return JSONObject that has key1-> "Users": value1->JSONArray of users in System
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value ="/all/registered", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public JSONObject getAllRegisteredUsers()  {
+		JSONObject toReturn = new JSONObject();
+		String key1 = "Users";//May become a final
+		JSONArray listOfUsers = new JSONArray();
+		List<User> uList = getUsers();
+		for(int i = 0; i < uList.size(); i++) {
+			JSONObject temp = new JSONObject();
+			temp.put("email", uList.get(i).getEmail());
+			temp.put("role", uList.get(i).getUserType());
+			if(temp.get("role").equals("registered")) {
+				listOfUsers.add(temp);
+			}
+		}
+		toReturn.put(key1, listOfUsers);
+		return toReturn;
+	}
+	
+	/**TODO finish
+	 * 
+	 * @return JSONObject that has key1-> "Users": value1->JSONArray of users in System
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value ="/all/admin", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public JSONObject getAllAdminUsers()  {
+		JSONObject toReturn = new JSONObject();
+		String key1 = "Users";//May become a final
+		JSONArray listOfUsers = new JSONArray();
+		List<User> uList = getUsers();
+		for(int i = 0; i < uList.size(); i++) {
+			JSONObject temp = new JSONObject();
+			temp.put("email", uList.get(i).getEmail());
+			temp.put("role", uList.get(i).getUserType());
+			if(temp.get("role").equals("admin")) {
+				listOfUsers.add(temp);
+			}
+		}
+		toReturn.put(key1, listOfUsers);
 		return toReturn;
 	}
 
@@ -83,7 +131,7 @@ public class UserController {
 	private Map<String,Object> createUser(@RequestBody User newUser) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
-			if(userRepository.findById(newUser.getEmail()) != null) {//User already exists
+			if(userRepository.existsById(newUser.getEmail())) {//User already exists
 				throw new IllegalArgumentException();
 			}
 			userRepository.save(newUser);
@@ -101,15 +149,14 @@ public class UserController {
 		return response;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE) 
+	@RequestMapping(method = RequestMethod.POST, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
 	private Map<String,Object> deleteUser(@RequestBody User userSelectedToPerish) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
-			if(userRepository.findById(userSelectedToPerish.getEmail()) == null) {//Checks to see if User is even in the DB
+			if(!userRepository.existsById(userSelectedToPerish.getEmail())) {//Checks to see if User is even in the DB
 				throw new IllegalArgumentException();
 			}
-
 			userRepository.deleteById(userSelectedToPerish.getEmail());
 			response.put("status", 200);
 			response.put("message", HttpStatus.OK);
@@ -125,21 +172,22 @@ public class UserController {
 		return response;
 	}
 	
-	/**
+	/**TODO finish
 	 * The argument given will simply be the way the new user wants to be changed.
 	 * Might need to implement userId****
+	 * PUT is for updating
 	 * @param userToEdit
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, path = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private Map<String,Object> editUser(@RequestBody User userToEdit) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
-			if(userRepository.findById(userToEdit.getEmail()) == null) {
+			if(!userRepository.existsById(userToEdit.getEmail())) {//pretty sure that is how I want to do this.
 				throw new IllegalArgumentException();
 			}
-			userRepository.deleteById(userToEdit.getEmail());
+			userRepository.save(userToEdit);//this will edit the user
 			response.put("status", 200);
 			response.put("message", HttpStatus.OK);
 		}catch (IllegalArgumentException e) {

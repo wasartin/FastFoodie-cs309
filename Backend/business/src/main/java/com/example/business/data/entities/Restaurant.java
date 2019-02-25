@@ -14,7 +14,7 @@ public class Restaurant {
 	//TODO this should be an int
 	@Id
 	@Column(name="restaurant_id")
-	private String restaurant_id;
+	private int restaurant_id;
 	@Column(name="restaurant_name")
 	private String restaurant_name;
 	@Column(name="last_updated")
@@ -24,17 +24,17 @@ public class Restaurant {
 		super();
 	}
 	
-	public Restaurant(String id, String name, Date last_updated) {
+	public Restaurant(int id, String name, Date last_updated) {
 		this.restaurant_id = id;
 		this.restaurant_name = name;
 		this.last_updated = last_updated;
 	}
 
-	public String getRestaurant_id() {
+	public int getRestaurant_id() {
 		return restaurant_id;
 	}
 
-	public void setRestaurant_id(String restaurant_id) {
+	public void setRestaurant_id(int restaurant_id) {
 		this.restaurant_id = restaurant_id;
 	}
 

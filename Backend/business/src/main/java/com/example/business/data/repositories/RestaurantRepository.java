@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.business.data.entities.Restaurant;
 
 @Repository
-public interface RestaurantRepository extends CrudRepository<Restaurant,String> {
+public interface RestaurantRepository extends CrudRepository<Restaurant,Integer> {
 
 }

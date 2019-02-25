@@ -11,7 +11,6 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,7 +81,7 @@ public class RestaurantController {
 	//NOTE: this will essentially look a lot like getAllRestaurantsJSONObject().
 	@RequestMapping(method = RequestMethod.GET, path = "/{restaurant_id}")
 	@ResponseBody
-	public Optional<Restaurant> getRestaurant(@PathVariable String restaurant_id){ //
+	public Optional<Restaurant> getRestaurant(@PathVariable int restaurant_id){ //
 		return restaurantRepo.findById(restaurant_id);
 	}
 	
@@ -110,7 +109,7 @@ public class RestaurantController {
 	
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}")
 	@ResponseBody
-	private Map<String,Object> deleteRestaurant(@PathVariable String restaurant_id ) { //TODO
+	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id ) { //TODO
 		HashMap<String,Object> response = new HashMap<>();
 		try {
 			if(restaurantRepo.findById(restaurant_id) == null)//TODO restaurantRepo has a method that does this much better, restaurantRepo.exitsById(...)

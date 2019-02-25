@@ -1,63 +1,57 @@
 package edu.iastate.graysonc.fastfood;
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Cache;
-import com.android.volley.Network;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import java.io.IOException;
+import java.util.concurrent.Executor;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
+import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import retrofit2.Response;
 
 @Singleton
 public class Repository {
-    // Instantiate the cache
-    //Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
+    private final Webservice webservice;
+    private final UserDAO userDAO;
+    private final Executor executor;
 
-    // Set up the network to use HttpURLConnection as the HTTP client.
-    //Network network = new BasicNetwork(new HurlStack());
-
-    // Instantiate the RequestQueue with the cache and network.
-    //RequestQueue requestQueue = new RequestQueue(cache, network);
-    RequestQueue requestQueue;
-
-
-    public Repository(Application application) {
-        requestQueue = Volley.newRequestQueue(application);
+    @Inject
+    public Repository(Webservice webservice, UserDAO userDAO, Executor executor) {
+        this.webservice = webservice;
+        this.userDAO = userDAO;
+        this.executor = executor;
     }
 
-//    public LiveData<User> getUser(int userId) {
-//        // This isn't an optimal implementation. We'll fix it later.
-//        final MutableLiveData<User> data = new MutableLiveData<>();
-//        webservice.getUser(userId).enqueue(new Callback<User>() {
-//            @Override
-//            public void onResponse(Call<User> call, Response<User> response) {
-//                data.setValue(response.body());
-//            }
-//
-//            // Error case is left out for brevity.
-//        });
-//        return data;
-//    }
+    public LiveData<User> getUser(String userId) {
+        refreshUser(userId);
+        // Returns a LiveData object directly from the database.
+        return userDAO.load(userId);
+    }
 
-    private void fetchUserData(final String UID) {
+    private void refreshUser(final String userId) {
+        // Runs in a background thread.
+        executor.execute(() -> {
+            // Check if user data was fetched recently.
+            boolean userExists = (webservice.getUser(userId) != null);
+            if (!userExists) {
+                // Refreshes the data.
+                Response<User> response = null;
+                try {
+                    response = webservice.getUser(userId).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // Check for errors here.
+
+                // Updates the database. The LiveData object automatically
+                // refreshes, so we don't need to do anything else here.
+                userDAO.save(response.body());
+            }
+        });
+    }
+
+    /*private void fetchUserData(final String UID) {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "http://cs309-bs-1.misc.iastate.edu:8080/users/" + UID  , null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -123,5 +117,5 @@ public class Repository {
             }
         };
         requestQueue.add(postRequest);
-    }
+    }*/
 }

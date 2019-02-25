@@ -1,25 +1,15 @@
 package edu.iastate.graysonc.fastfood;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mainNavigation;
@@ -47,12 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
         mainNavigation = findViewById(R.id.main_navigation);
         mainFrame = findViewById(R.id.main_frame);
-
-        // Initialize Repository
-        repo = new Repository(getApplication());
-
-        // Instantiate ViewModels
-        profileViewModel = new ProfileViewModel(repo, getApplication());
 
         // Instantiate all fragments
         homeFragment = new HomeFragment();

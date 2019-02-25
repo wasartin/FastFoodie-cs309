@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,10 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -51,6 +47,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient googleSignInClient;
+    private GoogleSignInAccount account;
 
     private Button signOutButton;
     private View signInButton;
@@ -90,9 +87,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-
+        viewModel.init(GoogleSignIn.getLastSignedInAccount(getContext()).getEmail());
         viewModel.getUser().observe(this, user -> {
-            updateUI(user);
+            //updateUI(user);
         });
 
         //Initialize Variables and point to correct XML objects
@@ -156,7 +153,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        viewModel.setUser(null);
                         toggleMenuVisible();
                     }
                 });
@@ -181,7 +177,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
      */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            viewModel.setUser(completedTask.getResult(ApiException.class));
+            account = completedTask.getResult(ApiException.class);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

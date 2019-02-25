@@ -170,7 +170,7 @@ public class UserController {
 		return response;
 	}
 	
-	/**TODO finish
+	/**
 	 * The argument given will simply be the way the new user wants to be changed.
 	 * Might need to implement userId****
 	 * PUT is for updating

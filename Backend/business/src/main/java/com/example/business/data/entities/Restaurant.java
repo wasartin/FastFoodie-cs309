@@ -11,6 +11,7 @@ import javax.persistence.Table;
 @Table(name="restaurant")
 public class Restaurant {
 
+	//TODO this should be an int
 	@Id
 	@Column(name="restaurant_id")
 	private String restaurant_id;

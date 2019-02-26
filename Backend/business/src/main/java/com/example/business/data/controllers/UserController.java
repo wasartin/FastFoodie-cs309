@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +28,36 @@ import com.example.business.data.repositories.UserRepository;
 @RequestMapping(value="/users")
 public class UserController {
 	
+	//TODO Ensure this is the key that Frontend would like to see
+	private final String USER_EMAIL_KEY = "email";
+	private final String USER_TYPE_KEY = "role";
+	private final String USERS_KEY_JO = "Users";
+	private final String USER_INFO_JO = "info";
+	
+	
 	@Autowired
 	UserRepository userRepository;
 	
 	private Logger logger = LoggerFactory.getLogger(UserController.class);
 	
+	//TODO Be sure to delete this
+	//	This is only here so that the old way of pulling users still works. 
+	//		Once the 'getUserJSONObject' method can be parsed my Front end, 
+	//		this will then be deleted.
+	@RequestMapping(method = RequestMethod.GET, path = "old/{user_email}")
+	@ResponseBody
+	public Optional<User> getUser_OLD(@PathVariable String user_email){
+		return userRepository.findById(user_email);
+	}
+
+	//TODO Be sure to delete this
+	// 	Once 'getAllUsersJSONObject' method can be correctly parsed by 
+	//		front end, this will be deleted
+	@GetMapping("old/all")
+	public Iterable<User> getAllUsers_OLD() {
+		return userRepository.findAll();
+	}
+
 	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getUserJSONObject(@PathVariable String user_email) {
@@ -171,22 +197,23 @@ public class UserController {
 	}
 	
 	/**
-	 * The argument given will simply be the way the new user wants to be changed.
-	 * Might need to implement userId****
-	 * PUT is for updating
+	 * JSONObject. 1st key is old
+	 * 2nd key is new
+	 * PUT is for update
 	 * @param userToEdit
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> editUser(@RequestBody JSONObject userToEdit) {
+	private Map<String,Object> editUser(@RequestBody JSONObject sentObject) {
 		HashMap<String,Object> response = new HashMap<>();
-		User toEdit = new User((String)userToEdit.get("email"), (String)userToEdit.get("userType"));
+		JSONObject oldInfo = (JSONObject) sentObject.get("oldInfo");
+		JSONObject newInfo = (JSONObject) sentObject.get("newInfo");
+		User toEdit = new User((String)newInfo.get("email"), (String)newInfo.get("userType"));
 		try {
 			if(!userRepository.existsById(toEdit.getEmail())) {//pretty sure that is how I want to do this.
 				throw new IllegalArgumentException();
 			}
-			
 			userRepository.save(toEdit);//this will edit the user
 			response.put("status", 200);
 			response.put("message", HttpStatus.OK);

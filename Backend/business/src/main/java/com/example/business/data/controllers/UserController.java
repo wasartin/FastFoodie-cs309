@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.business.data.entities.User;
 import com.example.business.data.repositories.UserRepository;
 
+/**
+ * Verbs are bad for api, but I am only doing it temporarily
+ * @author watis
+ *
+ */
 @RestController
 @RequestMapping(value="/users")
 public class UserController {
@@ -141,17 +147,16 @@ public class UserController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.DELETE, path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE) 
+	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteUser(@RequestBody JSONObject sentJSONObj) {
+	private JSONObject deleteUser(@RequestBody @PathVariable String user_email) {
 		JSONObject response = new JSONObject();
-		User selectedToPerish = new User((String)sentJSONObj.get("email"), (String)sentJSONObj.get("userType"));
 		try {
-			if(!userRepository.existsById(selectedToPerish.getEmail())) {//Checks to see if User is even in the DB
+			if(!userRepository.existsById(user_email)) {//Checks to see if User is even in the DB
 				throw new IllegalArgumentException();
 			}
-			userRepository.deleteById(selectedToPerish.getEmail());
-			response.put("status", 200);
+			userRepository.deleteById(user_email);
+			response.put("status", 204);
 			response.put("message", HttpStatus.OK);
 		}catch (IllegalArgumentException e) {
 			response.put("status", 400);
@@ -173,7 +178,7 @@ public class UserController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.PUT, path = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private JSONObject editUser(@RequestBody JSONObject sentObject) {
 		JSONObject response = new JSONObject();
@@ -198,4 +203,21 @@ public class UserController {
 		}
 		return response;
 	}
+	
+//	
+//	/**
+//	 * TODO: IDK
+//	 * @param user_email
+//	 * @return
+//	 */
+//	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
+//	public ResponseEntity User (@PathVariable String user_email) {//TODO will just be changed to getUser once conversion is complete
+//		Optional<User> temp = userRepository.findById(user_email);
+//		JSONObject response = new JSONObject();
+//		response.put(JSON_OBJECT_RESPONSE_KEY1, temp.get());
+//		return null;
+//	}
+//	
+	
 }

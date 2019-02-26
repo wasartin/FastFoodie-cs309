@@ -27,17 +27,10 @@ public class RestaurantController {
 
 	@Autowired
 	RestaurantRepository restaurantRepo;
-	
-	//This is why you had an error, there are two methods that map to /all. 
-	//TODO Just delete this method
-	//@GetMapping("/all")
-	//public Iterable<Restaurant> getAllRestaurants(){
-	//	return restaurantRepo.findAll();
-	//}
 
 	/**
 	 * Private method used for returned a list of restaurants
-	 * @return
+	 * @return List of Restaurants
 	 */
 	private List<Restaurant> getRestaurants(){
 		Iterable<Restaurant> rIters = restaurantRepo.findAll();
@@ -48,49 +41,57 @@ public class RestaurantController {
 	
 	/**
 	 * 
-	 * @return JSONObject that has key1-> "Restaurants": value1->JSONArray of resturants in System
+	 * @return JSONObject that has key1-> "Restaurants": value1->JSONArray of restaurants in System
 	 */
-	//TODO Go over this and delete all these comments
-	//TODO change this if you want, name shit that makes the most sense
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value ="/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JSONObject getAllRestaurantsJSONObject()  {
-		JSONObject toReturn = new JSONObject();//This is what will be returned
-		String key1 = "Restaurants";//This is the first key in the JSONObject
-		JSONArray listOfRestaurants = new JSONArray(); //This is the first value (mapped to Restaurants)
-		List<Restaurant> uList = getRestaurants(); //Here the Private method is used
-		for(int i = 0; i < uList.size(); i++) {//Iterate the whole list returned of restaurnts in the DB
-			JSONObject temp = new JSONObject(); //This is a temp object for making the JSON object to put in the JSONArray (listOfRestaurants)
-			temp.put("restaurantID", uList.get(i).getRestaurant_id()); //key = id, value = get, this is the parsing
-			temp.put("restaurantName", uList.get(i).getRestaurant_name());//Parsing
-			temp.put("lastUpdated", uList.get(i).getLast_updated());//Parsing
-			listOfRestaurants.add(temp);//Add to JSONARRAY
+		JSONObject toReturn = new JSONObject();
+		String key1 = "Restaurants";
+		JSONArray listOfRestaurants = new JSONArray(); 
+		List<Restaurant> uList = getRestaurants(); 
+		for(int i = 0; i < uList.size(); i++) {
+			JSONObject temp = new JSONObject(); 
+			temp.put("lastUpdated", uList.get(i).getLast_updated());
+			temp.put("restaurantName", uList.get(i).getRestaurant_name());
+			temp.put("restaurantID", uList.get(i).getRestaurant_id()); 
+			listOfRestaurants.add(temp);
 		}
-		toReturn.put(key1, listOfRestaurants);//Add the KEY & VALUE to the JSONObj we are returning
-		return toReturn;//return that shit
+		toReturn.put(key1, listOfRestaurants);
+		return toReturn;
 	}
 	
 	/**
-	 * I don't think we want to do this 
-	 * @param restaurant_id
-	 * @return
+	 * returns JSON Object of restaurant whose id was specified
+	 * @param restaurant_id id of desired restaurant
+	 * @return JSON Object of desired restaurant
 	 */
-	//TODO Change this to return a JSONObject with String key1 = 'restaurant' 
-		//then the VALUE here would be ANOTHER JSONObject that is the restaurant
-	//TODO Return a JSONObject not optional
-	//NOTE: this will essentially look a lot like getAllRestaurantsJSONObject().
-	@RequestMapping(method = RequestMethod.GET, path = "/{restaurant_id}")
+	@SuppressWarnings("unchecked")
+	@RequestMapping(method = RequestMethod.GET, path = "/{restaurant_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Optional<Restaurant> getRestaurant(@PathVariable int restaurant_id){ //
-		return restaurantRepo.findById(restaurant_id);
+	public JSONObject getRestaurantJSONObject(@PathVariable int restaurant_id) {
+		Optional<Restaurant> temp = restaurantRepo.findById(restaurant_id);
+		JSONObject toReturn = new JSONObject();
+		JSONObject restaurantInfo = new JSONObject();
+		restaurantInfo.put("lastUpdated", temp.get().getLast_updated());
+		restaurantInfo.put("restaurantName", temp.get().getRestaurant_name());
+		restaurantInfo.put("restaurantID", temp.get().getRestaurant_id());
+		toReturn.put("Restaurant", restaurantInfo);
+		return toReturn;
 	}
+
 	
-	@RequestMapping(method = RequestMethod.POST, path = "/create")
+	/**
+	 * adds a new restaurant to the database if said restaurant doesn't already exist
+	 * @param newRestaurant
+	 * @return Map of the message and http status of the post
+	 */
+	@RequestMapping(method = RequestMethod.POST, path = "/create", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
 		HashMap<String, Object> response = new HashMap<>();
 		try {
-			if(restaurantRepo.findById(newRestaurant.getRestaurant_id())==null) //TODO restaurantRepo has a method that does this much better, restaurantRepo.exitsById(.better..)
+			if(restaurantRepo.existsById(newRestaurant.getRestaurant_id()))
 				throw new IllegalArgumentException();	
 			restaurantRepo.save(newRestaurant);
 			response.put("status", 200);
@@ -107,12 +108,12 @@ public class RestaurantController {
 		return response;
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}")
+	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id ) { //TODO
+	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id ) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
-			if(restaurantRepo.findById(restaurant_id) == null)//TODO restaurantRepo has a method that does this much better, restaurantRepo.exitsById(...)
+			if(!restaurantRepo.existsById(restaurant_id))//Checks to see if restaurant is in the DB
 				throw new IllegalArgumentException();
 			restaurantRepo.deleteById(restaurant_id);
 			response.put("status", 200);
@@ -128,4 +129,5 @@ public class RestaurantController {
 		}
 		return response;
 	}
+
 }

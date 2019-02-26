@@ -1,9 +1,7 @@
 package com.example.business.data.controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.json.simple.JSONArray;
@@ -29,11 +27,8 @@ import com.example.business.data.repositories.UserRepository;
 public class UserController {
 	
 	//TODO Ensure this is the key that Frontend would like to see
-	private final String USER_EMAIL_KEY = "email";
-	private final String USER_TYPE_KEY = "role";
-	private final String USERS_KEY_JO = "Users";
-	private final String USER_INFO_JO = "info";
-	
+	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
+	private final String JSON_OBJECT_RESPONSE_KEY2 = "info";
 	
 	@Autowired
 	UserRepository userRepository;
@@ -58,18 +53,24 @@ public class UserController {
 		return userRepository.findAll();
 	}
 
+	/**
+	 * TODO: The User's favorites list will be added here as well. It will be the second key in this response=
+	 * @param user_email
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public JSONObject getUserJSONObject(@PathVariable String user_email) {
+	public JSONObject getUserJSONObject(@PathVariable String user_email) {//TODO will just be changed to getUser once conversion is complete
 		Optional<User> temp = userRepository.findById(user_email);
-		JSONObject toReturn = new JSONObject();
-		JSONObject userInfo = new JSONObject();
-		userInfo.put("role", temp.get().getUserType());
-		userInfo.put("email", temp.get().getEmail());
-		toReturn.put("User", userInfo);
-		return toReturn;
+		JSONObject response = new JSONObject();
+		response.put(JSON_OBJECT_RESPONSE_KEY1, temp.get());
+		return response;
 	}
 	
+	/**
+	 * This private helper method is used to pull all the users from the Data base so it is easier to parse into a JSONObject
+	 * @return List<User>
+	 */
 	private List<User> getUsers(){
 		Iterable<User> uIters = userRepository.findAll();
 		List<User> uList = new ArrayList<User>();
@@ -78,81 +79,48 @@ public class UserController {
 	}
 	
 	/**
+	 * This is a private helper method that parses the Backend's version of a user into a JSON object, 
+	 * @param user
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private JSONObject parseUserIntoJSONObject(User user) {
+		final String USER_EMAIL_KEY = "email";
+		final String USER_TYPE_KEY = "role";
+		JSONObject userAsJSONObj = new JSONObject();
+		userAsJSONObj.put(USER_EMAIL_KEY, user.getEmail());
+		userAsJSONObj.put(USER_TYPE_KEY, user.getUserType());
+		return userAsJSONObj;
+	}
+
+	/**
 	 * 
 	 * @return JSONObject that has key1-> "Users": value1->JSONArray of users in System
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value ="/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JSONObject getAllUsersJSONObject()  {
 		JSONObject toReturn = new JSONObject();
-		String key1 = "Users";//May become a final
+		String key1 = JSON_OBJECT_RESPONSE_KEY1;
 		JSONArray listOfUsers = new JSONArray();
 		List<User> uList = getUsers();
-		for(int i = 0; i < uList.size(); i++) {
-			JSONObject temp = new JSONObject();
-			temp.put("email", uList.get(i).getEmail());
-			temp.put("role", uList.get(i).getUserType());
-			listOfUsers.add(temp);
-		}
-		toReturn.put(key1, listOfUsers);
-		return toReturn;
-	}
-	
-	/**TODO finish
-	 * 
-	 * @return JSONObject that has key1-> "Users": value1->JSONArray of users in System
-	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value ="/all/registered", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JSONObject getAllRegisteredUsers()  {
-		JSONObject toReturn = new JSONObject();
-		String key1 = "Users";//May become a final
-		JSONArray listOfUsers = new JSONArray();
-		List<User> uList = getUsers();
-		for(int i = 0; i < uList.size(); i++) {
-			JSONObject temp = new JSONObject();
-			temp.put("email", uList.get(i).getEmail());
-			temp.put("role", uList.get(i).getUserType());
-			if(temp.get("role").equals("registered")) {
-				listOfUsers.add(temp);
-			}
-		}
-		toReturn.put(key1, listOfUsers);
-		return toReturn;
-	}
-	
-	/**TODO finish
-	 * 
-	 * @return JSONObject that has key1-> "Users": value1->JSONArray of users in System
-	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value ="/all/admin", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JSONObject getAllAdminUsers()  {
-		JSONObject toReturn = new JSONObject();
-		String key1 = "Users";//May become a final
-		JSONArray listOfUsers = new JSONArray();
-		List<User> uList = getUsers();
-		for(int i = 0; i < uList.size(); i++) {
-			JSONObject temp = new JSONObject();
-			temp.put("email", uList.get(i).getEmail());
-			temp.put("role", uList.get(i).getUserType());
-			if(temp.get("role").equals("admin")) {
-				listOfUsers.add(temp);
-			}
+		for(User user : uList) {
+			listOfUsers.add(parseUserIntoJSONObject(user));
 		}
 		toReturn.put(key1, listOfUsers);
 		return toReturn;
 	}
 
-	/**
-	 * Currently just takes user Object. Will might need to be a JSONObject I parse if more info is required.
+	/** TODO need a way to codense error handling
+	 * Currently just takes user Object. Might need to be a JSONObject I parse if more info is required.
 	 * @param newUser
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> createUser(@RequestBody User newUser) {
-		HashMap<String,Object> response = new HashMap<>();
+	private JSONObject createUser(@RequestBody User newUser) {
+		JSONObject response = new JSONObject();
 		try {
 			if(userRepository.existsById(newUser.getEmail())) {//User already exists
 				throw new IllegalArgumentException();
@@ -172,10 +140,11 @@ public class UserController {
 		return response;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private Map<String,Object> deleteUser(@RequestBody JSONObject sentJSONObj) {
-		HashMap<String,Object> response = new HashMap<>();
+	private JSONObject deleteUser(@RequestBody JSONObject sentJSONObj) {
+		JSONObject response = new JSONObject();
 		User selectedToPerish = new User((String)sentJSONObj.get("email"), (String)sentJSONObj.get("userType"));
 		try {
 			if(!userRepository.existsById(selectedToPerish.getEmail())) {//Checks to see if User is even in the DB
@@ -203,10 +172,11 @@ public class UserController {
 	 * @param userToEdit
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> editUser(@RequestBody JSONObject sentObject) {
-		HashMap<String,Object> response = new HashMap<>();
+	private JSONObject editUser(@RequestBody JSONObject sentObject) {
+		JSONObject response = new JSONObject();
 		JSONObject oldInfo = (JSONObject) sentObject.get("oldInfo");
 		JSONObject newInfo = (JSONObject) sentObject.get("newInfo");
 		User toEdit = new User((String)newInfo.get("email"), (String)newInfo.get("userType"));

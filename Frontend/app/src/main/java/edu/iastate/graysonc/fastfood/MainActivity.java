@@ -11,29 +11,30 @@ import android.widget.FrameLayout;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
-public class MainActivity extends AppCompatActivity {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+
+public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private BottomNavigationView mainNavigation;
     private FrameLayout mainFrame;
-
-    private Repository repo;
 
     private Fragment homeFragment;
     private Fragment favoritesFragment;
     private Fragment profileFragment;
     private Fragment signInFragment;
 
-    private ViewModel profileViewModel;
-
-
-    private static final String TAG = "SignInActivity";
-    private static final int RC_SIGN_IN = 9001;
-    private GoogleSignInClient googleSignInClient;
-    private GoogleSignInAccount account;
+    @Inject
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AndroidInjection.inject(this);
 
         mainNavigation = findViewById(R.id.main_navigation);
         mainFrame = findViewById(R.id.main_frame);
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         profileFragment = new ProfileFragment();
 
         // Start in home fragment
-        setFragment(homeFragment);
+        setFragment(profileFragment);
 
         mainNavigation.setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
@@ -60,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    @Override
+    public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
+        return dispatchingAndroidInjector;
     }
 
     private void setFragment(Fragment fragment) {

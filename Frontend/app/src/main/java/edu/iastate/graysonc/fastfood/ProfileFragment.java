@@ -1,5 +1,6 @@
 package edu.iastate.graysonc.fastfood;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +40,11 @@ import org.json.JSONObject;
 
 import java.util.Random;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import dagger.android.support.AndroidSupportInjection;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,21 +55,25 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private GoogleSignInClient googleSignInClient;
     private GoogleSignInAccount account;
 
-    private Button signOutButton;
-    private View signInButton;
-    private ImageView avatarImageView;
-    private TextView nameTextView;
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
+    private ProfileViewModel viewModel;
+
+    @BindView(R.id.sign_out_button) Button signOutButton;
+    @BindView(R.id.sign_in_button) View signInButton;
+    @BindView(R.id.avatar_image_view) ImageView avatarImageView;
+    @BindView(R.id.name_text_view) TextView nameTextView;
 
     private boolean toggled;
-    private TextView mUserInfoDisp;
-    private TextView mUserDietaryDisp;
-    private Button mMenuTicket;
-    private Button mMenuEdit;
-    private ImageButton mMenuExpand;
+    @BindView(R.id.user_info_display) TextView mUserInfoDisp;
+    @BindView(R.id.user_dietary_display) TextView mUserDietaryDisp;
+    @BindView(R.id.TicketButton) Button mMenuTicket;
+    @BindView(R.id.ButtonEdit) Button mMenuEdit;
+    @BindView(R.id.MenuButton) ImageButton mMenuExpand;
     private RequestQueue r;
-    private ConstraintLayout user_singed_in;
+    @BindView(R.id.user_signed_in) ConstraintLayout user_singed_in;
 
-    private ProfileViewModel viewModel;
+
 
     /**
      * Required empty constructor
@@ -72,13 +82,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        AndroidSupportInjection.inject(this);
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -86,25 +93,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
         viewModel.init(GoogleSignIn.getLastSignedInAccount(getContext()).getEmail());
         viewModel.getUser().observe(this, user -> {
             //updateUI(user);
         });
 
         //Initialize Variables and point to correct XML objects
-        signInButton = getView().findViewById(R.id.sign_in_button);
-        signOutButton = getView().findViewById(R.id.sign_out_button);
-        avatarImageView = getView().findViewById(R.id.avatar_image_view);
-        nameTextView = getView().findViewById(R.id.name_text_view);
         toggled = false;
-        mUserInfoDisp = (TextView) getView().findViewById(R.id.user_info_display);
-        mUserDietaryDisp = (TextView) getView().findViewById(R.id.user_dietary_display);
         r = Volley.newRequestQueue(getContext());
-        mMenuTicket =(Button) getView().findViewById(R.id.TicketButton);
-        mMenuEdit = (Button) getView().findViewById(R.id.ButtonEdit);
-        mMenuExpand = (ImageButton) getView().findViewById(R.id.MenuButton);
-        user_singed_in = (ConstraintLayout) getView().findViewById(R.id.user_signed_in);
 
         //Create Click Listeners
         signInButton.setOnClickListener(this);
@@ -112,6 +109,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mMenuEdit.setOnClickListener(this);
         mMenuTicket.setOnClickListener(this);
         mMenuExpand.setOnClickListener(this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     /**

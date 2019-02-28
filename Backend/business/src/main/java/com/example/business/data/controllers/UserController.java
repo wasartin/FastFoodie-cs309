@@ -114,31 +114,25 @@ public class UserController {
 		return toReturn;
 	}
 
-	/** TODO need a way to codense error handling
+	/**
 	 * Currently just takes user Object. Might need to be a JSONObject I parse if more info is required.
 	 * @param newUser
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private JSONObject createUser(@RequestBody User newUser) {
-		JSONObject response = new JSONObject();
+		JSONObject response;
 		try {
 			if(userRepository.existsById(newUser.getEmail())) {//User already exists
 				throw new IllegalArgumentException();
 			}
 			userRepository.save(newUser);
-			response.put("status", 200);
-			response.put("message", HttpStatus.OK);
+			response = generateResponse(204, HttpStatus.OK, "User has been created");
 		}catch (IllegalArgumentException e) {
-			response.put("status", 400);
-			response.put("error", HttpStatus.BAD_REQUEST);
-			response.put("message", "User might already exists, or your fields are incorrect, double check your request");
+			response = generateResponse(400, HttpStatus.BAD_REQUEST, "User might already exist, or your fields are incorrect, double check your request");
 		}catch (Exception e) {
-			response.put("status", 500);
-			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
-			response.put("message", "Server might be down now. Try again");
+			response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
 		}
 		return response;
 	}
@@ -148,26 +142,20 @@ public class UserController {
 	 * @param user_email
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
 	private JSONObject deleteUser(@RequestBody @PathVariable String user_email) {
-		JSONObject response = new JSONObject();
+		JSONObject response;
 		try {
 			if(!userRepository.existsById(user_email)) {//Checks to see if User is even in the DB
 				throw new IllegalArgumentException();
 			}
 			userRepository.deleteById(user_email);
-			response.put("status", 204);
-			response.put("message", HttpStatus.OK);
+			response = generateResponse(204, HttpStatus.OK, "User has been deleted");
 		}catch (IllegalArgumentException e) {
-			response.put("status", 400);
-			response.put("error", HttpStatus.BAD_REQUEST);
-			response.put("message", "Could not find that user in the database, or your fields are incorrect, double check your request");
+			response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that user in the database, or your fields are incorrect, double check your request");
 		}catch (Exception e) {
-			response.put("status", 500);
-			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
-			response.put("message", "Server might be down now. Try again");
+			response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
 		}
 		return response;
 	}
@@ -180,43 +168,31 @@ public class UserController {
 	 * @param userToEdit
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private JSONObject editUser(@RequestBody User newUserInfo, @PathVariable String user_email) {
-		JSONObject response = new JSONObject();
+		JSONObject response;
 		try {
 			if(!userRepository.existsById(user_email)) {//pretty sure that is how I want to do this.
 				throw new IllegalArgumentException();
 			}
 			userRepository.save(newUserInfo);//this will edit the user
-			response.put("status", 200);
-			response.put("message", HttpStatus.OK);
+			response = generateResponse(200, HttpStatus.OK, "User has been edited");
 		}catch (IllegalArgumentException e) {
-			response.put("status", 400);
-			response.put("error", HttpStatus.BAD_REQUEST);
-			response.put("message", "Could not find that user in the database, or your fields are incorrect, double check your request");
+			response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that user in the database, or your fields are incorrect, double check your request");
 		}catch (Exception e) {
-			response.put("status", 500);
-			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
-			response.put("message", "Server might be down now. Try again");
+			response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
 		}
 		return response;
 	}
 	
-//	
-//	/**
-//	 * TODO: Just trying to see if I can just return an object
-//	 * @param user_email
-//	 * @return
-//	 */
-//	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseBody
-//	public ResponseEntity User (@PathVariable String user_email) {//TODO will just be changed to getUser once conversion is complete
-//		Optional<User> temp = userRepository.findById(user_email);
-//		JSONObject response = new JSONObject();
-//		response.put(JSON_OBJECT_RESPONSE_KEY1, temp.get());
-//		return null;
-//	}
-//	
+	@SuppressWarnings("unchecked")
+	private JSONObject generateResponse(int status, HttpStatus input, String message) {
+		JSONObject response = new JSONObject();
+		response.put("status", status);
+		response.put("HttpStatus", input);
+		response.put("message", message);
+		//response.put
+		return response;
+	}
 }

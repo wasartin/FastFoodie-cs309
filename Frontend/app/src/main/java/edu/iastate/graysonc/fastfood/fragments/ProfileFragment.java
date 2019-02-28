@@ -1,4 +1,4 @@
-package edu.iastate.graysonc.fastfood;
+package edu.iastate.graysonc.fastfood.fragments;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -38,42 +38,41 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import dagger.android.support.AndroidSupportInjection;
+import edu.iastate.graysonc.fastfood.DownloadImageTask;
+import edu.iastate.graysonc.fastfood.R;
+import edu.iastate.graysonc.fastfood.database.entities.User;
+import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = "SignInActivity";
-    private static final int RC_SIGN_IN = 9001;
-    private GoogleSignInClient googleSignInClient;
     private GoogleSignInAccount account;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private ProfileViewModel viewModel;
 
-    @BindView(R.id.sign_out_button) Button signOutButton;
-    @BindView(R.id.sign_in_button) View signInButton;
-    @BindView(R.id.avatar_image_view) ImageView avatarImageView;
-    @BindView(R.id.name_text_view) TextView nameTextView;
+    Button signOutButton;
+    ImageView avatarImageView;
+    TextView nameTextView;
 
     private boolean toggled;
-    @BindView(R.id.user_info_display) TextView mUserInfoDisp;
-    @BindView(R.id.user_dietary_display) TextView mUserDietaryDisp;
-    @BindView(R.id.TicketButton) Button mMenuTicket;
-    @BindView(R.id.ButtonEdit) Button mMenuEdit;
-    @BindView(R.id.MenuButton) ImageButton mMenuExpand;
+    TextView mUserInfoDisp;
+    TextView mUserDietaryDisp;
+    Button mMenuTicket;
+    Button mMenuEdit;
+    ImageButton mMenuExpand;
     private RequestQueue r;
-    @BindView(R.id.user_signed_in) ConstraintLayout user_singed_in;
-
-
 
     /**
      * Required empty constructor
@@ -86,25 +85,31 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         AndroidSupportInjection.inject(this);
 
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+        signOutButton = getView().findViewById(R.id.sign_out_button);
+        avatarImageView = getView().findViewById(R.id.avatar_image_view);
+        nameTextView = getView().findViewById(R.id.name_text_view);
+        mUserInfoDisp = getView().findViewById(R.id.user_info_display);
+        mUserDietaryDisp = getView().findViewById(R.id.user_dietary_display);
+        mMenuTicket = getView().findViewById(R.id.TicketButton);
+        mMenuEdit = getView().findViewById(R.id.ButtonEdit);
+        mMenuExpand = getView().findViewById(R.id.MenuButton);
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
-        viewModel.init(GoogleSignIn.getLastSignedInAccount(getContext()).getEmail());
-        viewModel.getUser().observe(this, user -> {
-            //updateUI(user);
-        });
+        account = getArguments().getParcelable("ACCOUNT");
+        if (account != null) {
+            initUI(account);
+            viewModel.init(account.getEmail());
+            viewModel.getUser().observe(this, user -> {
+                updateUI(user);
+            });
+        }
+
 
         //Initialize Variables and point to correct XML objects
         toggled = false;
         r = Volley.newRequestQueue(getContext());
 
         //Create Click Listeners
-        signInButton.setOnClickListener(this);
         signOutButton.setOnClickListener(this);
         mMenuEdit.setOnClickListener(this);
         mMenuTicket.setOnClickListener(this);
@@ -116,83 +121,40 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
+    private void updateUI(User user) {
+        mUserInfoDisp.setText("Email: " + user.getEmail() + "\n");
+        mUserInfoDisp.append("User type: " + user.getType());
+    }
+
     /**
      * Toggles between signed in and signed out GUI's
-     * @param _account account being handled
      */
-    public void updateUI(GoogleSignInAccount _account) {
-        if (_account == null) { // User is not signed in
-            signOutButton.setVisibility(View.INVISIBLE);
-            signInButton.setVisibility(View.VISIBLE);
-            user_singed_in.setVisibility(View.INVISIBLE);
-            avatarImageView.setImageBitmap(null);
-            nameTextView.setText("Not signed in");
-        } else { // User is signed in
-            signInButton.setVisibility(View.INVISIBLE);
-            user_singed_in.setVisibility(View.VISIBLE);
-            nameTextView.setText(_account.getDisplayName());
-            Uri avatarUri = _account.getPhotoUrl();
-            if (avatarUri != null) {
-                DownloadImageTask imageDownloader = new DownloadImageTask(avatarImageView); // Downloads the user's avatar asynchronously
-                imageDownloader.execute(avatarUri.toString());
-            }
+    public void initUI(GoogleSignInAccount account) {
+        nameTextView.setText(account.getDisplayName());
+        Uri avatarUri = account.getPhotoUrl();
+        if (avatarUri != null) {
+            DownloadImageTask imageDownloader = new DownloadImageTask(avatarImageView); // Downloads the user's avatar asynchronously
+            imageDownloader.execute(avatarUri.toString());
         }
     }
 
     /**
-     * Uses Google Api To Sign In
+     * Opens SignInActivity
      */
     public void signIn() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        // TODO
     }
 
     /**
      * Uses Google Api To Sign Out
      */
     public void signOut() {
-        googleSignInClient.signOut()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        toggleMenuVisible();
-                    }
-                });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-    }
-
-    /**
-     * Handles Sign in, passes account etc
-     * @param completedTask
-     */
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            account = completedTask.getResult(ApiException.class);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-        }
+        // TODO
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.sign_in_button:
-                signIn();
-                break;
             case R.id.sign_out_button:
                 signOut();
                 break;

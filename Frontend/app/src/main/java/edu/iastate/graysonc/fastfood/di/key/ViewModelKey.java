@@ -1,4 +1,4 @@
-package edu.iastate.graysonc.fastfood;
+package edu.iastate.graysonc.fastfood.di.key;
 
 import android.arch.lifecycle.ViewModel;
 

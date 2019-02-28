@@ -1,4 +1,4 @@
-package edu.iastate.graysonc.fastfood;
+package edu.iastate.graysonc.fastfood.fragments;
 
 
 import android.arch.lifecycle.ViewModel;
@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
+import edu.iastate.graysonc.fastfood.R;
+import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
 
 
 /**
@@ -21,7 +23,7 @@ import dagger.android.support.AndroidSupportInjection;
 public class HomeFragment extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    //private HomeViewModel viewModel;
+    private HomeViewModel viewModel;
 
 
     public HomeFragment() {

@@ -1,6 +1,5 @@
-package edu.iastate.graysonc.fastfood;
+package edu.iastate.graysonc.fastfood.activities;
 
-import android.arch.lifecycle.ViewModel;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -8,23 +7,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import edu.iastate.graysonc.fastfood.fragments.FavoritesFragment;
+import edu.iastate.graysonc.fastfood.fragments.HomeFragment;
+import edu.iastate.graysonc.fastfood.fragments.ProfileFragment;
+import edu.iastate.graysonc.fastfood.R;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
-    private BottomNavigationView mainNavigation;
-    private FrameLayout mainFrame;
-
     private Fragment homeFragment;
     private Fragment favoritesFragment;
     private Fragment profileFragment;
-    private Fragment signInFragment;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -36,18 +32,22 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         AndroidInjection.inject(this);
 
-        mainNavigation = findViewById(R.id.main_navigation);
-        mainFrame = findViewById(R.id.main_frame);
-
         // Instantiate all fragments
         homeFragment = new HomeFragment();
         favoritesFragment = new FavoritesFragment();
         profileFragment = new ProfileFragment();
 
-        // Start in home fragment
-        setFragment(profileFragment);
+        // Pass pointer to Google account if not null
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("ACCOUNT", getIntent().getExtras().getParcelable("edu.iastate.graysonc.fastfood.ACCOUNT"));
+        profileFragment.setArguments(bundle);
 
-        mainNavigation.setOnNavigationItemSelectedListener(menuItem -> {
+        // Start in home fragment
+        if (savedInstanceState == null) {
+            setFragment(homeFragment);
+        }
+
+        ((BottomNavigationView)findViewById(R.id.main_navigation)).setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.navigation_home:
                     setFragment(homeFragment);

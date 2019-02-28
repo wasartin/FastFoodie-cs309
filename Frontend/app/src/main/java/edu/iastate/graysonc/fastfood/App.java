@@ -8,6 +8,8 @@ import javax.inject.Inject;
 
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+import edu.iastate.graysonc.fastfood.di.component.DaggerAppComponent;
 
 public class App extends Application implements HasActivityInjector {
 

@@ -1,4 +1,4 @@
-package edu.iastate.graysonc.fastfood;
+package edu.iastate.graysonc.fastfood.repositories;
 
 import android.arch.lifecycle.LiveData;
 
@@ -8,6 +8,9 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import edu.iastate.graysonc.fastfood.api.Webservice;
+import edu.iastate.graysonc.fastfood.database.dao.UserDAO;
+import edu.iastate.graysonc.fastfood.database.entities.User;
 import retrofit2.Response;
 
 @Singleton

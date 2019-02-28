@@ -1,7 +1,10 @@
-package edu.iastate.graysonc.fastfood;
+package edu.iastate.graysonc.fastfood.database;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
+
+import edu.iastate.graysonc.fastfood.database.entities.User;
+import edu.iastate.graysonc.fastfood.database.dao.UserDAO;
 
 @Database(entities = {User.class}, version = 1)
 public abstract class MyDatabase extends RoomDatabase {

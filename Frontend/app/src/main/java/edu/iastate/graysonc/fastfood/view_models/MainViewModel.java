@@ -1,4 +1,4 @@
-package edu.iastate.graysonc.fastfood;
+package edu.iastate.graysonc.fastfood.view_models;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

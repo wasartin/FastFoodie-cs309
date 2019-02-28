@@ -1,9 +1,12 @@
-package edu.iastate.graysonc.fastfood;
+package edu.iastate.graysonc.fastfood.view_models;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
 import javax.inject.Inject;
+
+import edu.iastate.graysonc.fastfood.repositories.Repository;
+import edu.iastate.graysonc.fastfood.database.entities.User;
 
 public class ProfileViewModel extends ViewModel {
     private Repository repo;
@@ -15,12 +18,11 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void init(String userId) {
-        if (this.user != null) {
-            // ViewModel is created on a per-Fragment basis, so the userId
-            // doesn't change.
-            return;
+        if (userId == null) {
+            user = null;
+        } else {
+            user = repo.getUser(userId);
         }
-        user = repo.getUser(userId);
     }
 
     public LiveData<User> getUser() {

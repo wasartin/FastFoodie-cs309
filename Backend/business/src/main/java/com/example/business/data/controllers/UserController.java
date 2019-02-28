@@ -146,6 +146,11 @@ public class UserController {
 		return response;
 	}
 	
+	/**
+	 * Deletes the user given their unique id
+	 * @param user_email
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
@@ -174,19 +179,20 @@ public class UserController {
 	 * JSONObject. 1st key is old
 	 * 2nd key is new
 	 * PUT is for update
+	 * TODO: When a user wants to change emails, will need to switch over favorites list
 	 * @param userToEdit
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.PUT, path = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private JSONObject editUser(@RequestBody JSONObject sentObject) {
 		JSONObject response = new JSONObject();
-		JSONObject oldInfo = (JSONObject) sentObject.get("oldInfo");
-		JSONObject newInfo = (JSONObject) sentObject.get("newInfo");
+		JSONObject oldInfo = (JSONObject) sentObject.get("oldUser");
+		JSONObject newInfo = (JSONObject) sentObject.get("newUser");
 		User toEdit = new User((String)newInfo.get("email"), (String)newInfo.get("userType"));
 		try {
-			if(!userRepository.existsById(toEdit.getEmail())) {//pretty sure that is how I want to do this.
+			if(!userRepository.existsById((String) oldInfo.get("email"))) {//pretty sure that is how I want to do this.
 				throw new IllegalArgumentException();
 			}
 			userRepository.save(toEdit);//this will edit the user
@@ -206,7 +212,7 @@ public class UserController {
 	
 //	
 //	/**
-//	 * TODO: IDK
+//	 * TODO: Just trying to see if I can just return an object
 //	 * @param user_email
 //	 * @return
 //	 */

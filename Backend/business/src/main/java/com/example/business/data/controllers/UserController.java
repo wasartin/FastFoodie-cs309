@@ -6,12 +6,9 @@ import java.util.Optional;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,12 +31,11 @@ public class UserController {
 	
 	//TODO Ensure this is the key that Frontend would like to see
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
+	@SuppressWarnings("unused")
 	private final String JSON_OBJECT_RESPONSE_KEY2 = "info";
 	
 	@Autowired
 	UserRepository userRepository;
-	
-	private Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	//TODO Be sure to delete this
 	//	This is only here so that the old way of pulling users still works. 
@@ -51,7 +47,7 @@ public class UserController {
 		return userRepository.findById(user_email);
 	}
 
-	//TODO Be sure to delete this
+	//TODO Be sure to delete this 
 	// 	Once 'getAllUsersJSONObject' method can be correctly parsed by 
 	//		front end, this will be deleted
 	@GetMapping("old/all")
@@ -64,6 +60,7 @@ public class UserController {
 	 * @param user_email
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getUserJSONObject(@PathVariable String user_email) {//TODO will just be changed to getUser once conversion is complete
@@ -184,18 +181,15 @@ public class UserController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.PUT, path = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject editUser(@RequestBody JSONObject sentObject) {
+	private JSONObject editUser(@RequestBody User newUserInfo, @PathVariable String user_email) {
 		JSONObject response = new JSONObject();
-		JSONObject oldInfo = (JSONObject) sentObject.get("oldUser");
-		JSONObject newInfo = (JSONObject) sentObject.get("newUser");
-		User toEdit = new User((String)newInfo.get("email"), (String)newInfo.get("userType"));
 		try {
-			if(!userRepository.existsById((String) oldInfo.get("email"))) {//pretty sure that is how I want to do this.
+			if(!userRepository.existsById(user_email)) {//pretty sure that is how I want to do this.
 				throw new IllegalArgumentException();
 			}
-			userRepository.save(toEdit);//this will edit the user
+			userRepository.save(newUserInfo);//this will edit the user
 			response.put("status", 200);
 			response.put("message", HttpStatus.OK);
 		}catch (IllegalArgumentException e) {
@@ -225,5 +219,4 @@ public class UserController {
 //		return null;
 //	}
 //	
-	
 }

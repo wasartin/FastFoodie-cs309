@@ -1,5 +1,6 @@
 package com.example.business.data.entities;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column; 
@@ -18,13 +19,13 @@ public class Restaurant {
 	@Column(name="restaurant_name")
 	private String restaurant_name;
 	@Column(name="last_updated")
-	private Date last_updated;
+	private Timestamp last_updated;
 	
 	public Restaurant(){
 		super();
 	}
 	
-	public Restaurant(int id, String name, Date last_updated) {
+	public Restaurant(int id, String name, Timestamp last_updated) {
 		this.restaurant_id = id;
 		this.restaurant_name = name;
 		this.last_updated = last_updated;
@@ -46,11 +47,11 @@ public class Restaurant {
 		this.restaurant_name = restaurant_name;
 	}
 
-	public Date getLast_updated() {
+	public Timestamp getLast_updated() {
 		return last_updated;
 	}
 
-	public void setLast_updated(Date last_updated) {
+	public void setLast_updated(Timestamp last_updated) {
 		this.last_updated = last_updated;
 	}
 	

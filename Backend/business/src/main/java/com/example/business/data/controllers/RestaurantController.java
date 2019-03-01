@@ -1,6 +1,8 @@
 package com.example.business.data.controllers;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,8 +93,45 @@ public class RestaurantController {
 	private Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
 		HashMap<String, Object> response = new HashMap<>();
 		try {
-			if(restaurantRepo.existsById(newRestaurant.getRestaurant_id()))
+			if(restaurantRepo.existsById(newRestaurant.getRestaurant_id())) {
 				throw new IllegalArgumentException();	
+			}
+			
+			newRestaurant.setLast_updated(null);
+			
+			restaurantRepo.save(newRestaurant);
+			response.put("status", 200);
+			response.put("message",HttpStatus.OK);
+		} catch(IllegalArgumentException e) {
+			response.put("status", 400);
+			response.put("error", HttpStatus.BAD_REQUEST);
+			response.put("message", "Restaurant might already exists or your fields are incorrect. Double check your request");
+		}catch (Exception e) {
+			response.put("status", 500);
+			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
+			response.put("message", "Server might be down now. Try again");
+		}
+		return response;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/create/JSON", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	private Map<String, Object> createRestaurantJSON(@RequestBody JSONObject newJSON){
+		HashMap<String, Object> response = new HashMap<>();
+		
+		JSONObject restaurantInfo = new JSONObject();
+		restaurantInfo = (JSONObject) newJSON.get("Restaurant");
+		
+		Restaurant newRestaurant = new Restaurant();
+		newRestaurant.setRestaurant_id((int) restaurantInfo.get("restaurantID"));
+		newRestaurant.setRestaurant_name((String) restaurantInfo.get("restaurantName"));
+		newRestaurant.setLast_updated((Timestamp) restaurantInfo.get("lastUpdated"));
+
+
+		try {
+			if(restaurantRepo.existsById(newRestaurant.getRestaurant_id())) {
+				throw new IllegalArgumentException();	
+			}
 			restaurantRepo.save(newRestaurant);
 			response.put("status", 200);
 			response.put("message",HttpStatus.OK);

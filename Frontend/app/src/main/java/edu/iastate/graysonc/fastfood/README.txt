@@ -1,6 +1,6 @@
-Here's my description of each package in the frontend code. This README
-is probably really confusing, so let me know if you have questions.
-Go State.
+Here's my description of each package in the frontend code. I followed the Model-View-ViewModel (MVVM) design pattern from
+this guide: https://developer.android.com/jetpack/docs/guide. This README is probably really confusing, so let me know if
+you have questions. Go State.
 	-Ya boy, Grayson.
 
 activities:

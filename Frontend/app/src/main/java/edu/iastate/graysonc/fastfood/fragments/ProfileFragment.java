@@ -9,11 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +44,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private Button signOutButton;
     private ImageView avatarImageView;
     private TextView nameTextView;
-    private boolean toggled;
     private TextView mUserInfoDisp;
     private TextView mUserDietaryDisp;
     private Button mMenuTicket;
     private Button mMenuEdit;
     private ImageButton mMenuExpand;
+    private ScrollView mHorizontalScroller;
+
+    private boolean toggled;
+    private boolean scrollable;
 
     /**
      * Required empty constructor
@@ -64,6 +69,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         //Initialize Variables and point to correct XML objects
         toggled = false;
+        scrollable = getResources().getConfiguration().orientation == 1;
         signOutButton = getView().findViewById(R.id.sign_out_button);
         avatarImageView = getView().findViewById(R.id.avatar_image_view);
         nameTextView = getView().findViewById(R.id.name_text_view);
@@ -72,6 +78,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mMenuTicket = getView().findViewById(R.id.TicketButton);
         mMenuEdit = getView().findViewById(R.id.ButtonEdit);
         mMenuExpand = getView().findViewById(R.id.MenuButton);
+        mHorizontalScroller = getView().findViewById(R.id.HorizontalScroller);
 
         // Get profile picture and name from Google Signin
         GoogleSignInAccount account = getArguments().getParcelable("ACCOUNT");
@@ -92,6 +99,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mMenuEdit.setOnClickListener(this);
         mMenuTicket.setOnClickListener(this);
         mMenuExpand.setOnClickListener(this);
+
+        mHorizontalScroller.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO Auto-generated method stub
+                return getResources().getConfiguration().orientation ==1 ;
+            }
+        });
     }
 
     @Override

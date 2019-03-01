@@ -10,7 +10,7 @@ import edu.iastate.graysonc.fastfood.repositories.Repository;
 
 public class HomeViewModel extends ViewModel {
     private Repository repo;
-    //private LiveData<User> user;
+    private LiveData<User> user;
 
     @Inject
     public HomeViewModel(Repository repo) {

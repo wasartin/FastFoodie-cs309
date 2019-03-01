@@ -17,12 +17,11 @@ public class ProfileViewModel extends ViewModel {
         this.repo = repo;
     }
 
-    public void init(String userId) {
-        if (userId == null) {
-            user = null;
-        } else {
-            user = repo.getUser(userId);
+    public void init(String email) {
+        if (this.user != null) {
+            return;
         }
+        user = repo.getUser(email);
     }
 
     public LiveData<User> getUser() {

@@ -5,19 +5,22 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.FrameLayout;
+import android.util.Log;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.fragments.FavoritesFragment;
 import edu.iastate.graysonc.fastfood.fragments.HomeFragment;
 import edu.iastate.graysonc.fastfood.fragments.ProfileFragment;
-import edu.iastate.graysonc.fastfood.R;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+    private static final String TAG = "MainActivity";
     private Fragment homeFragment;
     private Fragment favoritesFragment;
     private Fragment profileFragment;
@@ -39,7 +42,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         // Pass pointer to Google account if not null
         Bundle bundle = new Bundle();
-        bundle.putParcelable("ACCOUNT", getIntent().getExtras().getParcelable("edu.iastate.graysonc.fastfood.ACCOUNT"));
+        GoogleSignInAccount account = getIntent().getExtras().getParcelable("edu.iastate.graysonc.fastfood.ACCOUNT");
+        Log.e(TAG, "onCreate: Got account from " + account.getDisplayName());
+        bundle.putParcelable("ACCOUNT", account);
         profileFragment.setArguments(bundle);
 
         // Start in home fragment

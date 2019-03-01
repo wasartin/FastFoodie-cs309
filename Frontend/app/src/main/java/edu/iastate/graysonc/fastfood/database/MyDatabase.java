@@ -8,7 +8,7 @@ import edu.iastate.graysonc.fastfood.database.converter.DateConverter;
 import edu.iastate.graysonc.fastfood.database.entities.User;
 import edu.iastate.graysonc.fastfood.database.dao.UserDAO;
 
-@Database(entities = {User.class}, version = 1)
+@Database(entities = {User.class}, version = 2)
 @TypeConverters(DateConverter.class)
 public abstract class MyDatabase extends RoomDatabase {
     // --- SINGLETON ---

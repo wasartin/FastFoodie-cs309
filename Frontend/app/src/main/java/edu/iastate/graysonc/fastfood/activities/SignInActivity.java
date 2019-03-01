@@ -1,12 +1,11 @@
 package edu.iastate.graysonc.fastfood.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -45,9 +44,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onStart() {
         super.onStart();
-        //account = GoogleSignIn.getLastSignedInAccount(this);
+        account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
-            //startMainActivity(account);
+            Log.e(TAG, "onStart: Got account from " +  account.getDisplayName());
+            startMainActivity(account);
         }
     }
 
@@ -56,6 +56,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    /**
+     * There's no "sign out" button on this screen, so this does nothing.
+     * I'll probably delete this later.
+     */
     private void signOut() {
         googleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -72,8 +76,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
+            // The Task returned from this call is always completed, no need to attach a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
@@ -82,16 +85,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             account = completedTask.getResult(ApiException.class);
-
             if (account != null) {
-                // Signed in successfully, show authenticated UI.
+                // Signed in successfully, start MainActivity.
                 startMainActivity(account);
             }
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            //updateUI(null);
+            // TODO: Display error message or ask user to re-attempt a login, maybe
         }
     }
 
@@ -107,9 +109,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * Starts MainActivity
+     * @param account If null, MainActivity will be in "Unregistered User" mode.
+     */
     private void startMainActivity(GoogleSignInAccount account) {
         Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
         if (account != null) {
+            // Give MainActivity access to the Google account
             startIntent.putExtra("edu.iastate.graysonc.fastfood.ACCOUNT", account);
         }
         startActivity(startIntent);

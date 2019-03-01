@@ -23,7 +23,7 @@ public class User {
 
     private Date lastRefresh;
 
-    public User() { }
+    //public User() { }
 
     public User(@NonNull String email, String type, Date lastRefresh) {
         this.email = email;

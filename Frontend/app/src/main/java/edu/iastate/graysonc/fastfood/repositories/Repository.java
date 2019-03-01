@@ -35,10 +35,9 @@ public class Repository {
         this.executor = executor;
     }
 
-    public LiveData<User> getUser(String userId) {
-        refreshUser(userId);
-        // Returns a LiveData object directly from the database.
-        return userDAO.load(userId);
+    public LiveData<User> getUser(String email) {
+        refreshUser(email); // Refresh if possible
+        return userDAO.load(email); // Returns a LiveData object directly from the database.
     }
 
     private void refreshUser(final String email) {
@@ -60,7 +59,9 @@ public class Repository {
                     }
 
                     @Override
-                    public void onFailure(Call<User> call, Throwable t) { }
+                    public void onFailure(Call<User> call, Throwable t) {
+                        t.printStackTrace();
+                    }
                 });
             }
         });
@@ -72,72 +73,4 @@ public class Repository {
         cal.add(Calendar.MINUTE, -FRESH_TIMEOUT_IN_MINUTES);
         return cal.getTime();
     }
-
-    /*private void fetchUserData(final String UID) {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "http://cs309-bs-1.misc.iastate.edu:8080/users/" + UID  , null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    System.out.println(response.toString());
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if(error.toString().startsWith("com.android.volley.ParseError:")){
-                    //createUser(UID);
-                    try {
-                        TimeUnit.SECONDS.sleep(1); //TODO Not this
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    fetchUserData(UID);
-                }
-                System.out.println(error.toString());
-            }
-        });
-        requestQueue.add(request); //Actually processes request
-    }
-
-    private void addUser(String UID) {
-        JSONObject js = new JSONObject();
-        try {
-            js.put("email", UID);
-            js.put("userType", "registered");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        System.out.println(js.toString());
-        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, "http://cs309-bs-1.misc.iastate.edu:8080/users/create",js,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // response
-                        System.out.println(response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println(error.getMessage());
-                    }
-                }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-        requestQueue.add(postRequest);
-    }*/
 }

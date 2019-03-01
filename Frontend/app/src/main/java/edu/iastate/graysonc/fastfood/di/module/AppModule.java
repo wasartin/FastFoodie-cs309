@@ -5,7 +5,6 @@ import android.arch.persistence.room.Room;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -17,7 +16,6 @@ import dagger.Provides;
 import edu.iastate.graysonc.fastfood.api.Webservice;
 import edu.iastate.graysonc.fastfood.database.MyDatabase;
 import edu.iastate.graysonc.fastfood.database.dao.UserDAO;
-import edu.iastate.graysonc.fastfood.di.module.ViewModelModule;
 import edu.iastate.graysonc.fastfood.repositories.Repository;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -32,6 +30,7 @@ public class AppModule {
     MyDatabase provideDatabase(Application application) {
         return Room.databaseBuilder(application,
                 MyDatabase.class, "MyDatabase.db")
+                .fallbackToDestructiveMigration()
                 .build();
     }
 

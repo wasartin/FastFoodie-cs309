@@ -98,9 +98,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         account = getArguments().getParcelable("ACCOUNT");
         if (account != null) {
             initUI(account);
-            viewModel.init(account.getEmail());
+            viewModel.init("graysoncox98@gmail.com");
             viewModel.getUser().observe(this, user -> {
-                updateUI(user);
+                if (user != null) {
+                    updateUI(user);
+                }
             });
         }
 

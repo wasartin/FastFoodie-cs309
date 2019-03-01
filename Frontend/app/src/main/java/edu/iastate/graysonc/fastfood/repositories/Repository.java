@@ -1,20 +1,29 @@
 package edu.iastate.graysonc.fastfood.repositories;
 
 import android.arch.lifecycle.LiveData;
+import android.util.Log;
+import android.widget.Toast;
 
-import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.api.Webservice;
 import edu.iastate.graysonc.fastfood.database.dao.UserDAO;
 import edu.iastate.graysonc.fastfood.database.entities.User;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 @Singleton
 public class Repository {
+
+    private static int FRESH_TIMEOUT_IN_MINUTES = 1;
+
     private final Webservice webservice;
     private final UserDAO userDAO;
     private final Executor executor;
@@ -32,26 +41,36 @@ public class Repository {
         return userDAO.load(userId);
     }
 
-    private void refreshUser(final String userId) {
-        // Runs in a background thread.
+    private void refreshUser(final String email) {
         executor.execute(() -> {
-            // Check if user data was fetched recently.
-            boolean userExists = (webservice.getUser(userId) != null);
+            // Check if user was fetched recently
+            boolean userExists = (userDAO.hasUser(email, getMaxRefreshTime(new Date())) != null);
+            // If user have to be updated
             if (!userExists) {
-                // Refreshes the data.
-                Response<User> response = null;
-                try {
-                    response = webservice.getUser(userId).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                // Check for errors here.
+                webservice.getUser(email).enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        Log.e("TAG", "DATA REFRESHED FROM NETWORK");
+                        Toast.makeText(App.context, "Data refreshed from network !", Toast.LENGTH_LONG).show();
+                        executor.execute(() -> {
+                            User user = response.body();
+                            user.setLastRefresh(new Date());
+                            userDAO.save(user);
+                        });
+                    }
 
-                // Updates the database. The LiveData object automatically
-                // refreshes, so we don't need to do anything else here.
-                userDAO.save(response.body());
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) { }
+                });
             }
         });
+    }
+
+    private Date getMaxRefreshTime(Date currentDate){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentDate);
+        cal.add(Calendar.MINUTE, -FRESH_TIMEOUT_IN_MINUTES);
+        return cal.getTime();
     }
 
     /*private void fetchUserData(final String UID) {

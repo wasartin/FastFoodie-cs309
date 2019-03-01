@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 @Entity
 public class User {
     @PrimaryKey
@@ -19,11 +21,14 @@ public class User {
     @Expose
     private String type;
 
+    private Date lastRefresh;
+
     public User() { }
 
-    public User(@NonNull String email, String type) {
+    public User(@NonNull String email, String type, Date lastRefresh) {
         this.email = email;
         this.type = type;
+        this.lastRefresh = lastRefresh;
     }
 
     public String getEmail() {
@@ -40,5 +45,13 @@ public class User {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Date getLastRefresh() {
+        return lastRefresh;
+    }
+
+    public void setLastRefresh(Date lastRefresh) {
+        this.lastRefresh = lastRefresh;
     }
 }

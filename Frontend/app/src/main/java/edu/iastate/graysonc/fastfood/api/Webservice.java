@@ -11,7 +11,6 @@ public interface Webservice {
      * @Path("user") annotation on the userId parameter marks it as a
      * replacement for the {user} placeholder in the @GET path
      */
-    @GET("users/{user}")
-    Call<User> getUser(@Path("user") String email);
-
+    @GET("users/{email}")
+    Call<User> getUser(@Path("email") String email);
 }

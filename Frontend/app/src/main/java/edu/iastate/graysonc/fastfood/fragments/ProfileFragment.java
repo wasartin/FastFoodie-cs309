@@ -3,17 +3,22 @@ package edu.iastate.graysonc.fastfood.fragments;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Constraints;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +33,7 @@ import edu.iastate.graysonc.fastfood.database.entities.User;
 import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
 
 import static android.support.constraint.Constraints.TAG;
+import static android.view.View.getDefaultSize;
 
 
 /**
@@ -42,12 +48,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private Button signOutButton;
     private ImageView avatarImageView;
     private TextView nameTextView;
-    private boolean toggled;
     private TextView mUserInfoDisp;
     private TextView mUserDietaryDisp;
     private Button mMenuTicket;
     private Button mMenuEdit;
     private ImageButton mMenuExpand;
+    private ScrollView mHorizontalScroller;
+
+    private boolean toggled;
 
     /**
      * Required empty constructor
@@ -72,6 +80,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mMenuTicket = getView().findViewById(R.id.TicketButton);
         mMenuEdit = getView().findViewById(R.id.ButtonEdit);
         mMenuExpand = getView().findViewById(R.id.MenuButton);
+        mHorizontalScroller = getView().findViewById(R.id.HorizontalScroller);
+
 
         // Get profile picture and name from Google Signin
         GoogleSignInAccount account = getArguments().getParcelable("ACCOUNT");
@@ -92,6 +102,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mMenuEdit.setOnClickListener(this);
         mMenuTicket.setOnClickListener(this);
         mMenuExpand.setOnClickListener(this);
+
+        mHorizontalScroller.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO Auto-generated method stub
+                return getResources().getConfiguration().orientation ==1 ;
+            }
+        });
     }
 
     @Override

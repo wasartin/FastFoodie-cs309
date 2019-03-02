@@ -11,6 +11,9 @@
     <string name="layout_user_info">User Info</string>
     <string name="button_text">Retrieve Data</string>
     <string name="title_activity_signin">Sign in</string>
+    <string name="button_signOut">Sign out</string>
+    <string name="invalid_signin">Not signed in</string>
+    <string name="user_prof_desc">User Avatar</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -23,4 +26,5 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
 </resources>

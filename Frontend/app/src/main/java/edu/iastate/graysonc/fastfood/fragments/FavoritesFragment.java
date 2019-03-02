@@ -23,7 +23,6 @@ public class FavoritesFragment extends Fragment {
     ViewModelProvider.Factory viewModelFactory;
     //private HomeViewModel viewModel;
 
-
     public FavoritesFragment() {
         // Required empty public constructor
     }

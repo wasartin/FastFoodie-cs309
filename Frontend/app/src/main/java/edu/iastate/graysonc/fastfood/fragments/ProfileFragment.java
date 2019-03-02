@@ -3,9 +3,12 @@ package edu.iastate.graysonc.fastfood.fragments;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Constraints;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +33,7 @@ import edu.iastate.graysonc.fastfood.database.entities.User;
 import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
 
 import static android.support.constraint.Constraints.TAG;
+import static android.view.View.getDefaultSize;
 
 
 /**
@@ -52,7 +56,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ScrollView mHorizontalScroller;
 
     private boolean toggled;
-    private boolean scrollable;
 
     /**
      * Required empty constructor
@@ -69,7 +72,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         //Initialize Variables and point to correct XML objects
         toggled = false;
-        scrollable = getResources().getConfiguration().orientation == 1;
         signOutButton = getView().findViewById(R.id.sign_out_button);
         avatarImageView = getView().findViewById(R.id.avatar_image_view);
         nameTextView = getView().findViewById(R.id.name_text_view);
@@ -79,6 +81,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mMenuEdit = getView().findViewById(R.id.ButtonEdit);
         mMenuExpand = getView().findViewById(R.id.MenuButton);
         mHorizontalScroller = getView().findViewById(R.id.HorizontalScroller);
+
 
         // Get profile picture and name from Google Signin
         GoogleSignInAccount account = getArguments().getParcelable("ACCOUNT");

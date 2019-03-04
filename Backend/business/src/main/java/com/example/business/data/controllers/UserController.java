@@ -178,7 +178,10 @@ public class UserController {
 			if(!userRepository.existsById(user_email)) {//pretty sure that is how I want to do this.
 				throw new IllegalArgumentException();
 			}
-			userRepository.save(newUserInfo);//this will edit the user
+			if(!user_email.equals(newUserInfo.getUser_email())){
+				userRepository.deleteById(user_email);
+			}
+			userRepository.save(newUserInfo);
 			response = generateResponse(200, HttpStatus.OK, "User has been edited");
 		}catch (IllegalArgumentException e) {
 			response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that user in the database, or your fields are incorrect, double check your request");

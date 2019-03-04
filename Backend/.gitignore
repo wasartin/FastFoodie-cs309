@@ -16,7 +16,9 @@
 .metadata
 *.apk
 *.ap_
-/business/runtime/application.log*
+*.gz
+.log
+Backend/business/application.log*
 
 
 ### NetBeans ###

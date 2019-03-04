@@ -1,9 +1,8 @@
 package com.example.business.data.entities;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
-import javax.persistence.Column; 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -54,5 +53,4 @@ public class Restaurant {
 	public void setLast_updated(Timestamp last_updated) {
 		this.last_updated = last_updated;
 	}
-	
 }

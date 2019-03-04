@@ -2,7 +2,6 @@ package com.example.business.data.controllers;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,14 +48,14 @@ public class RestaurantController {
 	@RequestMapping(value ="/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JSONObject getAllRestaurantsJSONObject()  {
 		JSONObject toReturn = new JSONObject();
-		String key1 = "Restaurants";
+		String key1 = "data";
 		JSONArray listOfRestaurants = new JSONArray(); 
 		List<Restaurant> uList = getRestaurants(); 
 		for(int i = 0; i < uList.size(); i++) {
 			JSONObject temp = new JSONObject(); 
-			temp.put("lastUpdated", uList.get(i).getLast_updated());
-			temp.put("restaurantName", uList.get(i).getRestaurant_name());
-			temp.put("restaurantID", uList.get(i).getRestaurant_id()); 
+			temp.put("last_updated", uList.get(i).getLast_updated());
+			temp.put("restaurant_name", uList.get(i).getRestaurant_name());
+			temp.put("restaurant_id", uList.get(i).getRestaurant_id()); 
 			listOfRestaurants.add(temp);
 		}
 		toReturn.put(key1, listOfRestaurants);
@@ -75,10 +74,10 @@ public class RestaurantController {
 		Optional<Restaurant> temp = restaurantRepo.findById(restaurant_id);
 		JSONObject toReturn = new JSONObject();
 		JSONObject restaurantInfo = new JSONObject();
-		restaurantInfo.put("lastUpdated", temp.get().getLast_updated());
-		restaurantInfo.put("restaurantName", temp.get().getRestaurant_name());
-		restaurantInfo.put("restaurantID", temp.get().getRestaurant_id());
-		toReturn.put("Restaurant", restaurantInfo);
+		restaurantInfo.put("last_updated", temp.get().getLast_updated());
+		restaurantInfo.put("restaurant_name", temp.get().getRestaurant_name());
+		restaurantInfo.put("restaurant_id", temp.get().getRestaurant_id());
+		toReturn.put("data", restaurantInfo);
 		return toReturn;
 	}
 
@@ -96,41 +95,8 @@ public class RestaurantController {
 			if(restaurantRepo.existsById(newRestaurant.getRestaurant_id())) {
 				throw new IllegalArgumentException();	
 			}
-			
-			newRestaurant.setLast_updated(null);
-			
-			restaurantRepo.save(newRestaurant);
-			response.put("status", 200);
-			response.put("message",HttpStatus.OK);
-		} catch(IllegalArgumentException e) {
-			response.put("status", 400);
-			response.put("error", HttpStatus.BAD_REQUEST);
-			response.put("message", "Restaurant might already exists or your fields are incorrect. Double check your request");
-		}catch (Exception e) {
-			response.put("status", 500);
-			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
-			response.put("message", "Server might be down now. Try again");
-		}
-		return response;
-	}
-	
-	@RequestMapping(method = RequestMethod.POST, path = "/create/JSON", produces=MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	private Map<String, Object> createRestaurantJSON(@RequestBody JSONObject newJSON){
-		HashMap<String, Object> response = new HashMap<>();
-		
-		JSONObject restaurantInfo = new JSONObject();
-		restaurantInfo = (JSONObject) newJSON.get("Restaurant");
-		
-		Restaurant newRestaurant = new Restaurant();
-		newRestaurant.setRestaurant_id((int) restaurantInfo.get("restaurantID"));
-		newRestaurant.setRestaurant_name((String) restaurantInfo.get("restaurantName"));
-		newRestaurant.setLast_updated((Timestamp) restaurantInfo.get("lastUpdated"));
-
-
-		try {
-			if(restaurantRepo.existsById(newRestaurant.getRestaurant_id())) {
-				throw new IllegalArgumentException();	
+			if(newRestaurant.getLast_updated() == null) {
+				newRestaurant.setLast_updated(new Timestamp(System.currentTimeMillis()));
 			}
 			restaurantRepo.save(newRestaurant);
 			response.put("status", 200);
@@ -149,11 +115,12 @@ public class RestaurantController {
 	
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id ) {
+	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
-			if(!restaurantRepo.existsById(restaurant_id))//Checks to see if restaurant is in the DB
+			if(!restaurantRepo.existsById(restaurant_id)) {
 				throw new IllegalArgumentException();
+			}
 			restaurantRepo.deleteById(restaurant_id);
 			response.put("status", 200);
 			response.put("message", HttpStatus.OK);
@@ -168,5 +135,30 @@ public class RestaurantController {
 		}
 		return response;
 	}
-
+	
+	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	private Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
+		HashMap<String,Object> response = new HashMap<>();
+		try {
+			if(!restaurantRepo.existsById(restaurant_id)) {
+				throw new IllegalArgumentException();
+			}
+			if(updatedRestaurant.getLast_updated()==null) {
+				updatedRestaurant.setLast_updated(new Timestamp(System.currentTimeMillis()));
+			}
+			restaurantRepo.save(updatedRestaurant);
+			response.put("status", 200);
+			response.put("message", HttpStatus.OK);
+		}catch (IllegalArgumentException e) {
+			response.put("status", 400);
+			response.put("error", HttpStatus.BAD_REQUEST);
+			response.put("message", "Could not find that restaurant in the database or your fields are incorrect. Double check your request");
+		}catch (Exception e) {
+			response.put("status", 500);
+			response.put("error", HttpStatus.INTERNAL_SERVER_ERROR);
+			response.put("message", "Server might be down now. Try again");
+		}
+		return response;
+	}
 }

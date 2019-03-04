@@ -2,8 +2,11 @@
 /target/
 */target/*
 !.mvn/wrapper/maven-wrapper.jar
-
+#ignore
+*.log
+*.gz
 ### STS ###
+.metadata
 .apt_generated
 .classpath
 .factorypath

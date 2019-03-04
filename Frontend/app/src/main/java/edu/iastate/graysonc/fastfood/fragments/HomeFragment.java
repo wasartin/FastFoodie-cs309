@@ -1,7 +1,6 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
 
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import javax.inject.Inject;
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
-import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
 
 
 /**

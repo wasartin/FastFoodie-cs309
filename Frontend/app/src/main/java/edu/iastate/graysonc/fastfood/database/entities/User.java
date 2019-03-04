@@ -13,11 +13,11 @@ import java.util.Date;
 public class User {
     @PrimaryKey
     @NonNull
-    @SerializedName("email")
+    @SerializedName("user_email")
     @Expose
     private String email;
 
-    @SerializedName("userType")
+    @SerializedName("user_type")
     @Expose
     private String type;
 

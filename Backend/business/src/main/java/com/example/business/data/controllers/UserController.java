@@ -33,6 +33,8 @@ public class UserController {
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
 	@SuppressWarnings("unused")
 	private final String JSON_OBJECT_RESPONSE_KEY2 = "info";
+	@SuppressWarnings("unused")
+	private final String JSON_OBJECT_RESPONSE_KEY3 = "favoritesList";
 	
 	@Autowired
 	UserRepository userRepository;
@@ -88,11 +90,11 @@ public class UserController {
 	 */
 	@SuppressWarnings("unchecked")
 	private JSONObject parseUserIntoJSONObject(User user) {
-		final String USER_EMAIL_KEY = "email";
-		final String USER_TYPE_KEY = "role";
+		final String USER_EMAIL_KEY = "user_email";
+		final String USER_TYPE_KEY = "user_type";
 		JSONObject userAsJSONObj = new JSONObject();
-		userAsJSONObj.put(USER_EMAIL_KEY, user.getEmail());
-		userAsJSONObj.put(USER_TYPE_KEY, user.getUserType());
+		userAsJSONObj.put(USER_EMAIL_KEY, user.getUser_email());
+		userAsJSONObj.put(USER_TYPE_KEY, user.getUser_type());
 		return userAsJSONObj;
 	}
 
@@ -124,7 +126,7 @@ public class UserController {
 	private JSONObject createUser(@RequestBody User newUser) {
 		JSONObject response;
 		try {
-			if(userRepository.existsById(newUser.getEmail())) {//User already exists
+			if(userRepository.existsById(newUser.getUser_email())) {//User already exists
 				throw new IllegalArgumentException();
 			}
 			userRepository.save(newUser);
@@ -144,7 +146,7 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteUser(@RequestBody @PathVariable String user_email) {
+	private JSONObject deleteUser(@PathVariable String user_email) {
 		JSONObject response;
 		try {
 			if(!userRepository.existsById(user_email)) {//Checks to see if User is even in the DB
@@ -192,7 +194,6 @@ public class UserController {
 		response.put("status", status);
 		response.put("HttpStatus", input);
 		response.put("message", message);
-		//response.put
 		return response;
 	}
 }

@@ -1,6 +1,6 @@
 package com.example.business.data.entities;
 
-import javax.persistence.Column;
+import javax.persistence.Column; 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class User {
 	@Id //specifies that this is a primary key
 	@Column(name="user_email")
-	private String user_email;
+	private String user_email;//These names should exactly match the names of the db columns
 	@Column(name="user_type")
 	private String user_type;
 	

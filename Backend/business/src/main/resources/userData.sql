@@ -9,3 +9,4 @@ INSERT INTO user
 	('vincentAdultman@corporatePlace.com', 'admin'),
 	('gilbertPatel@Uruk.com', 'registered'),
 	('cowman@Springs.com', 'registered');
+	

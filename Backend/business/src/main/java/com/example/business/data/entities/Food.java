@@ -9,8 +9,6 @@ import javax.persistence.Table;
 @Table(name="food")
 public class Food {
 	
-	//I tried to add the food entity by matching stuff from our google doc
-	//feel free to change whatever
 
 	@Id //specifies primary key
 	//column names match variable names
@@ -26,18 +24,31 @@ public class Food {
 	private int calorie_total;
 	@Column(name="weight_oz_total")
 	private int weight_oz_total;
+	@Column (name="price_total")
+	private int price_total;
 	
+
+
 	public Food() {
 		super();
 	}
 	
-	public Food(String food_name, int protein, int carbs, int fat, int calories, int weight) {
+	public Food(String food_name, int protein, int carbs, int fat, int calories, int weight, int price) {
 		this.food_name = food_name;
 		this.protein_total = protein;
 		this.carb_total = carbs;
 		this.fat_total = fat;
 		this.calorie_total =calories;
 		this.weight_oz_total = weight;
+		this.price_total = price;
+	}
+	
+	public int getPrice_total() {
+		return price_total;
+	}
+
+	public void setPrice_total(int price_total) {
+		this.price_total = price_total;
 	}
 
 	public String getFood_name() {

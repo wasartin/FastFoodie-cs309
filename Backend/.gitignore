@@ -17,9 +17,11 @@
 .bin
 .recommenders
 .metadata
-application.log
 *.apk
 *.ap_
+*.gz
+.log
+business/application.log*
 
 
 ### NetBeans ###

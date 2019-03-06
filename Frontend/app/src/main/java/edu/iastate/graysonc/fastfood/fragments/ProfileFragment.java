@@ -179,7 +179,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
      * Creates A Toast Message With Content @message
      * @param message The message to be displayed
      */
-    public void createWarning(String message) {
+    public  void createWarning(String message) {
         Context context = getContext();
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }

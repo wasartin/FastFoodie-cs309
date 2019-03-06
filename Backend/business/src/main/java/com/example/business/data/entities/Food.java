@@ -8,10 +8,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name="food")
 public class Food {
-	
-
-	@Id //specifies primary key
-	//column names match variable names
+	@Id
+	@Column(name="food_id")
+	private String food_id; 
 	@Column(name="food_name")
 	private String food_name; 
 	@Column(name="protein_total")
@@ -27,22 +26,43 @@ public class Food {
 	@Column (name="price_total")
 	private int price_total;
 	
-
-
 	public Food() {
 		super();
 	}
-	
-	public Food(String food_name, int protein, int carbs, int fat, int calories, int weight, int price) {
+
+	public Food(String food_id, String food_name, int protein_total, int carb_total, int fat_total, int calorie_total,
+			int weight_oz_total, int price_total, int located_at) {
+		super();
+		this.food_id = food_id;
 		this.food_name = food_name;
-		this.protein_total = protein;
-		this.carb_total = carbs;
-		this.fat_total = fat;
-		this.calorie_total =calories;
-		this.weight_oz_total = weight;
-		this.price_total = price;
+		this.protein_total = protein_total;
+		this.carb_total = carb_total;
+		this.fat_total = fat_total;
+		this.calorie_total = calorie_total;
+		this.weight_oz_total = weight_oz_total;
+		this.price_total = price_total;
+		this.located_at = located_at;
 	}
-	
+
+	public int getLocated_at() {
+		return located_at;
+	}
+
+	public void setLocated_at(int located_at) {
+		this.located_at = located_at;
+	}
+
+	@Column (name="located_at")
+	private int located_at;
+
+	public String getFood_id() {
+		return food_id;
+	}
+
+	public void setFood_id(String food_id) {
+		this.food_id = food_id;
+	}
+
 	public int getPrice_total() {
 		return price_total;
 	}

@@ -18,7 +18,7 @@
 *.ap_
 *.gz
 .log
-Backend/business/application.log*
+business/application.log*
 
 
 ### NetBeans ###

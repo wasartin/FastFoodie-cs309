@@ -80,6 +80,18 @@ public class RestaurantController {
 		toReturn.put("data", restaurantInfo);
 		return toReturn;
 	}
+	
+	/**
+	 * Old method for GETting restaurant object
+	 * @param restaurant_id
+	 * @return restaurant object of stated id. (Not JSON Object)
+	 */
+	@RequestMapping(method = RequestMethod.GET, path = "old/{restaurant_id}")
+	@ResponseBody
+	public Optional<Restaurant> getRestaurant_OLD(@PathVariable int restaurant_id){
+		return restaurantRepo.findById(restaurant_id);
+	}
+
 
 	
 	/**
@@ -113,6 +125,11 @@ public class RestaurantController {
 		return response;
 	}
 	
+	/**
+	 * Deletes restaurant corresponding to restaurant_id in url path
+	 * @param restaurant_id
+	 * @return response
+	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
@@ -136,6 +153,12 @@ public class RestaurantController {
 		return response;
 	}
 	
+	/**
+	 * edits a restaurant, specified in the url path by its id 
+	 * @param updatedRestaurant info to update restaurant with
+	 * @param restaurant_id which restaurant to update
+	 * @return response
+	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	private Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
@@ -146,6 +169,9 @@ public class RestaurantController {
 			}
 			if(updatedRestaurant.getLast_updated()==null) {
 				updatedRestaurant.setLast_updated(new Timestamp(System.currentTimeMillis()));
+			}
+			if(restaurant_id != updatedRestaurant.getRestaurant_id()) {
+				restaurantRepo.deleteById(restaurant_id);
 			}
 			restaurantRepo.save(updatedRestaurant);
 			response.put("status", 200);

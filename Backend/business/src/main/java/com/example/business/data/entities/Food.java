@@ -8,49 +8,60 @@ import javax.persistence.Table;
 @Entity
 @Table(name="food")
 public class Food {
+	@Id
+	@Column(name="food_id")
+	private int food_id; 
 	
-
-	@Id //specifies primary key
-	//column names match variable names
 	@Column(name="food_name")
 	private String food_name; 
+	
 	@Column(name="protein_total")
 	private int protein_total;
+	
 	@Column(name="carb_total")
 	private int carb_total;
+	
 	@Column(name="fat_total")
 	private int fat_total;
+	
 	@Column(name="calorie_total")
 	private int calorie_total;
-	@Column(name="weight_oz_total")
-	private int weight_oz_total;
-	@Column (name="price_total")
-	private int price_total;
 	
-
-
+	@Column (name="located_at")
+	private int located_at;
+	
 	public Food() {
 		super();
 	}
-	
-	public Food(String food_name, int protein, int carbs, int fat, int calories, int weight, int price) {
+
+	public Food(int food_id, String food_name, int protein_total, int carb_total, int fat_total, int calorie_total,
+			int located_at) {
+		super();
+		this.food_id = food_id;
 		this.food_name = food_name;
-		this.protein_total = protein;
-		this.carb_total = carbs;
-		this.fat_total = fat;
-		this.calorie_total =calories;
-		this.weight_oz_total = weight;
-		this.price_total = price;
+		this.protein_total = protein_total;
+		this.carb_total = carb_total;
+		this.fat_total = fat_total;
+		this.calorie_total = calorie_total;
+		this.located_at = located_at;
+	}
+
+	public int getLocated_at() {
+		return located_at;
+	}
+
+	public void setLocated_at(int located_at) {
+		this.located_at = located_at;
 	}
 	
-	public int getPrice_total() {
-		return price_total;
+	public int getFood_id() {
+		return food_id;
 	}
 
-	public void setPrice_total(int price_total) {
-		this.price_total = price_total;
+	public void setFood_id(int food_id) {
+		this.food_id = food_id;
 	}
-
+	
 	public String getFood_name() {
 		return food_name;
 	}
@@ -91,11 +102,4 @@ public class Food {
 		this.calorie_total = calorie_total;
 	}
 
-	public int getWeight_oz_total() {
-		return weight_oz_total;
-	}
-
-	public void setWeight_oz_total(int weight_oz_total) {
-		this.weight_oz_total = weight_oz_total;
-	}
 }

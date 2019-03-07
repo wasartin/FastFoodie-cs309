@@ -102,7 +102,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
+                //If rotation = sideways
                 return getResources().getConfiguration().orientation == 1;
             }
         });

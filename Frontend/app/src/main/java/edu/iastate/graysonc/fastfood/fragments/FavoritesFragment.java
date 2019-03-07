@@ -4,6 +4,7 @@ package edu.iastate.graysonc.fastfood.fragments;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,7 +49,13 @@ public class FavoritesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         AndroidSupportInjection.inject(this);
-        buildList(); //Creates a fake List
+
+        //Looks for stored data Pre Rotate, uses new list if not found
+        if(savedInstanceState==null) {
+            buildList(); //Creates a fake List
+        }else{
+            favList= savedInstanceState.getParcelableArrayList("Foods");
+        }
 
         //Assign a radio group and handle Changes
         mSortBy = Objects.requireNonNull(getView()).findViewById(R.id.SortByRadioGroup);
@@ -76,15 +83,26 @@ public class FavoritesFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        //Logs foods to remove
+        //TODO Remove this food from Favorites
         super.onDestroy();
         Log.v("Debug",checkList().toString());
+        Context context = getContext();
+        Toast.makeText(context, "Removed " + checkList().toString(), Toast.LENGTH_LONG).show();
     }
 
-    public void removeItem(int pos) {
-        //TODO actually defavorite this
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        //Stores favlist for later, post rotate goodness
+        outState.putParcelableArrayList("Foods",favList);
+        super.onSaveInstanceState(outState);
+    }
 
-        Context context = getContext();
-        Toast.makeText(context, "Removing " + favList.get(pos).getFood() + " from favorites", Toast.LENGTH_SHORT).show();
+    /**
+     * Removes item at @pos from recycler
+     * @param pos Position of item to be removed
+     */
+    public void removeItem(int pos) {
         favList.remove(pos);
         mAdapter.notifyDataSetChanged();
     }
@@ -110,6 +128,9 @@ public class FavoritesFragment extends Fragment {
         favList.add(new recycler_card("BMT Sub", "Subway"));
     }
 
+    /**
+     * Actually creates the Recycler View
+     */
     public void buildView() {
         mainList = Objects.requireNonNull(getView()).findViewById(R.id.Favorites_Recycler);
         mainList.setHasFixedSize(true); //Prevents dynamic resizing, improves performance
@@ -132,12 +153,8 @@ public class FavoritesFragment extends Fragment {
                 recycler_card temp = favList.get(position);
                 if(temp.isFavored()){
                     temp.setFavored(false);
-                    Context context = getContext();
-                    Toast.makeText(context, "de-favorite " + favList.get(position).getFood(), Toast.LENGTH_SHORT).show();
                 }else{
                     temp.setFavored(true);
-                    Context context = getContext();
-                    Toast.makeText(context, "favorite " + favList.get(position).getFood(), Toast.LENGTH_SHORT).show();
                 }
 
             }

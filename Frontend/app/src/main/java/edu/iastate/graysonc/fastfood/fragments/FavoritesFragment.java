@@ -7,24 +7,23 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
+import android.widget.RadioGroup;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.RecyclerAdapter;
-import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.recyler_card;
+import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.recycler_card;
 
 
 /**
@@ -36,8 +35,8 @@ public class FavoritesFragment extends Fragment {
     private android.support.v7.widget.RecyclerView mainList;
     private RecyclerAdapter mAdapter;
     private android.support.v7.widget.RecyclerView.LayoutManager mlayoutManager;
-    ArrayList<recyler_card> favList;
-    Switch sortby;
+    ArrayList<recycler_card> favList;
+    RadioGroup mSortBy;
     //private HomeViewModel viewModel;
 
     public FavoritesFragment() {
@@ -48,17 +47,24 @@ public class FavoritesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         AndroidSupportInjection.inject(this);
-        sortby = getView().findViewById(R.id.sortBySwitch);
+        buildList(); //Creates a fake List
 
-        buildList();
-        sortby.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sortList(isChecked);
+        //Assign a radio group and handle Changes
+        mSortBy = Objects.requireNonNull(getView()).findViewById(R.id.SortByRadioGroup);
+        mSortBy.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == 2131230907) {
+                sortList(false);
+            } else if (checkedId == 2131230908) {
+                sortList(true);
+            } else {
+                Log.v("RadioButtonErr", "Expected 2131230907/8, got: " + checkedId);
             }
         });
-        buildView();
-        sortList(false);
+
+
+        buildView();//Creates a recycle view
+
+        sortList(false); //Sorts view by list type
     }
 
     @Override
@@ -80,32 +86,32 @@ public class FavoritesFragment extends Fragment {
     public void buildList() {
         //TODO populate with our data!
         favList = new ArrayList<>();
-        favList.add(new recyler_card("Tripple Sub", "Ihop"));
-        favList.add(new recyler_card("Pancake Double Stack", "Ihop"));
-        favList.add(new recyler_card("sad Sub", "McDanks"));
-        favList.add(new recyler_card("Moms Sub", "Subway"));
-        favList.add(new recyler_card("Large Shake", "McDanks"));
-        favList.add(new recyler_card("Double Burger", "McDanks"));
-        favList.add(new recyler_card("McDouble", "McDanks"));
-        favList.add(new recyler_card("Spicy Italian Sub", "Subway"));
-        favList.add(new recyler_card("Chicken Parm  Sub", "Subway"));
-        favList.add(new recyler_card("Marinara Sub", "Subway"));
-        favList.add(new recyler_card("Pineapple Pizza", "Jeffs"));
-        favList.add(new recyler_card("Vegan Sub", "Subway"));
-        favList.add(new recyler_card("Soup Pizza", "Jeffs"));
-        favList.add(new recyler_card("Salad", "Subway"));
-        favList.add(new recyler_card("BMT Sub", "Subway"));
+        favList.add(new recycler_card("Tripple Sub", "Ihop"));
+        favList.add(new recycler_card("Pancake Double Stack", "Ihop"));
+        favList.add(new recycler_card("sad Sub", "McDanks"));
+        favList.add(new recycler_card("Moms Sub", "Subway"));
+        favList.add(new recycler_card("Large Shake", "McDanks"));
+        favList.add(new recycler_card("Double Burger", "McDanks"));
+        favList.add(new recycler_card("McDouble", "McDanks"));
+        favList.add(new recycler_card("Spicy Italian Sub", "Subway"));
+        favList.add(new recycler_card("Chicken Parm  Sub", "Subway"));
+        favList.add(new recycler_card("Marinara Sub", "Subway"));
+        favList.add(new recycler_card("Pineapple Pizza", "Jeffs"));
+        favList.add(new recycler_card("Vegan Sub", "Subway"));
+        favList.add(new recycler_card("Soup Pizza", "Jeffs"));
+        favList.add(new recycler_card("Salad", "Subway"));
+        favList.add(new recycler_card("BMT Sub", "Subway"));
     }
 
     public void buildView() {
-        mainList = getView().findViewById(R.id.Favorites_Recycler);
-        mainList.setHasFixedSize(true);
+        mainList = Objects.requireNonNull(getView()).findViewById(R.id.Favorites_Recycler);
+        mainList.setHasFixedSize(true); //Prevents dynamic resizing, improves performance
         mlayoutManager = new LinearLayoutManager(getContext());
         mAdapter = new RecyclerAdapter(favList);
         mainList.setLayoutManager(mlayoutManager);
         mainList.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListner(new RecyclerAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 //TODO actually open this
@@ -120,8 +126,13 @@ public class FavoritesFragment extends Fragment {
         });
     }
 
-    public void sortList(boolean resturant) {
-        if (resturant) {
+    /**
+     * Sorts using custom comparators
+     *
+     * @param restaurant Sort by restaurant
+     */
+    private void sortList(boolean restaurant) {
+        if (restaurant) {
             Collections.sort(favList, (o1, o2) -> o1.getData().compareToIgnoreCase(o2.getData()));
         } else {
             Collections.sort(favList, (o1, o2) -> o1.getFood().compareToIgnoreCase(o2.getFood()));
@@ -130,5 +141,4 @@ public class FavoritesFragment extends Fragment {
     }
 
 }
-
 

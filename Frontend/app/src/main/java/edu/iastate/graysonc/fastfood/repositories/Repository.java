@@ -53,8 +53,12 @@ public class Repository {
                         Toast.makeText(App.context, "Data refreshed from network !", Toast.LENGTH_LONG).show();
                         executor.execute(() -> {
                             User user = response.body();
-                            user.setLastRefresh(new Date());
-                            userDAO.save(user);
+                            if(user==null){
+                                Log.v("RepositoryEr","Grayson your code doesn't work <3");
+                            }else {
+                                user.setLastRefresh(new Date());
+                                userDAO.save(user);
+                            }
                         });
                     }
 

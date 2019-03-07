@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import edu.iastate.graysonc.fastfood.R;
 
 public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    private ArrayList<recyler_card> mList;
+    private ArrayList<recycler_card> mList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener{
@@ -22,7 +21,7 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
         void onDeleteClick(int position);
     }
 
-    public void setOnItemClickListner(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener){
         mListener = listener;
     }
 
@@ -62,7 +61,7 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
         }
     }
 
-    public RecyclerAdapter(ArrayList<recyler_card> list){
+    public RecyclerAdapter(ArrayList<recycler_card> list){
         mList = list;
     }
 
@@ -76,7 +75,7 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int pos) {
-        recyler_card currentCard = mList.get(pos);
+        recycler_card currentCard = mList.get(pos);
         viewHolder.mLine1.setText(currentCard.getFood());
         viewHolder.mLine2.setText(currentCard.getData());
     }

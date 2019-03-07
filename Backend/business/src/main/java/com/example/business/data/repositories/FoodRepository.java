@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.business.data.entities.Food;
 
 @Repository
-public interface FoodRepository extends CrudRepository<Food,String>{
+public interface FoodRepository extends CrudRepository<Food, Integer>{
 
 }

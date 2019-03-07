@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +74,12 @@ public class FavoritesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_favorites, container, false);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.v("Debug",checkList().toString());
+    }
+
     public void removeItem(int pos) {
         //TODO actually defavorite this
 
@@ -120,8 +127,19 @@ public class FavoritesFragment extends Fragment {
             }
 
             @Override
-            public void onDeleteClick(int position) {
-                removeItem(position);
+            public void onFaveClick(int position) {
+                //removeItem(position);
+                recycler_card temp = favList.get(position);
+                if(temp.isFavored()){
+                    temp.setFavored(false);
+                    Context context = getContext();
+                    Toast.makeText(context, "de-favorite " + favList.get(position).getFood(), Toast.LENGTH_SHORT).show();
+                }else{
+                    temp.setFavored(true);
+                    Context context = getContext();
+                    Toast.makeText(context, "favorite " + favList.get(position).getFood(), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -140,5 +158,16 @@ public class FavoritesFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Foods Removed in action
+     * @return A list of foods removed
+     */
+    private ArrayList<String> checkList(){
+        ArrayList<String> removed = new ArrayList<>();
+        for(recycler_card item : favList){
+            if(!item.isFavored()) removed.add(item.getFood());
+        }
+        return removed;
+    }
 }
 

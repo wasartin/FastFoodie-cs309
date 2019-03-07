@@ -9,10 +9,10 @@ public class recycler_card {
     public recycler_card(String Food, String Misc_Data){
         this(Food, Misc_Data,true);
     }
-    public recycler_card(String Food, String Misc_Data, boolean favored){
+    public recycler_card(String Food, String Misc_Data, boolean fav){
         mLine1=Food;
         mLine2=Misc_Data;
-        this.favored=favored;
+        favored=fav;
     }
 
     public String getFood() {
@@ -26,4 +26,6 @@ public class recycler_card {
     public boolean isFavored() {
         return favored;
     }
+
+    public void setFavored(boolean val){favored=val;}
 }

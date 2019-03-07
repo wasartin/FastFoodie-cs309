@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text=""
-            android:textColor="@android:color/holo_blue_bright"
+            android:textColor="@android:color/tab_indicator_text"
             android:textSize="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/RecLine1" />

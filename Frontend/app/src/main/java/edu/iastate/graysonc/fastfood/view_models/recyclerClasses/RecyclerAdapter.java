@@ -18,14 +18,15 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
 
     public interface OnItemClickListener{
         void onItemClick(int position);
-        void onDeleteClick(int position);
+        void onFaveClick(int position);
     }
 
+    //Assign an on click listener to this Adapter
     public void setOnItemClickListener(OnItemClickListener listener){
         mListener = listener;
     }
 
-    public static class ViewHolder extends  android.support.v7.widget.RecyclerView.ViewHolder{
+    public  class ViewHolder extends  android.support.v7.widget.RecyclerView.ViewHolder{
         public ImageView mDeleteImage;
         public TextView mLine1;
         public TextView mLine2;
@@ -53,7 +54,12 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
                     if(listener != null){
                         int pos = getAdapterPosition();
                         if(pos != RecyclerView.NO_POSITION){
-                            listener.onDeleteClick(pos);
+                            listener.onFaveClick(pos);
+                            if(mList.get(pos).isFavored()){
+                                mDeleteImage.setImageResource(R.drawable.twotone_favorite_black_18dp_2x);
+                            }else{
+                                mDeleteImage.setImageResource(R.drawable.twotone_favorite_border_black_18dp_2x);
+                            }
                         }
                     }
                 }
@@ -78,6 +84,11 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
         recycler_card currentCard = mList.get(pos);
         viewHolder.mLine1.setText(currentCard.getFood());
         viewHolder.mLine2.setText(currentCard.getData());
+        if(mList.get(pos).isFavored()){
+            viewHolder.mDeleteImage.setImageResource(R.drawable.twotone_favorite_black_18dp_2x);
+        }else{
+            viewHolder.mDeleteImage.setImageResource(R.drawable.twotone_favorite_border_black_18dp_2x);
+        }
     }
 
     @Override

@@ -42,11 +42,26 @@ public class FoodController {
 		return foodRepository.findAll();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, path = "old/{food_keyword}")
+	@RequestMapping(method = RequestMethod.GET, path = "/{food_keyword}")
 	@ResponseBody
 	public JSONObject getFoodWithKeyword(@PathVariable String keyword){
-		//TODO
-		return null;
+		JSONObject toReturn = new JSONObject();
+		List<Food> fullFoodList = getFoods();
+		
+		JSONArray foodWithKeywordList = new JSONArray();
+		String key1 = keyword;
+		for(Food food : fullFoodList) {
+			JSONObject tempFoodObj = parseFoodIntoJSONObject(food);
+			String tempName = (String) tempFoodObj.get("food_name");
+			
+			tempName = tempName.toLowerCase();
+			String lowerCaseKeyword = keyword.toLowerCase();
+			if(tempName.contains(lowerCaseKeyword)) {
+				foodWithKeywordList.add(parseFoodIntoJSONObject(food));
+			}
+		}
+		toReturn.put(keyword, foodWithKeywordList);
+		return toReturn;
 	}
 
 	/**

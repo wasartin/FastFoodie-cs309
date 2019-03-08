@@ -2,6 +2,7 @@ package edu.iastate.graysonc.fastfood.api;
 
 import java.util.List;
 
+import edu.iastate.graysonc.fastfood.database.entities.Food;
 import edu.iastate.graysonc.fastfood.database.entities.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -31,4 +32,10 @@ public interface Webservice {
 
     @PUT("users/edit/{user_email}")
     Call<User> editUser(@Path("user_email") String email);
+
+    @GET("foods/old/{food_id}")
+    Call<Food> getFood(@Path("food_id") int id);
+
+    @GET("foods/old/all")
+    Call<List<Food>> getAllFoods();
 }

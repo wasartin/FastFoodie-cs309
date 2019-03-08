@@ -102,26 +102,26 @@ public class FoodController {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JSONObject getAllUsersJSONObject()  {
+	public JSONObject getAllFoodJSONObject()  {
 		JSONObject toReturn = new JSONObject();
 		String key1 = JSON_OBJECT_RESPONSE_KEY1;
-		JSONArray listOfUsers = new JSONArray();
+		JSONArray listOfFoods = new JSONArray();
 		List<Food> uList = getFoods();
 		for(Food food : uList) {
-			listOfUsers.add(parseFoodIntoJSONObject(food));
+			listOfFoods.add(parseFoodIntoJSONObject(food));
 		}
-		toReturn.put(key1, listOfUsers);
+		toReturn.put(key1, listOfFoods);
 		return toReturn;
 	}
 
 	/**
 	 * Currently just takes food Object. Might need to be a JSONObject I parse if more info is required.
-	 * @param newUser
+	 * @param newFood
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createUser(@RequestBody Food newFood) {
+	private JSONObject createFood(@RequestBody Food newFood) {
 		JSONObject response;
 		try {
 			if(foodRepository.existsById(newFood.getFood_id())) {
@@ -138,13 +138,13 @@ public class FoodController {
 	}
 	
 	/**
-	 * Deletes the user given their unique id
+	 * Deletes the food given their unique id
 	 * @param food_id
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteUser(@PathVariable int food_id) {
+	private JSONObject deleteFood(@PathVariable int food_id) {
 		JSONObject response;
 		try {
 			if(!foodRepository.existsById(food_id)) {
@@ -166,7 +166,7 @@ public class FoodController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject editUser(@RequestBody Food newFood, @PathVariable int food_id) {
+	private JSONObject editFood(@RequestBody Food newFood, @PathVariable int food_id) {
 		JSONObject response;
 		try {
 			if(!foodRepository.existsById(food_id)) {

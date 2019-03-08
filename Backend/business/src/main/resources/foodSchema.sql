@@ -6,5 +6,6 @@ CREATE TABLE food(
 	fat_total INT,
 	calorie_total INT,
 	located_at INT NOT NULL,
-	PRIMARY KEY(restaurant_id)
+	PRIMARY KEY(food_id),
+	FOREIGN KEY(located_at) REFERENCES restaurant(restaurant_id)
 );

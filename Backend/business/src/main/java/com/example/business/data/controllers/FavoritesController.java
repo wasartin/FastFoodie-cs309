@@ -48,12 +48,18 @@ public class FavoritesController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET, path = "/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, path = "/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public JSONObject getfavoriteJSONObject(@PathVariable int user_id) {
-		Optional<Favorites> temp = favoritesRepository.findById(user_id);
+	public JSONObject getfavoriteJSONObject(@PathVariable int favorites_id) {
 		JSONObject response = new JSONObject();
-		response.put(JSON_OBJECT_RESPONSE_KEY1, temp.get());
+		JSONArray listOfFavorites = new JSONArray();
+		List<Favorites> fullListOfFavorites = getFavorites();
+		for(Favorites fav : fullListOfFavorites) {
+			if(fav.getFavorites_id() == favorites_id) {
+				listOfFavorites.add(fav);
+			}
+		}
+		response.put("Data", listOfFavorites);
 		return response;
 	}
 	
@@ -76,6 +82,7 @@ public class FavoritesController {
 		JSONObject favoriteAsJSONObj = new JSONObject();
 		favoriteAsJSONObj.put(favorite_USER_ID_KEY, favorite.getUser_id());
 		favoriteAsJSONObj.put(favorite_fid_KEY, favorite.getFid());
+		favoriteAsJSONObj.put("favorites_id", favorite.getFavorites_id());
 		return favoriteAsJSONObj;
 	}
 
@@ -85,15 +92,15 @@ public class FavoritesController {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JSONObject getAllUsersJSONObject()  {
+	public JSONObject getAllFavoritesJSONObject()  {
 		JSONObject toReturn = new JSONObject();
 		String key1 = JSON_OBJECT_RESPONSE_KEY1;
-		JSONArray listOfUsers = new JSONArray();
+		JSONArray listOfFavorites = new JSONArray();
 		List<Favorites> uList = getFavorites();
 		for(Favorites favorite : uList) {
-			listOfUsers.add(parsefavoriteIntoJSONObject(favorite));
+			listOfFavorites.add(parsefavoriteIntoJSONObject(favorite));
 		}
-		toReturn.put(key1, listOfUsers);
+		toReturn.put(key1, listOfFavorites);
 		return toReturn;
 	}
 
@@ -104,10 +111,10 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createUser(@RequestBody Favorites newfavorite) {
+	private JSONObject createFavorite(@RequestBody Favorites newfavorite) {
 		JSONObject response;
 		try {
-			if(favoritesRepository.existsById(newfavorite.getUser_id())) {
+			if(favoritesRepository.existsById(newfavorite.getFavorites_id())) {
 				throw new IllegalArgumentException();
 			}
 			favoritesRepository.save(newfavorite);
@@ -121,19 +128,50 @@ public class FavoritesController {
 	}
 	
 	/**
-	 * Deletes the user given their unique id
+	 * Deletes the favorite given their unique id
 	 * @param favorite_id
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
+	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteUser(@PathVariable int user_id) {
+	private JSONObject deleteFavorite(@PathVariable int favorites_id) {
 		JSONObject response;
 		try {
-			if(!favoritesRepository.existsById(user_id)) {
+			if(!favoritesRepository.existsById(favorites_id)) {
 				throw new IllegalArgumentException();
 			}
-			favoritesRepository.deleteById(user_id);
+			favoritesRepository.deleteById(favorites_id);
+			response = generateResponse(204, HttpStatus.OK, "favorite has been deleted");
+		}catch (IllegalArgumentException e) {
+			response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that favorite in the database, or your fields are incorrect, double check your request");
+		}catch (Exception e) {
+			response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
+		}
+		return response;
+	}
+	
+	/**
+	 * Deletes the favorite given their user and food 
+	 * @param favorite_id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_id}/{fid}", produces = MediaType.APPLICATION_JSON_VALUE) 
+	@ResponseBody
+	private JSONObject deleteFavoriteByUser(@PathVariable String user_id, @PathVariable int fid) {
+		JSONObject response;
+		boolean found = false;
+		try {
+			List<Favorites> fullListOfFavorites = getFavorites();
+			for(Favorites fav : fullListOfFavorites) {
+				if(fav.getUser_id().equalsIgnoreCase(user_id) && fav.getFid()==fid) {
+					favoritesRepository.deleteById(fav.getFavorites_id());
+					found = true;
+					break;
+				}
+			}
+			if(!found) {
+				throw new IllegalArgumentException();
+			}
 			response = generateResponse(204, HttpStatus.OK, "favorite has been deleted");
 		}catch (IllegalArgumentException e) {
 			response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that favorite in the database, or your fields are incorrect, double check your request");
@@ -147,16 +185,16 @@ public class FavoritesController {
 	 * @param favorite To edit
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject editUser(@RequestBody Favorites newfavorite, @PathVariable int user_id) {
+	private JSONObject editUser(@RequestBody Favorites newfavorite, @PathVariable int favorites_id) {
 		JSONObject response;
 		try {
-			if(!favoritesRepository.existsById(user_id)) {
+			if(!favoritesRepository.existsById(favorites_id)) {
 				throw new IllegalArgumentException();
 			}
-			if(newfavorite.getUser_id() != user_id) {
-				favoritesRepository.deleteById(user_id);
+			if(newfavorite.getFavorites_id() != favorites_id) {
+				favoritesRepository.deleteById(favorites_id);
 			}
 			favoritesRepository.save(newfavorite);
 			response = generateResponse(200, HttpStatus.OK, "favorite has been edited");

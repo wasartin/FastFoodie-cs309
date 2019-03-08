@@ -5,10 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.iastate.graysonc.fastfood.R;
 
@@ -95,5 +98,7 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
     public int getItemCount() {
         return mList.size();
     }
+
+
 
 }

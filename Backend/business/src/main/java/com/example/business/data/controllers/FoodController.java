@@ -36,10 +36,17 @@ public class FoodController {
 	public Optional<Food> getFood_OLD(@PathVariable int food_id){
 		return foodRepository.findById(food_id);
 	}
-
+	
 	@GetMapping("old/all")
 	public Iterable<Food> getAllFood_OLD() {
 		return foodRepository.findAll();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, path = "old/{food_keyword}")
+	@ResponseBody
+	public JSONObject getFoodWithKeyword(@PathVariable String keyword){
+		//TODO
+		return null;
 	}
 
 	/**

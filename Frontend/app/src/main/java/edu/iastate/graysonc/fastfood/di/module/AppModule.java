@@ -15,6 +15,7 @@ import dagger.Module;
 import dagger.Provides;
 import edu.iastate.graysonc.fastfood.api.Webservice;
 import edu.iastate.graysonc.fastfood.database.MyDatabase;
+import edu.iastate.graysonc.fastfood.database.dao.FoodDAO;
 import edu.iastate.graysonc.fastfood.database.dao.UserDAO;
 import edu.iastate.graysonc.fastfood.repositories.Repository;
 import retrofit2.Retrofit;
@@ -38,6 +39,10 @@ public class AppModule {
     @Singleton
     UserDAO provideUserDAO(MyDatabase database) { return database.userDAO(); }
 
+    @Provides
+    @Singleton
+    FoodDAO provideFoodDAO(MyDatabase database) { return database.foodDAO(); }
+
     // --- REPOSITORY INJECTION ---
 
     @Provides
@@ -47,8 +52,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    Repository provideUserRepository(Webservice webservice, UserDAO userDAO, Executor executor) {
-        return new Repository(webservice, userDAO, executor);
+    Repository provideRepository(Webservice webservice, UserDAO userDAO, FoodDAO foodDAO, Executor executor) {
+        return new Repository(webservice, userDAO, foodDAO, executor);
     }
 
     // --- NETWORK INJECTION ---

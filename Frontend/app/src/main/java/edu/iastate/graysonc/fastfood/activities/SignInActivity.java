@@ -44,11 +44,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onStart() {
         super.onStart();
-        account = GoogleSignIn.getLastSignedInAccount(this);
+        // Un-comment this block if we want the app to sign in with the previously signed in account
+        /*account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
             Log.e(TAG, "onStart: Got account from " +  account.getDisplayName());
             startMainActivity(account);
-        }
+        }*/
     }
 
     private void signIn() {

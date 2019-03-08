@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -24,7 +26,7 @@ public class HomeFragment extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private HomeViewModel viewModel;
-
+    private SearchView mSearchView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -40,6 +42,21 @@ public class HomeFragment extends Fragment {
         // Configure ViewModel
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel.class);
         // TODO
+
+        mSearchView = getView().findViewById(R.id.SearchView);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(getContext(),"Our word : "+query,Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     @Override

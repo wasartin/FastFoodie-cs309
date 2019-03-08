@@ -4,6 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--Strings related to SearchScreen-->
+
     <!--  For User Profile -->
     <string name="menu_user_ticket">Submit a ticket</string>
     <string name="menu_user_editData">Edit User Data</string>
@@ -26,5 +28,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="searchQuery">What are you feeling like eating?</string>
 
 </resources>

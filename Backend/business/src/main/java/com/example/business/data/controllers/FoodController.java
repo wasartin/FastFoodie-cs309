@@ -42,7 +42,7 @@ public class FoodController {
 		return foodRepository.findAll();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, path = "/{food_keyword}")
+	@RequestMapping(method = RequestMethod.GET, path = "/{keyword}")
 	@ResponseBody
 	public JSONObject getFoodWithKeyword(@PathVariable String keyword){
 		JSONObject toReturn = new JSONObject();

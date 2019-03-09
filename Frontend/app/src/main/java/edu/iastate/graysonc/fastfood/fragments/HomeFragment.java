@@ -121,8 +121,13 @@ public class HomeFragment extends Fragment {
         RadioGroup mSortBy = getView().findViewById(R.id.searchByRadioGroup);
         //2131230888 restaurant
         //2131230886 food
-        int id = mSortBy.getCheckedRadioButtonId();
-        String url = "http://cs309-bs-1.misc.iastate.edu:8080/foods/all";
+        String url="";
+        if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood) {
+            url = "http://cs309-bs-1.misc.iastate.edu:8080/foods/all";
+        }else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes){
+            url = "http://cs309-bs-1.misc.iastate.edu:8080/restaurants/all";
+        }
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             try {
                 foodList.clear();
@@ -130,8 +135,8 @@ public class HomeFragment extends Fragment {
                 for (int i = 0; i < resArr.length(); i++) {
                     JSONObject food = resArr.getJSONObject(i);
                     if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes) { //if filter by res
-                        if (i%10==0) {
-                            foodList.add(new recycler_card("UnImplemented", "Come Back later?", false,68 ));
+                        if (food.getString("restaurant_name").contains(query)) {
+                            foodList.add(new recycler_card(food.getString("restaurant_name"), food.getString("last_updated"), false,food.getInt("restaurant_id") ));
                         }
                     } else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood) { //filter by food
                         if (food.getString("food_name").contains(query)) {
@@ -195,6 +200,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void updateFaves(){
+        //TODO Add this food from Favorites
         Log.v("AddToFavoritesDebug",checkList().toString());
         Context context = getContext();
         Toast.makeText(context, "Added " + checkList().toString(), Toast.LENGTH_LONG).show();

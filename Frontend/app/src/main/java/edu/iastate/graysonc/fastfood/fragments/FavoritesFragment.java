@@ -86,7 +86,7 @@ public class FavoritesFragment extends Fragment {
         //Logs foods to remove
         //TODO Remove this food from Favorites
         super.onDestroy();
-        Log.v("Debug",checkList().toString());
+        Log.v("AddToFavoritesDebug",checkList().toString());
         Context context = getContext();
         Toast.makeText(context, "Removed " + checkList().toString(), Toast.LENGTH_LONG).show();
     }
@@ -129,6 +129,32 @@ public class FavoritesFragment extends Fragment {
     }
 
     /**
+     * Sorts using custom comparators
+     *
+     * @param restaurant Sort by restaurant
+     */
+    private void sortList(boolean restaurant) {
+        if (restaurant) {
+            Collections.sort(favList, (o1, o2) -> o1.getData().compareToIgnoreCase(o2.getData()));
+        } else {
+            Collections.sort(favList, (o1, o2) -> o1.getFood().compareToIgnoreCase(o2.getFood()));
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Foods Removed from favorites
+     * @return A list of foods removed
+     */
+    private ArrayList<String> checkList(){
+        ArrayList<String> removed = new ArrayList<>();
+        for(recycler_card item : favList){
+            if(!item.isFavored()) removed.add(item.getFood());
+        }
+        return removed;
+    }
+
+    /**
      * Actually creates the Recycler View
      */
     public void buildView() {
@@ -161,30 +187,6 @@ public class FavoritesFragment extends Fragment {
         });
     }
 
-    /**
-     * Sorts using custom comparators
-     *
-     * @param restaurant Sort by restaurant
-     */
-    private void sortList(boolean restaurant) {
-        if (restaurant) {
-            Collections.sort(favList, (o1, o2) -> o1.getData().compareToIgnoreCase(o2.getData()));
-        } else {
-            Collections.sort(favList, (o1, o2) -> o1.getFood().compareToIgnoreCase(o2.getFood()));
-        }
-        mAdapter.notifyDataSetChanged();
-    }
 
-    /**
-     * Foods Removed in action
-     * @return A list of foods removed
-     */
-    private ArrayList<String> checkList(){
-        ArrayList<String> removed = new ArrayList<>();
-        for(recycler_card item : favList){
-            if(!item.isFavored()) removed.add(item.getFood());
-        }
-        return removed;
-    }
 }
 

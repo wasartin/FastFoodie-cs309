@@ -6,25 +6,53 @@ import android.os.Parcelable;
 public class recycler_card implements Parcelable {
     private String mLine1;
     private String mLine2;
+    private int id;
     private boolean favored;
 
-
-    public recycler_card(String Food, String Misc_Data){
-        this(Food, Misc_Data,true);
+    /**
+     *
+     * @param Name Name of card
+     * @param Misc_Data Secondary data On Card
+     */
+    public recycler_card(String Name, String Misc_Data){
+        this(Name, Misc_Data,true);
     }
-    public recycler_card(String Food, String Misc_Data, boolean fav){
-        mLine1=Food;
+
+    /**
+     *
+     * @param Name Name of card
+     * @param Misc_Data Secondary data On Card
+     * @param fav Indicates if card is favored or not
+     */
+    public recycler_card(String Name, String Misc_Data, boolean fav){
+        mLine1=Name;
         mLine2=Misc_Data;
         favored=fav;
+    }
+
+    /**
+     *
+     * @param Name Name of card
+     * @param Misc_Data Secondary data On Card
+     * @param fav Indicates if card is favored or not
+     * @param id Database UID of the card
+     */
+    public recycler_card(String Name, String Misc_Data, boolean fav, int id){
+        mLine1=Name;
+        mLine2=Misc_Data;
+        favored=fav;
+        this.id = id;
     }
 
     protected recycler_card(Parcel in) {
         mLine1 = in.readString();
         mLine2 = in.readString();
         favored = in.readByte() != 0;
+        id= in.readInt();
     }
 
     public static final Creator<recycler_card> CREATOR = new Creator<recycler_card>() {
+
         @Override
         public recycler_card createFromParcel(Parcel in) {
             return new recycler_card(in);
@@ -50,6 +78,8 @@ public class recycler_card implements Parcelable {
 
     public void setFavored(boolean val){favored=val;}
 
+    public void setID(int val){id=val;}
+
     @Override
     public int describeContents() {
         return 0;
@@ -60,5 +90,6 @@ public class recycler_card implements Parcelable {
         dest.writeString(mLine1);
         dest.writeString(mLine2);
         dest.writeValue(favored);
+        dest.writeInt(id);
     }
 }

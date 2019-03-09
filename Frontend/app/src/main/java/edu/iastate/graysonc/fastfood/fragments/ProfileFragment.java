@@ -1,5 +1,6 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -58,6 +59,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public ProfileFragment() {
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -98,13 +100,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mMenuTicket.setOnClickListener(this);
         mMenuExpand.setOnClickListener(this);
 
-        mHorizontalScroller.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //If rotation = sideways
-                return getResources().getConfiguration().orientation == 1;
-            }
+        mHorizontalScroller.setOnTouchListener((v, event) -> {
+            //If rotation = sideways
+            return getResources().getConfiguration().orientation == 1;
         });
     }
 

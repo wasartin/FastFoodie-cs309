@@ -60,9 +60,9 @@ public class FavoritesFragment extends Fragment {
         //Assign a radio group and handle Changes
         mSortBy = Objects.requireNonNull(getView()).findViewById(R.id.SortByRadioGroup);
         mSortBy.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == 2131230907) {
+            if (mSortBy.getCheckedRadioButtonId() == R.id.sortByFood) { //Search by food group
                 sortList(false);
-            } else if (checkedId == 2131230908) {
+            } else if (mSortBy.getCheckedRadioButtonId() == R.id.sortByRes) { //Search by restaurant
                 sortList(true);
             } else {
                 Log.v("RadioButtonErr", "Expected 2131230907/8, got: " + checkedId);

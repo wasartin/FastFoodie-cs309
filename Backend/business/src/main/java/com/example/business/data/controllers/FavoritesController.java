@@ -25,8 +25,6 @@ import com.example.business.data.repositories.FavoritesRepository;
 public class FavoritesController {
 
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
-	@SuppressWarnings("unused")
-	private final String JSON_OBJECT_RESPONSE_KEY2 = "info";
 	
 	@Autowired
 	FavoritesRepository favoritesRepository;
@@ -145,8 +143,8 @@ public class FavoritesController {
 		return response;
 	}
 	
-	/**TODO THIS IS NEW
-	 * Currently just takes favorite Object. Might need to be a JSONObject I parse if more info is required.
+	/**TODO
+	 * 
 	 * @param newUser
 	 * @return
 	 */
@@ -179,7 +177,7 @@ public class FavoritesController {
 		return false;
 	}
 	
-	/**TODO THIS IS NEW
+	/**TODO 
 	 * Deletes the favorite given their unique id
 	 * @param favorite_id
 	 * @return
@@ -225,31 +223,6 @@ public class FavoritesController {
 				throw new IllegalArgumentException();
 			}
 			response = generateResponse(204, HttpStatus.OK, "favorite has been deleted");
-		}catch (IllegalArgumentException e) {
-			response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that favorite in the database, or your fields are incorrect, double check your request");
-		}catch (Exception e) {
-			response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
-		}
-		return response;
-	}
-	
-	/**
-	 * @param favorite To edit
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	private JSONObject editUser(@RequestBody Favorites newfavorite, @PathVariable int favorites_id) {
-		JSONObject response;
-		try {
-			if(!favoritesRepository.existsById(favorites_id)) {
-				throw new IllegalArgumentException();
-			}
-			if(newfavorite.getFavorites_id() != favorites_id) {
-				favoritesRepository.deleteById(favorites_id);
-			}
-			favoritesRepository.save(newfavorite);
-			response = generateResponse(200, HttpStatus.OK, "favorite has been edited");
 		}catch (IllegalArgumentException e) {
 			response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that favorite in the database, or your fields are incorrect, double check your request");
 		}catch (Exception e) {

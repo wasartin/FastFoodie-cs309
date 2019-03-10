@@ -15,96 +15,93 @@ public class Food {
     @NonNull
     @SerializedName("food_id")
     @Expose
-    private int food_id;
+    private int id;
 
     @SerializedName("food_name")
     @Expose
-    private String food_name;
+    private String name;
 
     @SerializedName("protein_total")
     @Expose
-    private int protein_total;
+    private int proteinTotal;
 
     @SerializedName("carb_total")
     @Expose
-    private int carb_total;
+    private int carbTotal;
 
     @SerializedName("fat_total")
     @Expose
-    private int fat_total;
+    private int fatTotal;
 
     @SerializedName("calorie_total")
-    private int calorie_total;
+    private int calorieTotal;
 
     @SerializedName("located_at")
-    private int located_at;
+    private int location;
 
     private Date lastRefresh;
 
-    public Food(@NonNull int food_id, String food_name, int protein_total, int carb_total, int fat_total, int calorie_total, int located_at) {
-        this.food_id = food_id;
-        this.food_name = food_name;
-        this.protein_total = protein_total;
-        this.carb_total = carb_total;
-        this.fat_total = fat_total;
-        this.calorie_total = calorie_total;
-        this.located_at = located_at;
+    public Food(@NonNull int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, int location, Date lastRefresh) {
+        this.id = id;
+        this.name = name;
+        this.proteinTotal = proteinTotal;
+        this.carbTotal = carbTotal;
+        this.fatTotal = fatTotal;
+        this.calorieTotal = calorieTotal;
+        this.location = location;
+        this.lastRefresh = getLastRefresh();
     }
 
-    public int getFood_id() {
-        return food_id;
+    public int getId() {
+        return id;
     }
 
-    public void setFood_id(int food_id) {
-        this.food_id = food_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getFood_name() {
-        return food_name;
+    public String getName() {
+        return name;
     }
 
-    public void setFood_name(String food_name) {
-        this.food_name = food_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getProtein_total() {
-        return protein_total;
+    public int getProteinTotal() {
+        return proteinTotal;
     }
 
-    public void setProtein_total(int protein_total) {
-        this.protein_total = protein_total;
+    public void setProteinTotal(int proteinTotal) {
+        this.proteinTotal = proteinTotal;
     }
 
-    public int getCarb_total() {
-        return carb_total;
+    public int getCarbTotal() {
+        return carbTotal;
     }
 
-    public void setCarb_total(int carb_total) {
-        this.carb_total = carb_total;
+    public int getFatTotal() {
+        return fatTotal;
     }
 
-    public int getFat_total() {
-        return fat_total;
+    public void setFatTotal(int fatTotal) {
+        this.fatTotal = fatTotal;
     }
 
-    public void setFat_total(int fat_total) {
-        this.fat_total = fat_total;
+    public int getCalorieTotal() {
+        return calorieTotal;
     }
 
-    public int getCalorie_total() {
-        return calorie_total;
+    public void setCalorieTotal(int calorieTotal) {
+        this.calorieTotal = calorieTotal;
     }
 
-    public void setCalorie_total(int calorie_total) {
-        this.calorie_total = calorie_total;
+    public int getLocation() {
+        return location;
     }
 
-    public int getLocated_at() {
-        return located_at;
-    }
-
-    public void setLocated_at(int located_at) {
-        this.located_at = located_at;
+    public void setLocation(int location) {
+        this.location = location;
     }
 
     public Date getLastRefresh() {

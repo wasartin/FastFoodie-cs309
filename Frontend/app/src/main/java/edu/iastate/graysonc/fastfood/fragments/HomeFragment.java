@@ -15,18 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,15 +28,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Timer;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
-import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.RecyclerAdapter;
-import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.recycler_card;
+import edu.iastate.graysonc.fastfood.recyclerClasses.RecyclerAdapter;
+import edu.iastate.graysonc.fastfood.recyclerClasses.recycler_card;
 
 
 /**

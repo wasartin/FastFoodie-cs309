@@ -1,7 +1,9 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
 
+import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,9 +25,13 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
-import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.RecyclerAdapter;
-import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.recycler_card;
+import edu.iastate.graysonc.fastfood.recyclerClasses.FoodListAdapter;
+import edu.iastate.graysonc.fastfood.recyclerClasses.RecyclerAdapter;
+import edu.iastate.graysonc.fastfood.recyclerClasses.recycler_card;
+import edu.iastate.graysonc.fastfood.view_models.FavoritesViewModel;
+import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
 
 
 /**
@@ -34,12 +40,15 @@ import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.recycler_card;
 public class FavoritesFragment extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    private FavoritesViewModel viewModel;
+
+    private RecyclerView recyclerView;
+
     private android.support.v7.widget.RecyclerView mainList;
-    private RecyclerAdapter mAdapter;
+    private FoodListAdapter mAdapter;
     private android.support.v7.widget.RecyclerView.LayoutManager mlayoutManager;
     ArrayList<recycler_card> favList;
     RadioGroup mSortBy;
-    //private HomeViewModel viewModel;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -50,12 +59,15 @@ public class FavoritesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         AndroidSupportInjection.inject(this);
 
-        //Looks for stored data Pre Rotate, uses new list if not found
-        if(savedInstanceState==null) {
-            buildList(); //Creates a fake List
-        }else{
-            favList= savedInstanceState.getParcelableArrayList("Foods");
-        }
+        buildView();
+
+        // Configure ViewModel
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesViewModel.class);
+        viewModel.init(getArguments().getString("USER_EMAIL"));
+        mAdapter.setFoods(viewModel.getFavorites().getValue());
+        viewModel.getFavorites().observe(this, foods -> {
+            mAdapter.setFoods(foods);
+        });
 
         //Assign a radio group and handle Changes
         mSortBy = Objects.requireNonNull(getView()).findViewById(R.id.SortByRadioGroup);
@@ -65,14 +77,11 @@ public class FavoritesFragment extends Fragment {
             } else if (mSortBy.getCheckedRadioButtonId() == R.id.sortByRes) { //Search by restaurant
                 sortList(true);
             } else {
-                Log.v("RadioButtonErr", "Expected 2131230907/8, got: " + checkedId);
+                Log.e("RadioButtonErr", "Expected 2131230907/8, got: " + checkedId);
             }
         });
 
-
-        buildView();//Creates a recycle view
-
-        sortList(false); //Sorts view by list type
+        //sortList(false); //Sorts view by list type
     }
 
     @Override
@@ -86,16 +95,9 @@ public class FavoritesFragment extends Fragment {
         //Logs foods to remove
         //TODO Remove this food from Favorites
         super.onDestroy();
-        Log.v("AddToFavoritesDebug",checkList().toString());
+        /*Log.v("AddToFavoritesDebug",checkList().toString());
         Context context = getContext();
-        Toast.makeText(context, "Removed " + checkList().toString(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        //Stores favlist for later, post rotate goodness
-        outState.putParcelableArrayList("Foods",favList);
-        super.onSaveInstanceState(outState);
+        Toast.makeText(context, "Removed " + checkList().toString(), Toast.LENGTH_LONG).show();*/
     }
 
     /**
@@ -146,10 +148,12 @@ public class FavoritesFragment extends Fragment {
      * Foods Removed from favorites
      * @return A list of foods removed
      */
-    private ArrayList<String> checkList(){
+    private ArrayList<String> checkList() {
         ArrayList<String> removed = new ArrayList<>();
-        for(recycler_card item : favList){
-            if(!item.isFavored()) removed.add(item.getFood());
+        for (recycler_card item : favList) {
+            if (!item.isFavored()) {
+                removed.add(item.getFood());
+            }
         }
         return removed;
     }
@@ -158,14 +162,12 @@ public class FavoritesFragment extends Fragment {
      * Actually creates the Recycler View
      */
     public void buildView() {
-        mainList = Objects.requireNonNull(getView()).findViewById(R.id.Favorites_Recycler);
-        mainList.setHasFixedSize(true); //Prevents dynamic resizing, improves performance
-        mlayoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new RecyclerAdapter(favList);
-        mainList.setLayoutManager(mlayoutManager);
-        mainList.setAdapter(mAdapter);
+        recyclerView = getView().findViewById(R.id.Favorites_Recycler);
+        mAdapter = new FoodListAdapter(App.context);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(App.context));
 
-        mAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+        /*mAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 //TODO actually open this
@@ -177,14 +179,14 @@ public class FavoritesFragment extends Fragment {
             public void onFaveClick(int position) {
                 //removeItem(position);
                 recycler_card temp = favList.get(position);
-                if(temp.isFavored()){
+                if (temp.isFavored()) {
                     temp.setFavored(false);
-                }else{
+                } else {
                     temp.setFavored(true);
                 }
 
             }
-        });
+        });*/
     }
 
 

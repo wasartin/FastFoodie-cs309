@@ -6,15 +6,19 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import java.util.Date;
+import java.util.List;
 
 import edu.iastate.graysonc.fastfood.database.entities.User;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface UserDAO {
+public interface UserDao {
     @Insert(onConflict = REPLACE)
-    void save(User user);
+    void insert(User user);
+
+    @Insert(onConflict = REPLACE)
+    void insert(List<User> users);
 
     @Query("SELECT * FROM user WHERE email = :email")
     LiveData<User> load(String email);

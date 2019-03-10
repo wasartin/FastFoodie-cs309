@@ -1,4 +1,4 @@
-package edu.iastate.graysonc.fastfood.view_models.recyclerClasses;
+package edu.iastate.graysonc.fastfood.recyclerClasses;
 
 import android.os.Parcel;
 import android.os.Parcelable;

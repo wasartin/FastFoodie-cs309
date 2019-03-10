@@ -1,17 +1,14 @@
-package edu.iastate.graysonc.fastfood.view_models.recyclerClasses;
+package edu.iastate.graysonc.fastfood.recyclerClasses;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.iastate.graysonc.fastfood.R;
 
@@ -35,9 +32,9 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
         public TextView mLine2;
         public ViewHolder(@NonNull View itemView, OnItemClickListener  listener) {
             super(itemView);
-            mLine1 = itemView.findViewById(R.id.RecLine1);
-            mLine2 = itemView.findViewById(R.id.RecLine2);
-            mDeleteImage = itemView.findViewById(R.id.image_delete);
+            mLine1 = itemView.findViewById(R.id.name_text);
+            mLine2 = itemView.findViewById(R.id.restaurant_text);
+            mDeleteImage = itemView.findViewById(R.id.favorite_button);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -40,11 +40,13 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         favoritesFragment = new FavoritesFragment();
         profileFragment = new ProfileFragment();
 
-        // Pass pointer to Google account if not null
-        Bundle bundle = new Bundle();
+        // Pass the current user's email address and GoogleSignInAccount object to each fragment
         GoogleSignInAccount account = getIntent().getExtras().getParcelable("edu.iastate.graysonc.fastfood.ACCOUNT");
-        Log.e(TAG, "onCreate: Got account from " + account.getDisplayName());
+        Bundle bundle = new Bundle();
+        bundle.putString("USER_EMAIL", account.getEmail());
         bundle.putParcelable("ACCOUNT", account);
+        homeFragment.setArguments(bundle);
+        favoritesFragment.setArguments(bundle);
         profileFragment.setArguments(bundle);
 
         // Start in home fragment

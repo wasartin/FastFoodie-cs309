@@ -102,8 +102,11 @@ public class FavoritesController {
 		return toReturn;
 	}
 	
-	//TODO THIS IS NEW
-	//getting favorites from a specific user
+	/**
+	 * getting favorites from a specific user
+	 * @param user_id
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/user/{user_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JSONArray getAllFavorites(@PathVariable String user_id) {
@@ -143,7 +146,7 @@ public class FavoritesController {
 		return response;
 	}
 	
-	/**TODO
+	/**
 	 * 
 	 * @param newUser
 	 * @return

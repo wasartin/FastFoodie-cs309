@@ -15,8 +15,9 @@ import dagger.Module;
 import dagger.Provides;
 import edu.iastate.graysonc.fastfood.api.Webservice;
 import edu.iastate.graysonc.fastfood.database.MyDatabase;
-import edu.iastate.graysonc.fastfood.database.dao.FoodDAO;
-import edu.iastate.graysonc.fastfood.database.dao.UserDAO;
+import edu.iastate.graysonc.fastfood.database.dao.FavoriteDao;
+import edu.iastate.graysonc.fastfood.database.dao.FoodDao;
+import edu.iastate.graysonc.fastfood.database.dao.UserDao;
 import edu.iastate.graysonc.fastfood.repositories.Repository;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -37,11 +38,15 @@ public class AppModule {
 
     @Provides
     @Singleton
-    UserDAO provideUserDAO(MyDatabase database) { return database.userDAO(); }
+    UserDao provideUserDao(MyDatabase database) { return database.userDao(); }
 
     @Provides
     @Singleton
-    FoodDAO provideFoodDAO(MyDatabase database) { return database.foodDAO(); }
+    FoodDao provideFoodDao(MyDatabase database) { return database.foodDao(); }
+
+    @Provides
+    @Singleton
+    FavoriteDao provideFavoriteDao(MyDatabase database) { return database.favoriteDao(); }
 
     // --- REPOSITORY INJECTION ---
 
@@ -52,8 +57,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    Repository provideRepository(Webservice webservice, UserDAO userDAO, FoodDAO foodDAO, Executor executor) {
-        return new Repository(webservice, userDAO, foodDAO, executor);
+    Repository provideRepository(Webservice webservice, UserDao userDAO, FoodDao foodDAO, FavoriteDao favoriteDao, Executor executor) {
+        return new Repository(webservice, userDAO, foodDAO, favoriteDao, executor);
     }
 
     // --- NETWORK INJECTION ---

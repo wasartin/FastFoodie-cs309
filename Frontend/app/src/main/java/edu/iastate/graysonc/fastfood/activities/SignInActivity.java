@@ -35,6 +35,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
         googleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInClient.signOut();
 
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);

@@ -15,18 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,15 +28,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Timer;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
-import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.RecyclerAdapter;
-import edu.iastate.graysonc.fastfood.view_models.recyclerClasses.recycler_card;
+import edu.iastate.graysonc.fastfood.recyclerClasses.RecyclerAdapter;
+import edu.iastate.graysonc.fastfood.recyclerClasses.recycler_card;
 
 
 /**
@@ -136,11 +129,11 @@ public class HomeFragment extends Fragment {
                     JSONObject food = resArr.getJSONObject(i);
                     if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes) { //if filter by res
                         if (food.getString("restaurant_name").contains(query)) {
-                            foodList.add(new recycler_card(food.getString("restaurant_name"), food.getString("last_updated"), false,food.getInt("restaurant_id") ));
+                            foodList.add(new recycler_card(food.getInt("food_id"), food.getString("restaurant_name"), food.getString("last_updated"), false,food.getInt("restaurant_id") ));
                         }
                     } else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood) { //filter by food
                         if (food.getString("food_name").contains(query)) {
-                            foodList.add(new recycler_card(food.getString("food_name"), "Calories = " + food.getInt("calorie_total"), false,food.getInt("food_id")));
+                            foodList.add(new recycler_card(food.getInt("food_id"), food.getString("food_name"), "Calories = " + food.getInt("calorie_total"), false,food.getInt("food_id")));
                         }
                     } else {
                         Log.v("FilterJsonErr", "Invalid selection of radio button");
@@ -179,8 +172,10 @@ public class HomeFragment extends Fragment {
                 //removeItem(position);
                 recycler_card temp = foodList.get(position);
                 if (temp.isFavored()) {
+                    viewModel.removeFavorite(getArguments().getString("USER_EMAIL"), temp.getFoodId());
                     temp.setFavored(false);
                 } else {
+                    viewModel.addFavorite(getArguments().getString("USER_EMAIL"), temp.getFoodId());
                     temp.setFavored(true);
                 }
             }
@@ -191,10 +186,10 @@ public class HomeFragment extends Fragment {
      * Foods Added to favorites
      * @return A list of foods removed
      */
-    private ArrayList<String> checkList(){
-        ArrayList<String> removed = new ArrayList<>();
+    private ArrayList<Integer> checkList(){
+        ArrayList<Integer> removed = new ArrayList<>();
         for(recycler_card item : foodList){
-            if(item.isFavored()) removed.add(item.getFood());
+            if(item.isFavored()) removed.add(item.getFoodId());
         }
         return removed;
     }

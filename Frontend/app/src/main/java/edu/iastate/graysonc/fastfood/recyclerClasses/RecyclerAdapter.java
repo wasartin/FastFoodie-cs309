@@ -1,17 +1,15 @@
-package edu.iastate.graysonc.fastfood.view_models.recyclerClasses;
+package edu.iastate.graysonc.fastfood.recyclerClasses;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.iastate.graysonc.fastfood.R;
 
@@ -30,14 +28,14 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
     }
 
     public  class ViewHolder extends  android.support.v7.widget.RecyclerView.ViewHolder{
-        public ImageView mDeleteImage;
+        public CheckBox mDeleteImage;
         public TextView mLine1;
         public TextView mLine2;
         public ViewHolder(@NonNull View itemView, OnItemClickListener  listener) {
             super(itemView);
-            mLine1 = itemView.findViewById(R.id.RecLine1);
-            mLine2 = itemView.findViewById(R.id.RecLine2);
-            mDeleteImage = itemView.findViewById(R.id.image_delete);
+            mLine1 = itemView.findViewById(R.id.name_text);
+            mLine2 = itemView.findViewById(R.id.restaurant_text);
+            mDeleteImage = itemView.findViewById(R.id.favorite_button);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,11 +56,11 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
                         int pos = getAdapterPosition();
                         if(pos != RecyclerView.NO_POSITION){
                             listener.onFaveClick(pos);
-                            if(mList.get(pos).isFavored()){
+                            /*if(mList.get(pos).isFavored()){
                                 mDeleteImage.setImageResource(R.drawable.twotone_favorite_black_18dp_2x);
                             }else{
                                 mDeleteImage.setImageResource(R.drawable.twotone_favorite_border_black_18dp_2x);
-                            }
+                            }*/
                         }
                     }
                 }
@@ -87,11 +85,12 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
         recycler_card currentCard = mList.get(pos);
         viewHolder.mLine1.setText(currentCard.getFood());
         viewHolder.mLine2.setText(currentCard.getData());
-        if(mList.get(pos).isFavored()){
+        viewHolder.mDeleteImage.setChecked(mList.get(pos).isFavored());
+        /*if(mList.get(pos).isFavored()){
             viewHolder.mDeleteImage.setImageResource(R.drawable.twotone_favorite_black_18dp_2x);
         }else{
             viewHolder.mDeleteImage.setImageResource(R.drawable.twotone_favorite_border_black_18dp_2x);
-        }
+        }*/
     }
 
     @Override

@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -14,14 +16,21 @@ import edu.iastate.graysonc.fastfood.database.entities.Food;
 
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodViewHolder> {
 
-    class FoodViewHolder extends RecyclerView.ViewHolder {
+    public class FoodViewHolder extends RecyclerView.ViewHolder {
+        private Food food;
         private final TextView nameTextView;
         private final TextView restaurantTextView;
+        private final CheckBox favoriteButton;
 
         private FoodViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.name_text);
             restaurantTextView = itemView.findViewById(R.id.restaurant_text);
+            favoriteButton = itemView.findViewById(R.id.favorite_button);
+        }
+
+        public Food getFood() {
+            return food;
         }
     }
 
@@ -40,8 +49,10 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodVi
     public void onBindViewHolder(FoodViewHolder holder, int position) {
         if (mFoods != null) {
             Food current = mFoods.get(position);
+            holder.food = current;
             holder.nameTextView.setText(current.getName());
             holder.restaurantTextView.setText("" + current.getLocation());
+            holder.favoriteButton.setChecked(true); // TODO: make this check to see if an item is actually a favorite
         } else {
             // Covers the case of data not being ready yet.
             holder.nameTextView.setText("Loading...");

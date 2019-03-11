@@ -25,4 +25,12 @@ public class HomeViewModel extends ViewModel {
         // TODO
         return null;
     }
+
+    public void addFavorite(String userEmail, int foodId) {
+        repo.createFavorite(userEmail, foodId);
+    }
+
+    public void removeFavorite(String userEmail, int foodId) {
+        repo.deleteFavorite(userEmail, foodId);
+    }
 }

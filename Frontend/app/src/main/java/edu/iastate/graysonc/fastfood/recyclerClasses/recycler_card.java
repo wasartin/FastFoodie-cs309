@@ -8,14 +8,15 @@ public class recycler_card implements Parcelable {
     private String mLine2;
     private int id;
     private boolean favored;
+    private int foodId;
 
     /**
      *
      * @param Name Name of card
      * @param Misc_Data Secondary data On Card
      */
-    public recycler_card(String Name, String Misc_Data){
-        this(Name, Misc_Data,true);
+    public recycler_card(int foodId, String Name, String Misc_Data){
+        this(foodId, Name, Misc_Data,true);
     }
 
     /**
@@ -24,7 +25,8 @@ public class recycler_card implements Parcelable {
      * @param Misc_Data Secondary data On Card
      * @param fav Indicates if card is favored or not
      */
-    public recycler_card(String Name, String Misc_Data, boolean fav){
+    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav){
+        this.foodId = foodId;
         mLine1=Name;
         mLine2=Misc_Data;
         favored=fav;
@@ -37,7 +39,8 @@ public class recycler_card implements Parcelable {
      * @param fav Indicates if card is favored or not
      * @param id Database UID of the card
      */
-    public recycler_card(String Name, String Misc_Data, boolean fav, int id){
+    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav, int id){
+        this.foodId = foodId;
         mLine1=Name;
         mLine2=Misc_Data;
         favored=fav;
@@ -45,6 +48,7 @@ public class recycler_card implements Parcelable {
     }
 
     protected recycler_card(Parcel in) {
+        this.foodId = in.readInt();
         mLine1 = in.readString();
         mLine2 = in.readString();
         favored = in.readByte() != 0;
@@ -91,5 +95,13 @@ public class recycler_card implements Parcelable {
         dest.writeString(mLine2);
         dest.writeValue(favored);
         dest.writeInt(id);
+    }
+
+    public int getFoodId() {
+        return foodId;
+    }
+
+    public void setFoodId(int foodId) {
+        this.foodId = foodId;
     }
 }

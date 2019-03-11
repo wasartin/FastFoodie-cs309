@@ -57,12 +57,15 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         ((BottomNavigationView)findViewById(R.id.main_navigation)).setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.navigation_home:
+                    menuItem.setChecked(true);
                     setFragment(homeFragment);
                     break;
                 case R.id.navigation_favorites:
+                    menuItem.setChecked(true);
                     setFragment(favoritesFragment);
                     break;
                 case R.id.navigation_profile:
+                    menuItem.setChecked(true);
                     setFragment(profileFragment);
                     break;
             }

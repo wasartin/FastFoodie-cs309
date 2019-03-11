@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
@@ -24,13 +25,18 @@ public class FavoritesViewModel extends ViewModel {
         if (this.favorites != null) {
             return;
         }
-        repo.fetchAllUsers(); // Remove this line when we're able to get only the favorite foods for specific user
-        repo.fetchAllFoods(); // Remove this line when we're able to get only the favorite foods for specific user
-        repo.fetchAllFavorites(); // Remove this line when we're able to get only the favorite foods for specific user
         favorites = repo.getFavorites(userEmail);
     }
 
     public LiveData<List<Food>> getFavorites() {
         return favorites;
+    }
+
+    public void updateFavorites() {
+        // TODO
+    }
+
+    public void removeFavorite(String userEmail, int foodId) {
+        repo.deleteFavorite(userEmail, foodId);
     }
 }

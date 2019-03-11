@@ -2,6 +2,7 @@ package edu.iastate.graysonc.fastfood.database.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
@@ -21,7 +22,10 @@ public interface FavoriteDao {
     @Insert(onConflict = REPLACE)
     void insert(List<Favorite> favorites);
 
-    @Query("SELECT food.id, name, proteinTotal, carbTotal, fatTotal, calorieTotal, location, food.lastRefresh FROM food INNER JOIN favorite ON food.id = favorite.foodId WHERE favorite.userEmail = :userEmail")
+    @Query("DELETE FROM favorite WHERE userEmail = :userEmail AND foodId = :foodId")
+    void delete(String userEmail, int foodId);
+
+    @Query("SELECT food.id, name, proteinTotal, carbTotal, fatTotal, calorieTotal, location, isFavorite, food.lastRefresh FROM food INNER JOIN favorite ON food.id = favorite.foodId WHERE favorite.userEmail = :userEmail")
     LiveData<List<Food>> getFavoritesForUser(final String userEmail);
 
     @Query("SELECT * FROM favorite WHERE userEmail = :userEmail AND foodId = :foodId AND lastRefresh > :lastRefreshMax LIMIT 1")

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +28,7 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
     }
 
     public  class ViewHolder extends  android.support.v7.widget.RecyclerView.ViewHolder{
-        public ImageView mDeleteImage;
+        public CheckBox mDeleteImage;
         public TextView mLine1;
         public TextView mLine2;
         public ViewHolder(@NonNull View itemView, OnItemClickListener  listener) {
@@ -55,11 +56,11 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
                         int pos = getAdapterPosition();
                         if(pos != RecyclerView.NO_POSITION){
                             listener.onFaveClick(pos);
-                            if(mList.get(pos).isFavored()){
+                            /*if(mList.get(pos).isFavored()){
                                 mDeleteImage.setImageResource(R.drawable.twotone_favorite_black_18dp_2x);
                             }else{
                                 mDeleteImage.setImageResource(R.drawable.twotone_favorite_border_black_18dp_2x);
-                            }
+                            }*/
                         }
                     }
                 }
@@ -84,11 +85,12 @@ public class RecyclerAdapter extends  android.support.v7.widget.RecyclerView.Ada
         recycler_card currentCard = mList.get(pos);
         viewHolder.mLine1.setText(currentCard.getFood());
         viewHolder.mLine2.setText(currentCard.getData());
-        if(mList.get(pos).isFavored()){
+        viewHolder.mDeleteImage.setChecked(mList.get(pos).isFavored());
+        /*if(mList.get(pos).isFavored()){
             viewHolder.mDeleteImage.setImageResource(R.drawable.twotone_favorite_black_18dp_2x);
         }else{
             viewHolder.mDeleteImage.setImageResource(R.drawable.twotone_favorite_border_black_18dp_2x);
-        }
+        }*/
     }
 
     @Override

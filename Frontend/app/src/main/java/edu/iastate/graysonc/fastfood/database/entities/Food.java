@@ -41,7 +41,9 @@ public class Food {
 
     private Date lastRefresh;
 
-    public Food(@NonNull int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, int location, Date lastRefresh) {
+    private boolean isFavorite;
+
+    public Food(@NonNull int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, int location) {
         this.id = id;
         this.name = name;
         this.proteinTotal = proteinTotal;
@@ -49,6 +51,7 @@ public class Food {
         this.fatTotal = fatTotal;
         this.calorieTotal = calorieTotal;
         this.location = location;
+        this.isFavorite = false;
         this.lastRefresh = getLastRefresh();
     }
 
@@ -103,6 +106,10 @@ public class Food {
     public void setLocation(int location) {
         this.location = location;
     }
+
+    public boolean isFavorite() { return isFavorite; }
+
+    public void setFavorite(boolean favorite) { isFavorite = favorite; }
 
     public Date getLastRefresh() {
         return lastRefresh;

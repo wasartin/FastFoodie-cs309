@@ -8,5 +8,4 @@ INSERT INTO favorites(user_id, fid) VALUES
 	('TomDodge@gmail.com', 140), 
 	('vincentAdultman@corporatePlace.com', 330),
 	('vincentAdultman@corporatePlace.com', 331),
-	('vincentAdultman@corporatePlace.com', 250), 
-	('SHAI-HULUD@jos.com', 269);
+	('vincentAdultman@corporatePlace.com', 250);

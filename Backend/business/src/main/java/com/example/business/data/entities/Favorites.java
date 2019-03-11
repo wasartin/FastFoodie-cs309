@@ -2,6 +2,8 @@ package com.example.business.data.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -9,7 +11,7 @@ import javax.persistence.Table;
 @Table(name="favorites")
 public class Favorites {
 
-	@Id
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="favorites_id")
 	private int favorites_id;
 	
@@ -23,13 +25,19 @@ public class Favorites {
 		super();
 	}
 	
-	public Favorites(String user_id, int fid, int favorites_id) {
+	public Favorites(int favorites_id, String user_id, int fid) {
 		super();
 		this.favorites_id = favorites_id;
 		this.user_id = user_id;
 		this.fid = fid;
 	}
-	
+
+	public Favorites(String user_id, int fid) {
+		super();
+		this.user_id = user_id;
+		this.fid = fid;
+	}
+
 	public int getFavorites_id() {
 		return favorites_id;
 	}

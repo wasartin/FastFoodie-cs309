@@ -25,16 +25,14 @@ import com.example.business.data.repositories.FavoritesRepository;
 public class FavoritesController {
 
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
-	@SuppressWarnings("unused")
-	private final String JSON_OBJECT_RESPONSE_KEY2 = "info";
 	
 	@Autowired
 	FavoritesRepository favoritesRepository;
 	
-	@RequestMapping(method = RequestMethod.GET, path = "old/{user_id}")
+	@RequestMapping(method = RequestMethod.GET, path = "old/{fav_id}")
 	@ResponseBody
-	public Optional<Favorites> getfavorite_OLD(@PathVariable int user_id){
-		return favoritesRepository.findById(user_id);
+	public Optional<Favorites> getfavorite_OLD(@PathVariable int fav_id){
+		return favoritesRepository.findById(fav_id);
 	}
 
 	@GetMapping("old/all")
@@ -59,7 +57,7 @@ public class FavoritesController {
 				listOfFavorites.add(fav);
 			}
 		}
-		response.put("Data", listOfFavorites);
+		response.put("data", listOfFavorites);
 		return response;
 	}
 	
@@ -103,7 +101,25 @@ public class FavoritesController {
 		toReturn.put(key1, listOfFavorites);
 		return toReturn;
 	}
-
+	
+	/**
+	 * getting favorites from a specific user
+	 * @param user_id
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/user/{user_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public JSONArray getAllFavorites(@PathVariable String user_id) {
+		JSONArray usersFavorites = new JSONArray();
+		List<Favorites> fullList = getFavorites();
+		for(Favorites fav : fullList) {
+			if(fav.getUser_id().equals(user_id)) {
+				usersFavorites.add(parsefavoriteIntoJSONObject(fav));
+			}
+		}
+		return usersFavorites;
+	}
+	
 	/**
 	 * Currently just takes favorite Object. Might need to be a JSONObject I parse if more info is required.
 	 * @param newUser
@@ -117,6 +133,9 @@ public class FavoritesController {
 			if(favoritesRepository.existsById(newfavorite.getFavorites_id())) {
 				throw new IllegalArgumentException();
 			}
+			if(alreadyExists(newfavorite)) {
+				throw new IllegalArgumentException();
+			}
 			favoritesRepository.save(newfavorite);
 			response = generateResponse(204, HttpStatus.OK, "favorite has been created");
 		}catch (IllegalArgumentException e) {
@@ -128,6 +147,40 @@ public class FavoritesController {
 	}
 	
 	/**
+	 * 
+	 * @param newUser
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, path = "/create/{user_id}/{fid}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	private JSONObject createFavoriteForUser(@PathVariable String user_id, @PathVariable int fid) {
+		Favorites newFav = new Favorites(user_id, fid);
+		JSONObject response;
+		try {
+			if(alreadyExists(newFav)) {
+				throw new IllegalArgumentException();
+			}
+			favoritesRepository.save(newFav);
+			response = generateResponse(204, HttpStatus.OK, "favorite has been created");
+		}catch (IllegalArgumentException e) {
+			response = generateResponse(400, HttpStatus.BAD_REQUEST, "favorite might already exist, or your fields are incorrect, double check your request");
+		}catch (Exception e) {
+			response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
+		}
+		return response;
+	}
+	
+	private boolean alreadyExists(Favorites newFav) {
+		List<Favorites> fullListOfFavorites = getFavorites();
+		for(Favorites fav : fullListOfFavorites) {
+			if(fav.getUser_id().equals(newFav.getUser_id()) && fav.getFid()== newFav.getFid()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**TODO 
 	 * Deletes the favorite given their unique id
 	 * @param favorite_id
 	 * @return
@@ -173,31 +226,6 @@ public class FavoritesController {
 				throw new IllegalArgumentException();
 			}
 			response = generateResponse(204, HttpStatus.OK, "favorite has been deleted");
-		}catch (IllegalArgumentException e) {
-			response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that favorite in the database, or your fields are incorrect, double check your request");
-		}catch (Exception e) {
-			response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
-		}
-		return response;
-	}
-	
-	/**
-	 * @param favorite To edit
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	private JSONObject editUser(@RequestBody Favorites newfavorite, @PathVariable int favorites_id) {
-		JSONObject response;
-		try {
-			if(!favoritesRepository.existsById(favorites_id)) {
-				throw new IllegalArgumentException();
-			}
-			if(newfavorite.getFavorites_id() != favorites_id) {
-				favoritesRepository.deleteById(favorites_id);
-			}
-			favoritesRepository.save(newfavorite);
-			response = generateResponse(200, HttpStatus.OK, "favorite has been edited");
 		}catch (IllegalArgumentException e) {
 			response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that favorite in the database, or your fields are incorrect, double check your request");
 		}catch (Exception e) {

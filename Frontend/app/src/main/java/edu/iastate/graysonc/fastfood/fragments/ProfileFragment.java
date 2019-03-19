@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 import javax.inject.Inject;
 
@@ -136,7 +137,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
      * Uses Google Api To Sign Out
      */
     public void signOut() {
-        // TODO
+
     }
 
     @Override

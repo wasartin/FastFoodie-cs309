@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -51,6 +53,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private Button mMenuEdit;
     private ImageButton mMenuExpand;
     private ScrollView mHorizontalScroller;
+    private Animation fINAnim;
+    private Animation fOUTAnim;
 
     private boolean toggled;
 
@@ -79,6 +83,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mMenuEdit = getView().findViewById(R.id.ButtonEdit);
         mMenuExpand = getView().findViewById(R.id.MenuButton);
         mHorizontalScroller = getView().findViewById(R.id.HorizontalScroller);
+        fINAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+        fINAnim.setDuration(500);
+        fOUTAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
+        fOUTAnim.setDuration(500);
 
 
         // Get profile picture and name from Google Signin
@@ -150,7 +158,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 createWarning("Open Edit Users Page");
                 break;
             case R.id.TicketButton:
-                createWarning("Open Submit Ticket");
+                //createWarning("Open Submit Ticket");
+
                 break;
             case R.id.MenuButton:
                 toggleMenuVisible();
@@ -163,13 +172,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
      */
     public void toggleMenuVisible() {
         if (toggled) {
-            mMenuTicket.setVisibility(View.INVISIBLE);
-            mMenuEdit.setVisibility(View.INVISIBLE);
-            signOutButton.setVisibility(View.INVISIBLE);
+            mMenuTicket.setVisibility(View.GONE);
+            mMenuEdit.setVisibility(View.GONE);
+            signOutButton.setVisibility(View.GONE);
+            mMenuTicket.startAnimation(fOUTAnim);
+            mMenuEdit.startAnimation(fOUTAnim);
+            signOutButton.startAnimation(fOUTAnim);
         } else {
             mMenuTicket.setVisibility(View.VISIBLE);
             mMenuEdit.setVisibility(View.VISIBLE);
             signOutButton.setVisibility(View.VISIBLE);
+            mMenuTicket.startAnimation(fINAnim);
+            mMenuEdit.startAnimation(fINAnim);
+            signOutButton.startAnimation(fINAnim);
         }
         toggled = !toggled;
     }

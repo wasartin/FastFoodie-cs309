@@ -42,6 +42,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.R;
+import edu.iastate.graysonc.fastfood.database.entities.Food;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
 import edu.iastate.graysonc.fastfood.recyclerClasses.RecyclerAdapter;
 import edu.iastate.graysonc.fastfood.recyclerClasses.recycler_card;
@@ -154,12 +155,10 @@ public class HomeFragment extends Fragment {
     private void buildList(String query) {
         RadioGroup mSortBy = getView().findViewById(R.id.searchByRadioGroup);
         String url="";
-        if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood) {
+        if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood || mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom) {
             url = "http://cs309-bs-1.misc.iastate.edu:8080/foods/all";
         }else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes){
             url = "http://cs309-bs-1.misc.iastate.edu:8080/restaurants/all";
-        }else if(mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom){
-            //Do nothing right now
         }else{
             Log.v("HomeFragCatERR","Invalid Selection on RadioGroup");
         }
@@ -170,9 +169,9 @@ public class HomeFragment extends Fragment {
                 JSONArray resArr = response.getJSONArray("data");
                 for (int i = 0; i < resArr.length(); i++) {
                     JSONObject food = resArr.getJSONObject(i);
-                    if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes) { //if filter by res
+                    if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes || mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom) { //if filter by restaurant or macros
                         if (food.getString("restaurant_name").contains(query)) {
-                            foodList.add(new recycler_card(food.getInt("food_id"), food.getString("restaurant_name"), food.getString("last_updated"), false,food.getInt("restaurant_id") ));
+                            foodList.add(new recycler_card(new Food(food.getInt("food_id"),food.getString("food_name"),food.getInt("protein_total"),food.getInt("carb_total"),food.getInt("fat_total"),food.getInt("calorie_total"),food.getInt("located_at"))));
                         }
                     } else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood) { //filter by food
                         if (food.getString("food_name").contains(query)) {
@@ -295,20 +294,19 @@ public class HomeFragment extends Fragment {
     }
 
     private int getMacro(recycler_card card, macrosENUM type){
+       Log.v("GetMacroLog","Sorting by macro");
         switch(type){
             case FAT:
-                return 1;
-                break;
+                return card.getFoodObj().getFatTotal();
             case CARBS:
-                return 2;
-                break;
+                return card.getFoodObj().getCarbTotal();
             case SUGAR:
-                return 3;
-                break;
+                Toast.makeText(getContext(), "Sorting by sugar not yet implemented",Toast.LENGTH_LONG).show();
+                return 1;
             case PROTEIN:
-                return 4;
-                break;
+                return card.getFoodObj().getProteinTotal();
             default:
+                Log.v("GetMacroERR", "Invalid State");
                 return 1;
         }
     }

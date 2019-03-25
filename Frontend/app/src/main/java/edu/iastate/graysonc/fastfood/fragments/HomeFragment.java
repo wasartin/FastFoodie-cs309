@@ -123,10 +123,10 @@ public class HomeFragment extends Fragment {
                 return false;
             }
         });
-        mSearchView.setIconifiedByDefault(true);
+        mSearchView.setIconifiedByDefault(false);
         mSearchView.setFocusable(true);
-        mSearchView.setIconified(false);
-        mSearchView.requestFocusFromTouch();
+        //mSearchView.setIconified(false);
+        //mSearchView.requestFocusFromTouch();
 
         fINAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
         fINAnim.setDuration(300);

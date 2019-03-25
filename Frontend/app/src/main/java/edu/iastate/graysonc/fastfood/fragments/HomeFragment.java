@@ -5,16 +5,23 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -27,12 +34,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.R;
+import edu.iastate.graysonc.fastfood.database.entities.Food;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
 import edu.iastate.graysonc.fastfood.recyclerClasses.RecyclerAdapter;
 import edu.iastate.graysonc.fastfood.recyclerClasses.recycler_card;
@@ -47,10 +57,29 @@ public class HomeFragment extends Fragment {
     private HomeViewModel viewModel;
     private SearchView mSearchView;
     private RecyclerView mainList;
-    ArrayList<recycler_card> foodList;
-    RadioGroup mSortBy;
-    RequestQueue requestQueue;
-    RecyclerAdapter mAdapter;
+    private ArrayList<recycler_card> foodList;
+    private RadioGroup mSortBy;
+    private RequestQueue requestQueue;
+    private RecyclerAdapter mAdapter;
+    private boolean CustomSearchExpanded;
+    private Animation fINAnim,fOUTAnim;
+    private Spinner mSpinner1, mSpinner2;
+
+    enum macrosENUM{
+        FAT("Fat"),
+        CARBS("Carbs"),
+        PROTEIN("Protein"),
+        SUGAR("Sugar");
+
+        private String name;
+
+        macrosENUM(String name){
+            this.name = name;
+        }
+        @Override public String toString(){
+            return name;
+        }
+    }
 
     public HomeFragment() {
         // Required empty public constructor
@@ -70,10 +99,14 @@ public class HomeFragment extends Fragment {
         mAdapter = new RecyclerAdapter(foodList);
         mSortBy = getView().findViewById(R.id.searchByRadioGroup);
         mSortBy.setOnCheckedChangeListener((group, checkedId) -> {
-            //2131230888 restaurant
-            //2131230886 food
+            if(checkedId==R.id.searchByCustom){
+                updateSearchOptions(true);
+            }else{
+                updateSearchOptions(false);
+            }
             Log.v("SearchByRadio", "Changed to " + checkedId);
         });
+        CustomSearchExpanded = false;
         mSearchView = getView().findViewById(R.id.SearchView);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -94,6 +127,15 @@ public class HomeFragment extends Fragment {
         mSearchView.setFocusable(true);
         mSearchView.setIconified(false);
         mSearchView.requestFocusFromTouch();
+
+        fINAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+        fINAnim.setDuration(300);
+        fOUTAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
+        fOUTAnim.setDuration(300);
+
+        mSpinner1 = getView().findViewById(R.id.CustomParameterSpinner1);
+        mSpinner2 = getView().findViewById(R.id.CustomParameterSpinner2);
+        populateSpinners();
     }
 
     @Override
@@ -112,13 +154,13 @@ public class HomeFragment extends Fragment {
 
     private void buildList(String query) {
         RadioGroup mSortBy = getView().findViewById(R.id.searchByRadioGroup);
-        //2131230888 restaurant
-        //2131230886 food
         String url="";
-        if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood) {
+        if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood || mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom) {
             url = "http://cs309-bs-1.misc.iastate.edu:8080/foods/all";
         }else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes){
             url = "http://cs309-bs-1.misc.iastate.edu:8080/restaurants/all";
+        }else{
+            Log.v("HomeFragCatERR","Invalid Selection on RadioGroup");
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
@@ -127,12 +169,12 @@ public class HomeFragment extends Fragment {
                 JSONArray resArr = response.getJSONArray("data");
                 for (int i = 0; i < resArr.length(); i++) {
                     JSONObject food = resArr.getJSONObject(i);
-                    if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes) { //if filter by res
-                        if (food.getString("restaurant_name").contains(query)) {
-                            foodList.add(new recycler_card(food.getInt("food_id"), food.getString("restaurant_name"), food.getString("last_updated"), false,food.getInt("restaurant_id") ));
+                    if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes) { //if filter by restaurant or macros
+                        if (food.getString("restaurant_name").toLowerCase().contains(query.toLowerCase())) {
+                            foodList.add(new recycler_card(new Food(food.getInt("restaurant_id"),food.getString("restaurant_name"),0,0,0,0,0)));
                         }
-                    } else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood) { //filter by food
-                        if (food.getString("food_name").contains(query)) {
+                    } else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood || mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom ) { //filter by food
+                        if (food.getString("food_name").toLowerCase().contains(query.toLowerCase())) {
                             foodList.add(new recycler_card(food.getInt("food_id"), food.getString("food_name"), "Calories = " + food.getInt("calorie_total"), false,food.getInt("food_id")));
                         }
                     } else {
@@ -147,6 +189,10 @@ public class HomeFragment extends Fragment {
         }, error -> Log.v("JSRQError", error.toString()));
 
         requestQueue.add(jsonObjectRequest);
+
+        if(mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom){
+            sortList();
+        }
     }
 
     /**
@@ -199,5 +245,70 @@ public class HomeFragment extends Fragment {
         Log.v("AddToFavoritesDebug",checkList().toString());
         Context context = getContext();
         Toast.makeText(context, "Added " + checkList().toString(), Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     *
+     * @param open Should we expand the menu?
+     */
+    private void updateSearchOptions(boolean open){
+        CardView viewer = getView().findViewById(R.id.CustomSearchDisplay);
+        if(open){//open
+            CustomSearchExpanded = true;
+            viewer.setVisibility(View.VISIBLE);
+            viewer.startAnimation(fINAnim);
+        }else{
+            if(CustomSearchExpanded){  //close
+                CustomSearchExpanded = false;;
+                viewer.startAnimation(fOUTAnim);
+                Handler handler = new Handler();
+                handler.postDelayed(() -> viewer.setVisibility(View.GONE), 310);
+            }else{
+                //nothing
+            }
+        }
+    }
+
+    /**
+     * Loads the spinners in the pop up menu with all the values in the enumerator
+     */
+    private void populateSpinners(){
+        mSpinner2.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, macrosENUM.values()));
+        mSpinner1.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, macrosENUM.values()));
+
+    }
+
+    /**
+     * Sorts the list comparing the values of the two spinners
+     */
+    private void sortList(){
+        Collections.sort(foodList, (o1, o2) -> {
+            int vala1,vala2,valb1,valb2;
+            vala1 = getMacro(o1, (macrosENUM) mSpinner1.getSelectedItem());
+            vala2 = getMacro(o1, (macrosENUM) mSpinner1.getSelectedItem());
+            valb1 = getMacro(o2, (macrosENUM) mSpinner2.getSelectedItem());
+            valb2 = getMacro(o2, (macrosENUM) mSpinner2.getSelectedItem());
+            o1.setmLine2("Comparator = " + vala1/vala2);
+            o2.setmLine2("Comparator = " + valb1/valb2);
+            return vala1/vala2 - valb1/valb2;
+        });
+    }
+
+    private int getMacro(recycler_card card, macrosENUM type){
+       Log.v("GetMacroLog","Sorting by macro");
+        switch(type){
+            case FAT:
+                return card.getFoodObj().getFatTotal();
+            case CARBS:
+                return card.getFoodObj().getCarbTotal();
+            case SUGAR:
+                Toast.makeText(getContext(), "Sorting by sugar not yet implemented",Toast.LENGTH_LONG).show();
+                return 1;
+            case PROTEIN:
+                return card.getFoodObj().getProteinTotal();
+            default:
+                Log.v("GetMacroERR", "Invalid State");
+                return 1;
+        }
     }
 }

@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".fragments.ProfileFragment">
+        tools:context=".fragments.ProfileFragment"
+        android:animateLayoutChanges="true">
 
         <ScrollView
             android:id="@+id/HorizontalScroller"

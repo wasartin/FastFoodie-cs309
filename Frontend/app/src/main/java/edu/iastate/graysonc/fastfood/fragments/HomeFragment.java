@@ -169,12 +169,12 @@ public class HomeFragment extends Fragment {
                 JSONArray resArr = response.getJSONArray("data");
                 for (int i = 0; i < resArr.length(); i++) {
                     JSONObject food = resArr.getJSONObject(i);
-                    if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes || mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom) { //if filter by restaurant or macros
-                        if (food.getString("restaurant_name").contains(query)) {
-                            foodList.add(new recycler_card(new Food(food.getInt("food_id"),food.getString("food_name"),food.getInt("protein_total"),food.getInt("carb_total"),food.getInt("fat_total"),food.getInt("calorie_total"),food.getInt("located_at"))));
+                    if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes) { //if filter by restaurant or macros
+                        if (food.getString("restaurant_name").toLowerCase().contains(query.toLowerCase())) {
+                            foodList.add(new recycler_card(new Food(food.getInt("restaurant_id"),food.getString("restaurant_name"),0,0,0,0,0)));
                         }
-                    } else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood) { //filter by food
-                        if (food.getString("food_name").contains(query)) {
+                    } else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood || mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom ) { //filter by food
+                        if (food.getString("food_name").toLowerCase().contains(query.toLowerCase())) {
                             foodList.add(new recycler_card(food.getInt("food_id"), food.getString("food_name"), "Calories = " + food.getInt("calorie_total"), false,food.getInt("food_id")));
                         }
                     } else {
@@ -283,12 +283,13 @@ public class HomeFragment extends Fragment {
      */
     private void sortList(){
         Collections.sort(foodList, (o1, o2) -> {
-            int vala1=1,vala2=1,valb1=0,valb2=0;
+            int vala1,vala2,valb1,valb2;
             vala1 = getMacro(o1, (macrosENUM) mSpinner1.getSelectedItem());
             vala2 = getMacro(o1, (macrosENUM) mSpinner1.getSelectedItem());
             valb1 = getMacro(o2, (macrosENUM) mSpinner2.getSelectedItem());
             valb2 = getMacro(o2, (macrosENUM) mSpinner2.getSelectedItem());
-
+            o1.setmLine2("Comparator = " + vala1/vala2);
+            o2.setmLine2("Comparator = " + valb1/valb2);
             return vala1/vala2 - valb1/valb2;
         });
     }

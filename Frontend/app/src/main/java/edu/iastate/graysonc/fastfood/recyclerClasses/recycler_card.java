@@ -18,43 +18,40 @@ public class recycler_card implements Parcelable {
 
 
     /**
-     *
-     * @param Name Name of card
+     * @param Name      Name of card
      * @param Misc_Data Secondary data On Card
      */
-    public recycler_card(int foodId, String Name, String Misc_Data){
-        this(foodId, Name, Misc_Data,true);
+    public recycler_card(int foodId, String Name, String Misc_Data) {
+        this(foodId, Name, Misc_Data, true);
     }
 
     /**
-     *
-     * @param Name Name of card
+     * @param Name      Name of card
      * @param Misc_Data Secondary data On Card
-     * @param fav Indicates if card is favored or not
+     * @param fav       Indicates if card is favored or not
      */
-    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav){
+    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav) {
         this.foodId = foodId;
-        name =Name;
-        mLine2=Misc_Data;
-        favored=fav;
+        name = Name;
+        mLine2 = Misc_Data;
+        favored = fav;
     }
 
     /**
-     *
-     * @param Name Name of card
+     * @param Name      Name of card
      * @param Misc_Data Secondary data On Card
-     * @param fav Indicates if card is favored or not
-     * @param id Database UID of the card
+     * @param fav       Indicates if card is favored or not
+     * @param id        Database UID of the card
      */
-    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav, int id){
+    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav, int id) {
         this.foodId = foodId;
-        name =Name;
-        mLine2=Misc_Data;
-        favored=fav;
+        name = Name;
+        mLine2 = Misc_Data;
+        favored = fav;
         this.id = id;
     }
 
-    public recycler_card(Food food){
+    public recycler_card(Food food) {
         //Food(@NonNull int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, int location)
         this.name = food.getName();
         mLine2 = "";
@@ -69,7 +66,7 @@ public class recycler_card implements Parcelable {
         name = in.readString();
         mLine2 = in.readString();
         favored = in.readByte() != 0;
-        id= in.readInt();
+        id = in.readInt();
     }
 
     public static final Creator<recycler_card> CREATOR = new Creator<recycler_card>() {
@@ -97,9 +94,9 @@ public class recycler_card implements Parcelable {
         return favored;
     }
 
-    public void setFavored(boolean val){favored=val;}
+    public void setFavored(boolean val) {favored = val;}
 
-    public void setID(int val){id=val;}
+    public void setID(int val) {id = val;}
 
     @Override
     public int describeContents() {
@@ -125,4 +122,6 @@ public class recycler_card implements Parcelable {
     public Food getFoodObj() {
         return foodObj;
     }
+
+    public void setmLine2(String text) {mLine2 = text; }
 }

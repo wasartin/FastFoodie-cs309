@@ -1,5 +1,7 @@
 package com.example.business.data.entities;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column; 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,6 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="food")
 public class Food {
+	
 	@Id
 	@Column(name="food_id")
 	private int food_id; 
@@ -27,6 +30,12 @@ public class Food {
 	@Column(name="calorie_total")
 	private int calorie_total;
 	
+	@Column(name="price")
+	private String price;
+	
+	@Column(name="category")
+	private String category;
+	
 	@Column (name="located_at")
 	private int located_at;
 	
@@ -35,7 +44,7 @@ public class Food {
 	}
 
 	public Food(int food_id, String food_name, int protein_total, int carb_total, int fat_total, int calorie_total,
-			int located_at) {
+			String price, String category, int located_at) {
 		super();
 		this.food_id = food_id;
 		this.food_name = food_name;
@@ -43,9 +52,11 @@ public class Food {
 		this.carb_total = carb_total;
 		this.fat_total = fat_total;
 		this.calorie_total = calorie_total;
+		this.price = price;
+		this.category = category;
 		this.located_at = located_at;
 	}
-
+	
 	public int getLocated_at() {
 		return located_at;
 	}
@@ -101,5 +112,23 @@ public class Food {
 	public void setCalorie_total(int calorie_total) {
 		this.calorie_total = calorie_total;
 	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
+	
 
 }

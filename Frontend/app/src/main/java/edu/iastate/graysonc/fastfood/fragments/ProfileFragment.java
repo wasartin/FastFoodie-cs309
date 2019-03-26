@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,17 +47,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     ViewModelProvider.Factory viewModelFactory;
     private ProfileViewModel viewModel;
 
-    private Button signOutButton;
     private ImageView avatarImageView;
     private TextView nameTextView;
     private TextView mUserInfoDisp;
-    private TextView mUserDietaryDisp;
-    private Button mMenuTicket;
-    private Button mMenuEdit;
     private ImageButton mMenuExpand;
     private ScrollView mHorizontalScroller;
     private Animation fINAnim;
     private Animation fOUTAnim;
+    private RadioGroup mProfileGroupRadioGroup;
 
     private boolean toggled;
 
@@ -74,19 +74,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         //Initialize Variables and point to correct XML objects
         toggled = false;
-        signOutButton = getView().findViewById(R.id.sign_out_button);
         avatarImageView = getView().findViewById(R.id.avatar_image_view);
         nameTextView = getView().findViewById(R.id.name_text_view);
         mUserInfoDisp = getView().findViewById(R.id.user_info_display);
-        mUserDietaryDisp = getView().findViewById(R.id.user_dietary_display);
-        mMenuTicket = getView().findViewById(R.id.TicketButton);
-        mMenuEdit = getView().findViewById(R.id.ButtonEdit);
         mMenuExpand = getView().findViewById(R.id.MenuButton);
         mHorizontalScroller = getView().findViewById(R.id.HorizontalScroller);
+        mProfileGroupRadioGroup = getView().findViewById(R.id.ProfileGroupRadioGroup);
         fINAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
-        fINAnim.setDuration(500);
+        fINAnim.setDuration(600);
         fOUTAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
-        fOUTAnim.setDuration(500);
+        fOUTAnim.setDuration(300);
 
 
         // Get profile picture and name from Google Signin
@@ -104,9 +101,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
 
         // Create Click Listeners
-        signOutButton.setOnClickListener(this);
-        mMenuEdit.setOnClickListener(this);
-        mMenuTicket.setOnClickListener(this);
+        mProfileGroupRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.ticketRadioButton:
+                        createWarning("Open Submit Ticket");
+                        break;
+                    case R.id.singOutRadioButton:
+                        signOut();
+                        createWarning("Sign user out");
+                        break;
+                    case R.id.editDataRadioButton:
+                        createWarning("Open Edit Users Page");
+                        break;
+                }
+            }
+        });
         mMenuExpand.setOnClickListener(this);
 
         mHorizontalScroller.setOnTouchListener((v, event) -> {
@@ -151,16 +162,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.sign_out_button:
-                signOut();
-                break;
-            case R.id.ButtonEdit:
-                createWarning("Open Edit Users Page");
-                break;
-            case R.id.TicketButton:
-                //createWarning("Open Submit Ticket");
-
-                break;
             case R.id.MenuButton:
                 toggleMenuVisible();
                 break;
@@ -172,19 +173,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
      */
     public void toggleMenuVisible() {
         if (toggled) {
-            mMenuTicket.setVisibility(View.GONE);
-            mMenuEdit.setVisibility(View.GONE);
-            signOutButton.setVisibility(View.GONE);
-            mMenuTicket.startAnimation(fOUTAnim);
-            mMenuEdit.startAnimation(fOUTAnim);
-            signOutButton.startAnimation(fOUTAnim);
+              mMenuExpand.setImageResource(R.drawable.drop_down_light);
+              mProfileGroupRadioGroup.setVisibility(View.GONE);
+            mProfileGroupRadioGroup.startAnimation(fOUTAnim);
+
         } else {
-            mMenuTicket.setVisibility(View.VISIBLE);
-            mMenuEdit.setVisibility(View.VISIBLE);
-            signOutButton.setVisibility(View.VISIBLE);
-            mMenuTicket.startAnimation(fINAnim);
-            mMenuEdit.startAnimation(fINAnim);
-            signOutButton.startAnimation(fINAnim);
+            mMenuExpand.setImageResource(R.drawable.drop_down_dark);
+              mProfileGroupRadioGroup.setVisibility(View.VISIBLE);
+              mProfileGroupRadioGroup.startAnimation(fINAnim);
         }
         toggled = !toggled;
     }

@@ -85,7 +85,7 @@
             app:layout_constraintTop_toBottomOf="@+id/SortByRadioGroup">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/Favorites_Recycler"
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"

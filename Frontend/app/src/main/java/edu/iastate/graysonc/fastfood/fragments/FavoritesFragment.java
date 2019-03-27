@@ -1,9 +1,8 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
-
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,17 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.EditText;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Objects;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import javax.inject.Inject;
 
@@ -31,131 +23,79 @@ import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
-import edu.iastate.graysonc.fastfood.recyclerClasses.FoodListAdapter;
-import edu.iastate.graysonc.fastfood.recyclerClasses.RecyclerAdapter;
-import edu.iastate.graysonc.fastfood.recyclerClasses.recycler_card;
+import edu.iastate.graysonc.fastfood.recyclerClasses.FavoritesListAdapter;
 import edu.iastate.graysonc.fastfood.view_models.FavoritesViewModel;
 
+public class FavoritesFragment extends Fragment {
+    private static final String TAG = "FavoritesFragment";
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class FavoritesFragment extends Fragment implements View.OnClickListener {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    private FavoritesViewModel viewModel;
+    private FavoritesViewModel mViewModel;
 
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
+    private FavoritesListAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
-    private android.support.v7.widget.RecyclerView mainList;
-    private FoodListAdapter mAdapter;
-    private android.support.v7.widget.RecyclerView.LayoutManager mlayoutManager;
-    ArrayList<recycler_card> favList;
-    RadioGroup mSortBy;
+    public FavoritesFragment() {}
 
-    public FavoritesFragment() {
-        // Required empty public constructor
-    }
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // Configure Dagger 2
         AndroidSupportInjection.inject(this);
 
-        buildView();
-
         // Configure ViewModel
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesViewModel.class);
-        viewModel.init(getArguments().getString("USER_EMAIL"));
-        mAdapter.setFoods(viewModel.getFavorites().getValue());
-        viewModel.getFavorites().observe(this, foods -> {
-            mAdapter.setFoods(foods);
-        });
-        recyclerView.setOnClickListener(this);
-
-
-        //Assign a radio group and handle Changes
-        mSortBy = Objects.requireNonNull(getView()).findViewById(R.id.SortByRadioGroup);
-        mSortBy.setOnCheckedChangeListener((group, checkedId) -> {
-            if (mSortBy.getCheckedRadioButtonId() == R.id.sortByFood) { //Search by food group
-                sortList(false);
-            } else if (mSortBy.getCheckedRadioButtonId() == R.id.sortByRes) { //Search by restaurant
-                sortList(true);
-            } else {
-                Log.e("RadioButtonErr", "Expected 2131230907/8, got: " + checkedId);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesViewModel.class);
+        mViewModel.init(((GoogleSignInAccount)getArguments().getParcelable("ACCOUNT")).getEmail());
+        mViewModel.getFavorites().observe(this, f -> {
+            if (f != null) {
+                //updateUI(f);
             }
         });
 
-        //sortList(false); //Sorts view by list type
+        // Set up list
+        buildRecyclerView();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favorites, container, false);
     }
 
-    @Override
-    public void onDestroy() {
-        //Logs foods to remove
-        //TODO Remove this food from Favorites
-        super.onDestroy();
-        removeNonFavorites();
+    public void removeItem(int position) {
+        Food selectedItem = mViewModel.getFavorites().getValue().get(position);
+        Log.d(TAG, "removeItem: " + selectedItem.getName());
+        //mAdapter.notifyItemRemoved(position);
     }
 
-    /**
-     * Removes item at @pos from recycler
-     * @param pos Position of item to be removed
-     */
-    public void removeItem(int pos) {
-        favList.remove(pos);
-        mAdapter.notifyDataSetChanged();
+    public void openFoodPage(int position) {
+        Food selectedItem = mViewModel.getFavorites().getValue().get(position);
+        Log.d(TAG, "openFoodPage: " + selectedItem.getName());
+        //mAdapter.notifyItemChanged(position);
     }
 
+    public void buildRecyclerView() {
+        mRecyclerView = getView().findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(App.context);
+        mAdapter = new FavoritesListAdapter(mViewModel.getFavorites().getValue());
 
-    private void sortList(boolean restaurant){
-        if (restaurant) {
-            Collections.sort(viewModel.getFavorites().getValue(), (o1, o2) -> o1.getLocation()-(o2.getLocation()));
-        } else {
-            Collections.sort(viewModel.getFavorites().getValue(), (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
-        }
-        mAdapter.notifyDataSetChanged();
-    }
-    //viewModel.getFavorites().getValue()
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
-    /**
-     * Foods Removed from favorites
-     * @return A list of foods removed
-     */
-    private void removeNonFavorites() {
-        for (Food f : viewModel.getFavorites().getValue()) {
-            if (!f.isFavorite()) {
-                viewModel.removeFavorite(getArguments().getString("USER_EMAIL"), f.getId());
+        mAdapter.setOnItemClickListener(new FavoritesListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                openFoodPage(position);
             }
-        }
-    }
 
-    /**
-     * Actually creates the Recycler View
-     */
-    public void buildView() {
-        recyclerView = getView().findViewById(R.id.Favorites_Recycler);
-        mAdapter = new FoodListAdapter(App.context);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(App.context));
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.favorite_button: // TODO: Enable user's to remove favorites. This block doesn't work.
-                viewModel.getFavorites().getValue().get(recyclerView.getChildAdapterPosition(v)).setFavorite(((CheckBox) v).isChecked());
-                break;
-            case R.layout.recycler_card:
-                Toast.makeText(App.context, "Food info page coming soon", Toast.LENGTH_SHORT);
-                break;
-        }
+            @Override
+            public void onDeleteClick(int position) {
+                removeItem(position);
+            }
+        });
     }
 }
-

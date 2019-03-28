@@ -17,6 +17,9 @@ import android.widget.EditText;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
@@ -52,12 +55,10 @@ public class FavoritesFragment extends Fragment {
         mViewModel.init(((GoogleSignInAccount)getArguments().getParcelable("ACCOUNT")).getEmail());
         mViewModel.getFavorites().observe(this, f -> {
             if (f != null) {
-                //updateUI(f);
+                buildRecyclerView();
+                mAdapter.notifyDataSetChanged();
             }
         });
-
-        // Set up list
-        buildRecyclerView();
     }
 
     @Override

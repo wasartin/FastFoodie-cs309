@@ -28,16 +28,14 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
     }
 
     public static class FavoriteViewHolder extends RecyclerView.ViewHolder {
-        public ImageView mImageView;
         public TextView mTextView1;
         public TextView mTextView2;
         public ImageView mDeleteImage;
 
         public FavoriteViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
-            mImageView = itemView.findViewById(R.id.imageView);
             mTextView1 = itemView.findViewById(R.id.nameTextView);
-            mTextView2 = itemView.findViewById(R.id.restaurantTextView);
+            mTextView2 = itemView.findViewById(R.id.restaurantNameTextView);
             mDeleteImage = itemView.findViewById(R.id.image_delete);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -67,11 +65,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
     }
 
     public FavoritesListAdapter(List<Food> favoriteList) {
-        if (favoriteList == null) {
-            mFavoritesList = new ArrayList<>();
-        } else {
-            mFavoritesList = favoriteList;
-        }
+        mFavoritesList = favoriteList;
     }
 
     @Override

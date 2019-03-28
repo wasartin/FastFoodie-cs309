@@ -30,4 +30,10 @@
     </string>
     <string name="searchQuery">What are you feeling like eating?</string>
 
+    <string name="food_protein_total">Protein</string>
+    <string name="food_carb_total">Carbohydrate</string>
+    <string name="food_fat_total">Fat</string>
+    <string name="food_calorie_total">Calories</string>
+    <string name="food_location">Location</string>
+
 </resources>

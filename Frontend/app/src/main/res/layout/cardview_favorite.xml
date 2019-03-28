@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/nameTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -33,8 +33,8 @@
             app:layout_constraintVertical_bias="0.1" />
 
         <TextView
-            android:id="@+id/restaurantNameTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/card_restaurant"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"

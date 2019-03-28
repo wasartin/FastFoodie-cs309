@@ -12,13 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -69,7 +64,8 @@ public class FavoritesFragment extends Fragment {
     public void removeItem(int position) {
         Food selectedItem = mViewModel.getFavorites().getValue().get(position);
         Log.d(TAG, "removeItem: " + selectedItem.getName());
-        //mAdapter.notifyItemRemoved(position);
+        mViewModel.removeFavorite(((GoogleSignInAccount)getArguments().getParcelable("ACCOUNT")).getEmail(), selectedItem.getId());
+        mAdapter.notifyItemRemoved(position);
     }
 
     public void openFoodPage(int position) {

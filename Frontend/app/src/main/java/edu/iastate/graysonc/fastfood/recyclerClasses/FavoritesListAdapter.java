@@ -35,7 +35,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
         public FavoriteViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             mTextView1 = itemView.findViewById(R.id.nameTextView);
-            mTextView2 = itemView.findViewById(R.id.restaurantNameTextView);
+            mTextView2 = itemView.findViewById(R.id.card_restaurant);
             mDeleteImage = itemView.findViewById(R.id.image_delete);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +80,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
         Food currentItem = mFavoritesList.get(position);
 
         holder.mTextView1.setText(currentItem.getName());
-        holder.mTextView2.setText(currentItem.getLocation());
+        holder.mTextView2.setText("" + currentItem.getLocation());
     }
 
     @Override

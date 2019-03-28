@@ -112,19 +112,6 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
         mAdapter.notifyDataSetChanged();
     }
 
-//    /**
-//     * Sorts using custom comparators
-//     *
-//     * @param restaurant Sort by restaurant
-//     */
-//    private void sortList(boolean restaurant) {
-//        if (restaurant) {
-//            Collections.sort(favList, (o1, o2) -> o1.getData().compareToIgnoreCase(o2.getData()));
-//        } else {
-//            Collections.sort(favList, (o1, o2) -> o1.getFood().compareToIgnoreCase(o2.getFood()));
-//        }
-//        mAdapter.notifyDataSetChanged();
-//    }
 
     private void sortList(boolean restaurant){
         if (restaurant) {

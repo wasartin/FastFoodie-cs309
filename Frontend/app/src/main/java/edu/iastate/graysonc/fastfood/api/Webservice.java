@@ -46,5 +46,5 @@ public interface Webservice {
     Call<Favorite> createFavorite(@Path("user_email") String userEmail, @Path("food_id") int foodId);
 
     @DELETE("favorites/delete/{user_email}/{food_id}")
-    Call<Food> deleteFavorite(@Path("user_email") String userEmail, @Path("food_id") int foodId);
+    Call<Favorite> deleteFavorite(@Path("user_email") String userEmail, @Path("food_id") int foodId);
 }

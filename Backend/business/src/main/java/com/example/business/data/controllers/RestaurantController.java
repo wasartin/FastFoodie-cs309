@@ -33,7 +33,7 @@ public class RestaurantController {
 	 * Private method used for returned a list of restaurants
 	 * @return List of Restaurants
 	 */
-	private List<Restaurant> getRestaurants(){
+	public List<Restaurant> getRestaurants(){
 		Iterable<Restaurant> rIters = restaurantRepo.findAll();
 		List<Restaurant> rList = new ArrayList<Restaurant>();
 		rIters.forEach(rList::add);

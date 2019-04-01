@@ -123,7 +123,7 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createUser(@RequestBody User newUser) {
+	public JSONObject createUser(@RequestBody User newUser) {
 		JSONObject response;
 		try {
 			if(userRepository.existsById(newUser.getUser_email())) {//User already exists
@@ -146,7 +146,7 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteUser(@PathVariable String user_email) {
+	public JSONObject deleteUser(@PathVariable String user_email) {
 		JSONObject response;
 		try {
 			if(!userRepository.existsById(user_email)) {//Checks to see if User is even in the DB
@@ -172,7 +172,7 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject editUser(@RequestBody User newUserInfo, @PathVariable String user_email) {
+	public JSONObject editUser(@RequestBody User newUserInfo, @PathVariable String user_email) {
 		JSONObject response;
 		try {
 			if(!userRepository.existsById(user_email)) {//pretty sure that is how I want to do this.
@@ -188,8 +188,15 @@ public class UserController {
 		return response;
 	}
 	
+	/**
+	 * Made Public for testing
+	 * @param status
+	 * @param input
+	 * @param message
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	private JSONObject generateResponse(int status, HttpStatus input, String message) {
+	public JSONObject generateResponse(int status, HttpStatus input, String message) {
 		JSONObject response = new JSONObject();
 		response.put("status", status);
 		response.put("HttpStatus", input);

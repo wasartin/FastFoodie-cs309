@@ -28,7 +28,6 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
 
     public static class FavoriteViewHolder extends RecyclerView.ViewHolder {
         public TextView mNameTextView,
-                        mTextView2,
                         mCalorieTextView,
                         mProteinTextView,
                         mFatTextView,
@@ -39,7 +38,6 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
         public FavoriteViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             mNameTextView = itemView.findViewById(R.id.nameTextView);
-            //mTextView2 = itemView.findViewById(R.id.card_restaurant);
             mCalorieTextView = itemView.findViewById(R.id.calorie_text);
             mProteinTextView = itemView.findViewById(R.id.protein_text);
             mFatTextView = itemView.findViewById(R.id.fat_text);
@@ -97,7 +95,6 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
         Food currentItem = mFavoritesList.get(position);
 
         holder.mNameTextView.setText(currentItem.getName());
-        //holder.mTextView2.setText("" + currentItem.getLocation());
         holder.mCalorieTextView.setText("" + currentItem.getCalorieTotal());
         holder.mProteinTextView.setText("" + currentItem.getProteinTotal());
         holder.mFatTextView.setText("" + currentItem.getFatTotal());

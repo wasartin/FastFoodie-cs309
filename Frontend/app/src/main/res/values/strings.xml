@@ -29,5 +29,8 @@
         completions."
     </string>
     <string name="searchQuery">What are you feeling like eating?</string>
+    <string name="submit_ticket">Submit Ticket</string>
+    <string name="category">Category :</string>
+    <string name="what_can_we_help_you_with">What can we help you with?</string>
 
 </resources>

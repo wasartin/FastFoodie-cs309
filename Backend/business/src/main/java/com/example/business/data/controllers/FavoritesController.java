@@ -24,8 +24,6 @@ public class FavoritesController {
 
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
 	
-	@Autowired
-	FavoritesRepository favoritesRepository;
 	
 	@Autowired
 	FavoritesService favoritesService;

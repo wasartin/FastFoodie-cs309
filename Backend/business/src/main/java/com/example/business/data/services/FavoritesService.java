@@ -8,10 +8,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import com.example.business.data.entities.Favorites;
 import com.example.business.data.repositories.FavoritesRepository;
 
+@Service
 public class FavoritesService {
 	
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";

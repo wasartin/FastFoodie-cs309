@@ -150,6 +150,7 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
      * Toggles Visibility Of Buttons
      */
     public void toggleMenuVisible() {
+        mProfileGroupRadioGroup.check(R.id.emptyRadioButton);
         if (toggled) {
               mMenuExpand.setImageResource(R.drawable.drop_down_light);
               mProfileGroupRadioGroup.setVisibility(View.GONE);
@@ -181,9 +182,11 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
                 break;
             case R.id.singOutRadioButton:
                 signOut();
+                toggleMenuVisible();
                 createWarning("Sign user out");
                 break;
             case R.id.editDataRadioButton:
+                toggleMenuVisible();
                 createWarning("Open Edit Users Page");
                 break;
         }

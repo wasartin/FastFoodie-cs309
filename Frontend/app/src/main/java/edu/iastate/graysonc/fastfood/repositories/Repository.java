@@ -44,7 +44,12 @@ public class Repository {
         this.foodDao = foodDao;
         this.favoriteDao = favoriteDao;
         this.executor = executor;
+
+        //fetchAllFoods();
+        //fetchAllFavorites();
     }
+
+
 
     /**
      * Fetches all users from the server and puts them in the Database
@@ -126,12 +131,16 @@ public class Repository {
         return foodDao.load(foodId); // Returns a LiveData object directly from the database.
     }
 
+    public LiveData<List<Food>> getAllFoods() {
+        return foodDao.loadAll();
+    }
+
     private void refreshFood(final int foodId) {
         executor.execute(() -> {
             // Check if food was fetched recently
-            boolean userExists = (foodDao.hasFood(foodId, getMaxRefreshTime(new Date())) != null);
+            boolean foodExists = (foodDao.hasFood(foodId, getMaxRefreshTime(new Date())) != null);
             // If food have to be updated
-            if (!userExists) {
+            if (!foodExists) {
                 webservice.getFood(foodId).enqueue(new Callback<Food>() {
                     @Override
                     public void onResponse(Call<Food> call, Response<Food> response) {
@@ -176,16 +185,21 @@ public class Repository {
         });
     }
 
-    public LiveData<List<Food>> getFavorites(String userEmail) {
-        refreshFavorites(userEmail); // Refresh if possible
-        LiveData<List<Food>> favorites = favoriteDao.getFavoritesForUser(userEmail); // Returns a LiveData object directly from the database.
-        if (favorites.getValue() != null) {
-            for (Food f: favorites.getValue()) {
-                f.setFavorite(true);
-                foodDao.insert(f);
-            }
-        }
-        return favoriteDao.getFavoritesForUser(userEmail); // Returns a LiveData object directly from the database.
+    public LiveData<List<Food>> getFavoriteFoodsForUser(String userEmail) {
+        fetchAllFavorites();
+        fetchAllFoods();
+        //refreshFavoritesForUser(userEmail);
+
+        //Debug
+        LiveData<List<Food>> f = foodDao.getFavoriteFoodsForUser(userEmail);
+        //Log.d(TAG, "getFavoriteFoodsForUser: " + f.getValue().get(0).getName());
+
+        return f;
+    }
+
+    public LiveData<List<Favorite>> getFavoritesForUser(String userEmail) {
+        refreshFavoritesForUser(userEmail);
+        return favoriteDao.getFavoritesForUser(userEmail);
     }
 
     public void createFavorite(String userEmail, int foodId) {
@@ -195,7 +209,7 @@ public class Repository {
                 public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                     Log.d(TAG, "FAVORITE ADDED");
                     //Toast.makeText(App.context, "Added to favorites", Toast.LENGTH_LONG).show();
-                    refreshFavorites(userEmail);
+                    refreshFavoritesForUser(userEmail);
                 }
                 @Override
                 public void onFailure(Call<Favorite> call, Throwable t) { t.printStackTrace(); }
@@ -206,18 +220,51 @@ public class Repository {
     public void deleteFavorite(String userEmail, int foodId) {
         executor.execute(() -> {
             favoriteDao.delete(userEmail, foodId);
-            webservice.deleteFavorite(userEmail, foodId).enqueue(new Callback<Food>() {
+            webservice.deleteFavorite(userEmail, foodId).enqueue(new Callback<Favorite>() {
                 @Override
-                public void onResponse(Call<Food> call, Response<Food> response) {
+                public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                     Log.d(TAG, "FAVORITE REMOVED");
                     //Toast.makeText(App.context, "Removed from favorites", Toast.LENGTH_LONG).show();
-                    refreshFavorites(userEmail);
+                    refreshFavoritesForUser(userEmail);
                 }
                 @Override
-                public void onFailure(Call<Food> call, Throwable t) { t.printStackTrace(); }
+                public void onFailure(Call<Favorite> call, Throwable t) { t.printStackTrace(); }
             });
         });
     }
+
+    private void refreshFavoritesForUser(String userEmail) {
+        executor.execute(() -> {
+            //favoriteDao.deleteAll();
+            webservice.getFavoritesForUser(userEmail).enqueue(new Callback<List<Favorite>>() {
+                @Override
+                public void onResponse(Call<List<Favorite>> call, Response<List<Favorite>> response) {
+                    Log.d(TAG, "FAVORITES REFRESHED FROM NETWORK");
+                    Toast.makeText(App.context, "Data refreshed from network", Toast.LENGTH_LONG).show();
+                    executor.execute(() -> {
+                        List<Favorite> favorites = response.body();
+                        if (favorites == null) {
+                            Log.e(TAG,"Grayson your code doesn't work <3 - refreshFood");
+                        } else {
+                            favoriteDao.insert(favorites);
+                        }
+                    });
+                }
+                @Override
+                public void onFailure(Call<List<Favorite>> call, Throwable t) {
+                        t.printStackTrace();
+                }
+            });
+        });
+    }
+
+    public LiveData<List<Food>> getFavorites(String userEmail) {
+        refreshFavorites(userEmail); // Refresh if possible
+        LiveData<List<Food>> favorites = foodDao.getFavoriteFoodsForUser(userEmail); // Returns a LiveData object directly from the database.
+        return favorites; // Returns a LiveData object directly from the database.
+    }
+
+
 
     private void refreshFavorites(final String userEmail) {
         //fetchAllFoods(); // TODO: Not this ever again. This is bad.
@@ -253,13 +300,12 @@ public class Repository {
                                 });
                             }
                         }
-
                     });
                 }
                 @Override
                 public void onFailure(Call<List<Favorite>> call, Throwable t) {
                         t.printStackTrace();
-                    }
+                }
             });
         });
     }

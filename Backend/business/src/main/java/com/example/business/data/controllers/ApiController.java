@@ -23,7 +23,6 @@ import com.example.business.data.repositories.FoodRepository;
 @RequestMapping(value="/api")
 public class ApiController {
 
-	
 	@Autowired
 	FoodRepository foodRepository;
 	
@@ -36,11 +35,12 @@ public class ApiController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET, path = "favorites/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, path = "/json/favorites/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public JSONObject getfavoriteJSONObject(@PathVariable int user_id) {
+	public JSONObject getfavoriteJSONObject(@PathVariable String user_id) {
 		JSONObject response = new JSONObject();
-		JSONArray listOfFavorites = new JSONArray();
+		JSONArray usersFavorites = new JSONArray();
+		
 		ArrayList<Food> result = new ArrayList<>();
 		
 		List<Favorites> fullListOfFavorites = getFavorites();
@@ -48,24 +48,53 @@ public class ApiController {
 		
 		for(Favorites fav : fullListOfFavorites) {
 			if(fav.getUser_id().equals(user_id)) {
-				listOfFavorites.add(fav);
+				usersFavorites.add(fav);
 			}
 		}
 		
-		for(int i = 0; i < fullListOfFavorites.size(); i++) {
+		for(int i = 0; i < usersFavorites.size(); i++) {
 			for(int j = 0; j < fullListOfFoods.size(); j++)
-			if(fullListOfFavorites.get(i).getFid() == fullListOfFoods.get(j).getFood_id()) {
+			if(((Favorites) usersFavorites.get(i)).getFid() == fullListOfFoods.get(j).getFood_id()) {
 				result.add(fullListOfFoods.get(j));
 				break;
 			}
 		}
-		
 		response.put("data", result);
 		return response;
 	}
 	
-	
-	
+	/**
+	 *
+	 * @param favorite_id
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(method = RequestMethod.GET, path = "/favorites/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<Food> getfavoriteFoodsByUser(@PathVariable String user_id) {
+		JSONArray usersFavorites = new JSONArray();
+		
+		ArrayList<Food> result = new ArrayList<>();
+		
+		List<Favorites> fullListOfFavorites = getFavorites();
+		List<Food> fullListOfFoods = getFoods();
+		
+		for(Favorites fav : fullListOfFavorites) {
+			if(fav.getUser_id().equals(user_id)) {
+				usersFavorites.add(fav);
+			}
+		}
+		
+		for(int i = 0; i < usersFavorites.size(); i++) {
+			for(int j = 0; j < fullListOfFoods.size(); j++)
+			if(((Favorites) usersFavorites.get(i)).getFid() == fullListOfFoods.get(j).getFood_id()) {
+				result.add(fullListOfFoods.get(j));
+				break;
+			}
+		}
+		return result;
+	}
+
 	private List<Favorites> getFavorites(){
 		Iterable<Favorites> uIters = favoritesRepository.findAll();
 		List<Favorites> uList = new ArrayList<Favorites>();

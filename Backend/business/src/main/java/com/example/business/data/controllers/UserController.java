@@ -152,6 +152,8 @@ public class UserController {
 			if(!userRepository.existsById(user_email)) {//Checks to see if User is even in the DB
 				throw new IllegalArgumentException();
 			}
+			//User user = userRepository.findByID(user_email);
+			//userRepository.delete(user);
 			userRepository.deleteById(user_email);
 			response = generateResponse(204, HttpStatus.OK, "User has been deleted");
 		}catch (IllegalArgumentException e) {

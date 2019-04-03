@@ -2,10 +2,9 @@ package com.example.business.data;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,9 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.http.HttpStatus;
 
 import com.example.business.data.controllers.UserController;
@@ -111,8 +108,35 @@ public class UserControllerTest {
 	
 	@Test
 	public void deleteUserTest() {
-		//User toDelete = new User("thisGuy@gmail.com", "admin");
-		//TODO
+		when(repo.existsById("wasartin@iastate.edu")).thenReturn(true);
+
+		JSONObject response = userController.deleteUser("wasartin@iastate.edu");
+		verify(repo, times(1)).deleteById("wasartin@iastate.edu");
+		assertEquals(response.get("HttpStatus"), HttpStatus.OK);
+		assertEquals(response.get("message"), "User has been deleted");
+		assertEquals(response.get("status"), 204);
+	}
+	
+	@Test
+	public void deleteUserTest_Fail() {
+		when(repo.existsById("thisGuy@Gmail.com")).thenReturn(true);
+
+		JSONObject response = userController.deleteUser("thisGuy@gmail.com");
+		verify(repo, never()).deleteById("thisGuy@gmail.com");
+		assertEquals(response.get("HttpStatus"), HttpStatus.BAD_REQUEST);
+		assertEquals(response.get("message"), "Could not find that user in the database, or your fields are incorrect, double check your request");
+		assertEquals(response.get("status"), 400);
+	}
+	
+	@Test
+	public void deleteUserTest_Exception() {
+		when(repo.existsById("thisGuy@Gmail.com")).thenThrow(IllegalArgumentException.class);
+
+		JSONObject response = userController.deleteUser("thisGuy@gmail.com");
+		verify(repo, never()).deleteById("thisGuy@gmail.com");
+		assertEquals(response.get("HttpStatus"), HttpStatus.BAD_REQUEST);
+		assertEquals(response.get("message"), "Could not find that user in the database, or your fields are incorrect, double check your request");
+		assertEquals(response.get("status"), 400);
 	}
 	
 	@Test

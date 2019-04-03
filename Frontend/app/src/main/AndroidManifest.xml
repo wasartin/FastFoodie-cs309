@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".PopUps.submitPopUp" android:theme = "@style/AppTheme.CustomThemeTrans"></activity>
     </application>
 
 </manifest>

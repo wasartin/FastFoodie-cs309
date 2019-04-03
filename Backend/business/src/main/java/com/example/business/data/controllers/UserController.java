@@ -39,21 +39,14 @@ public class UserController {
 	@Autowired
 	UserRepository userRepository;
 	
-	//TODO Be sure to delete this
-	//	This is only here so that the old way of pulling users still works. 
-	//		Once the 'getUserJSONObject' method can be parsed my Front end, 
-	//		this will then be deleted.
-	@RequestMapping(method = RequestMethod.GET, path = "old/{user_email}")
+	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}")
 	@ResponseBody
-	public Optional<User> getUser_OLD(@PathVariable String user_email){
+	public Optional<User> getUser(@PathVariable String user_email){
 		return userRepository.findById(user_email);
 	}
 
-	//TODO Be sure to delete this 
-	// 	Once 'getAllUsersJSONObject' method can be correctly parsed by 
-	//		front end, this will be deleted
-	@GetMapping("old/all")
-	public Iterable<User> getAllUsers_OLD() {
+	@GetMapping("/all")
+	public Iterable<User> getAllUsers() {
 		return userRepository.findAll();
 	}
 
@@ -63,7 +56,7 @@ public class UserController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, path = "json/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getUserJSONObject(@PathVariable String user_email) {//TODO will just be changed to getUser once conversion is complete
 		Optional<User> temp = userRepository.findById(user_email);

@@ -25,9 +25,7 @@ import com.example.business.data.controllers.UserController;
 import com.example.business.data.entities.User;
 import com.example.business.data.repositories.UserRepository;
 
-
 /**
- * TODO, figure out how to best test with a DB
  * @author watis
  *
  */
@@ -45,10 +43,10 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void getAccountByIdTest() {
+	public void getUserByIdTest() {
 		when(repo.findById("TomDodge@gmail.com")).thenReturn(Optional.of(new User("TomDodge@gmail.com", "registered")));
 	
-		Optional<User> uO = userController.getUser_OLD("TomDodge@gmail.com");
+		Optional<User> uO = userController.getUser("TomDodge@gmail.com");
 		
 		User found = uO.get();
 		assertEquals("TomDodge@gmail.com", found.getUser_email());
@@ -56,7 +54,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void getAllAccountTest() {
+	public void getAllUsersTest() {
 		List<User> list = new ArrayList<User>();
 		list.add(new User("TomDodge@gmail.com", "registered"));
 		list.add(new User("wasartin@iastate.edu", "admin"));
@@ -74,7 +72,7 @@ public class UserControllerTest {
 
 		when(repo.findAll()).thenReturn(list);
 
-		List<User> uList = (List<User>) userController.getAllUsers_OLD();
+		List<User> uList = (List<User>) userController.getAllUsers();
 
 		assertEquals(13, uList.size());
 		verify(repo, times(1)).findAll();

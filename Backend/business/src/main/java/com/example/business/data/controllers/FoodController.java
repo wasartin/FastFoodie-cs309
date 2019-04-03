@@ -31,14 +31,14 @@ public class FoodController {
 	@Autowired
 	FoodRepository foodRepository;
 	
-	@RequestMapping(method = RequestMethod.GET, path = "old/{food_id}")
+	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}")
 	@ResponseBody
-	public Optional<Food> getFood_OLD(@PathVariable int food_id){
+	public Optional<Food> getFood(@PathVariable int food_id){
 		return foodRepository.findById(food_id);
 	}
 
-	@GetMapping("old/all")
-	public Iterable<Food> getAllFood_OLD() {
+	@GetMapping("/all")
+	public Iterable<Food> getAllFood() {
 		return foodRepository.findAll();
 	}
 
@@ -48,7 +48,7 @@ public class FoodController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, path = "json/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getFoodJSONObject(@PathVariable int food_id) {
 		Optional<Food> temp = foodRepository.findById(food_id);
@@ -98,7 +98,7 @@ public class FoodController {
 	 * @return JSONObject 
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "json/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JSONObject getAllFoodJSONObject()  {
 		JSONObject toReturn = new JSONObject();
 		String key1 = JSON_OBJECT_RESPONSE_KEY1;

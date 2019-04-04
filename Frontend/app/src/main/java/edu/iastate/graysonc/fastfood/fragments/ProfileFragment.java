@@ -32,6 +32,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.DownloadImageTask;
 import edu.iastate.graysonc.fastfood.PopUps.submitPopUp;
 import edu.iastate.graysonc.fastfood.R;
@@ -87,15 +88,10 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
         fOUTAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
         fOUTAnim.setDuration(300);
 
-
-        // Get profile picture and name from Google Signin
-        GoogleSignInAccount account = getArguments().getParcelable("ACCOUNT");
-        Log.e(TAG, "onActivityCreated: Account received from " + account.getDisplayName());
-        initUI(account);
-
         // Configure ViewModel
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
-        viewModel.init(account.getEmail());
+        viewModel.init(App.account.getEmail());
+        initUI(App.account);
         viewModel.getUser().observe(this, user -> {
             if (user != null) {
                 updateUI(user);

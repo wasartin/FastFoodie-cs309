@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +32,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.DownloadImageTask;
+import edu.iastate.graysonc.fastfood.PopUps.submitPopUp;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.database.entities.User;
 import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
@@ -41,7 +44,7 @@ import static android.support.constraint.Constraints.TAG;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProfileFragment extends Fragment implements View.OnClickListener {
+public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedChangeListener{
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -85,15 +88,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         fOUTAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
         fOUTAnim.setDuration(300);
 
-
-        // Get profile picture and name from Google Signin
-        GoogleSignInAccount account = getArguments().getParcelable("ACCOUNT");
-        Log.e(TAG, "onActivityCreated: Account received from " + account.getDisplayName());
-        initUI(account);
-
         // Configure ViewModel
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
-        viewModel.init(account.getEmail());
+        viewModel.init(App.account.getEmail());
+        initUI(App.account);
         viewModel.getUser().observe(this, user -> {
             if (user != null) {
                 updateUI(user);
@@ -101,24 +99,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
 
         // Create Click Listeners
-        mProfileGroupRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.ticketRadioButton:
-                        createWarning("Open Submit Ticket");
-                        break;
-                    case R.id.singOutRadioButton:
-                        signOut();
-                        createWarning("Sign user out");
-                        break;
-                    case R.id.editDataRadioButton:
-                        createWarning("Open Edit Users Page");
-                        break;
-                }
-            }
-        });
-        mMenuExpand.setOnClickListener(this);
+        mProfileGroupRadioGroup.setOnCheckedChangeListener(this);
+        mMenuExpand.setOnClickListener(v -> toggleMenuVisible());
+
 
         mHorizontalScroller.setOnTouchListener((v, event) -> {
             //If rotation = sideways
@@ -159,19 +142,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.MenuButton:
-                toggleMenuVisible();
-                break;
-        }
-    }
-
     /**
      * Toggles Visibility Of Buttons
      */
     public void toggleMenuVisible() {
+        mProfileGroupRadioGroup.check(R.id.emptyRadioButton);
         if (toggled) {
               mMenuExpand.setImageResource(R.drawable.drop_down_light);
               mProfileGroupRadioGroup.setVisibility(View.GONE);
@@ -192,5 +167,24 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public  void createWarning(String message) {
         Context context = getContext();
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId) {
+            case R.id.ticketRadioButton:
+                toggleMenuVisible();
+                startActivity(new Intent(getContext(), submitPopUp.class));
+                break;
+            case R.id.singOutRadioButton:
+                signOut();
+                toggleMenuVisible();
+                createWarning("Sign user out");
+                break;
+            case R.id.editDataRadioButton:
+                toggleMenuVisible();
+                createWarning("Open Edit Users Page");
+                break;
+        }
     }
 }

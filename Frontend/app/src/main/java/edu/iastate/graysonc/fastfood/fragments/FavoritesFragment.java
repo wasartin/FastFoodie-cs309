@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,7 @@ public class FavoritesFragment extends Fragment {
 
         // Configure ViewModel
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesViewModel.class);
-        mViewModel.init(((GoogleSignInAccount)getArguments().getParcelable("ACCOUNT")).getEmail());
+        mViewModel.init(App.account.getEmail());
         mViewModel.getFavorites().observe(this, f -> {
             if (f != null) {
                 buildRecyclerView();
@@ -64,14 +65,14 @@ public class FavoritesFragment extends Fragment {
     public void removeItem(int position) {
         Food selectedItem = mViewModel.getFavorites().getValue().get(position);
         Log.d(TAG, "removeItem: " + selectedItem.getName());
-        mViewModel.removeFavorite(((GoogleSignInAccount)getArguments().getParcelable("ACCOUNT")).getEmail(), selectedItem.getId());
+        mViewModel.removeFavorite(App.account.getEmail(), selectedItem.getId());
         mAdapter.notifyItemRemoved(position);
     }
 
     public void openFoodPage(int position) {
         Food selectedItem = mViewModel.getFavorites().getValue().get(position);
         Log.d(TAG, "openFoodPage: " + selectedItem.getName());
-        //mAdapter.notifyItemChanged(position);
+        mAdapter.notifyItemChanged(position);
     }
 
     public void buildRecyclerView() {
@@ -79,6 +80,8 @@ public class FavoritesFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(App.context);
         mAdapter = new FavoritesListAdapter(mViewModel.getFavorites().getValue());
+
+        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

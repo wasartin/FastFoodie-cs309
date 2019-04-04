@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.iastate.graysonc.fastfood.R;
@@ -28,15 +27,25 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
     }
 
     public static class FavoriteViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTextView1;
-        public TextView mTextView2;
-        public ImageView mDeleteImage;
+        public TextView mNameTextView,
+                        mPriceTextView,
+                        mCalorieTextView,
+                        mProteinTextView,
+                        mFatTextView,
+                        mCarbohydrateTextView;
+        public ImageView mDeleteImage, mRestaurantLogo;
 
         public FavoriteViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
-            mTextView1 = itemView.findViewById(R.id.nameTextView);
-            mTextView2 = itemView.findViewById(R.id.card_restaurant);
+            mNameTextView = itemView.findViewById(R.id.nameTextView);
+            mPriceTextView = itemView.findViewById(R.id.price_text);
+            mCalorieTextView = itemView.findViewById(R.id.calorie_text);
+            mProteinTextView = itemView.findViewById(R.id.protein_text);
+            mFatTextView = itemView.findViewById(R.id.fat_text);
+            mCarbohydrateTextView = itemView.findViewById(R.id.carbohydrate_text);
             mDeleteImage = itemView.findViewById(R.id.image_delete);
+            mRestaurantLogo = itemView.findViewById(R.id.restaurant_logo);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -44,6 +53,12 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
+                            View dropDown = v.findViewById(R.id.food_info);
+                            if (dropDown.getVisibility() == View.GONE) {
+                                dropDown.setVisibility(View.VISIBLE);
+                            } else {
+                                dropDown.setVisibility(View.GONE);
+                            }
                             listener.onItemClick(position);
                         }
                     }
@@ -78,9 +93,26 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
     @Override
     public void onBindViewHolder(FavoriteViewHolder holder, int position) {
         Food currentItem = mFavoritesList.get(position);
-
-        holder.mTextView1.setText(currentItem.getName());
-        holder.mTextView2.setText("" + currentItem.getLocation());
+        holder.mPriceTextView.setText(currentItem.getPrice());
+        holder.mNameTextView.setText(currentItem.getName());
+        holder.mCalorieTextView.setText("" + currentItem.getCalorieTotal());
+        holder.mProteinTextView.setText("" + currentItem.getProteinTotal());
+        holder.mFatTextView.setText("" + currentItem.getFatTotal());
+        holder.mCarbohydrateTextView.setText("" + currentItem.getCarbTotal());
+        switch (currentItem.getLocation()) {
+            case 0:
+                holder.mRestaurantLogo.setImageResource(R.drawable.mcdonalds);
+                break;
+            case 1:
+                holder.mRestaurantLogo.setImageResource(R.drawable.chickfila);
+                break;
+            case 2:
+                holder.mRestaurantLogo.setImageResource(R.drawable.subway);
+                break;
+            default:
+                // Maybe display "Image not found" image
+                break;
+        }
     }
 
     @Override

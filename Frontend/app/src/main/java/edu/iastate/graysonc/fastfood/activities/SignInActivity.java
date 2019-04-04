@@ -15,6 +15,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
@@ -118,8 +119,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void startMainActivity(GoogleSignInAccount account) {
         Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
         if (account != null) {
-            // Give MainActivity access to the Google account
-            startIntent.putExtra("edu.iastate.graysonc.fastfood.ACCOUNT", account);
+            App.account = account;
         }
         startActivity(startIntent);
     }

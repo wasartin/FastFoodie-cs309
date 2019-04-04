@@ -1,28 +1,31 @@
-package com.example.business.tests;
+package com.example.business.data;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.json.simple.JSONObject;
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
 import com.example.business.data.controllers.RestaurantController;
 import com.example.business.data.entities.Restaurant;
 import com.example.business.data.repositories.RestaurantRepository;
 
-/**
- * Tests are designed to test functionality of Restaurant Controller
- * @author Jonathan
- *
- */
-public class RestaurantControllerTests {
+public class RestaurantControllerTest {
 
 	@InjectMocks
 	RestaurantController restCont;
@@ -74,19 +77,19 @@ public class RestaurantControllerTests {
 		Restaurant found = new Restaurant(1, "McDonalds", now);
 		when(restRepo.save(found)).thenReturn(new Restaurant());
 		
-		JSONObject response = restCont.createRestaurant(found);
+		Map<String,Object> response = restCont.createRestaurant(found);
 		assertThat(restRepo.save(found), is(notNullValue()));
-		assertEquals(response.get("HttpStatus"), HttpStatus.OK);
-		assertEquals(response.get("status"), 204);	
+		assertEquals(response.get("message"), HttpStatus.OK);
+		assertEquals(response.get("status"), 200);	
 	}
 
 	@Test 
 	public void deleteRestaurantTest() {
 		when(restRepo.existsById(1)).thenReturn(true);
 
-		JSONObject response = restCont.deleteRestaurant(1);
+		Map<String, Object> response = restCont.deleteRestaurant(1);
 		verify(restRepo, times(1)).deleteById(1);
-		assertEquals(response.get("status"), 204);
+		assertEquals(response.get("status"), 200);
 	}
 	
 	@Test
@@ -97,7 +100,7 @@ public class RestaurantControllerTests {
 		when(restRepo.save(rest)).thenReturn(new Restaurant());
 		when(restRepo.existsById(1)).thenReturn(true);
 		
-		JSONObject response = restCont.editRestaurant(rest, 1);
+		Map<String, Object> response = restCont.editRestaurant(rest, 1);
 
 		assertThat(restRepo.save(rest), is(notNullValue()));
 		System.out.println(response.toString());
@@ -105,5 +108,5 @@ public class RestaurantControllerTests {
 		assertEquals(response.get("status"), 200);
 
 	}
-	
+
 }

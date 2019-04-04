@@ -101,7 +101,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
+	public Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
 		HashMap<String, Object> response = new HashMap<>();
 		try {
 			if(restaurantRepo.existsById(newRestaurant.getRestaurant_id())) {
@@ -132,7 +132,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
+	public Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
 			if(!restaurantRepo.existsById(restaurant_id)) {
@@ -161,7 +161,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
+	public Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
 			if(!restaurantRepo.existsById(restaurant_id)) {

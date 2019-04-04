@@ -1,11 +1,16 @@
 package com.example.business.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.json.simple.JSONObject;
+import org.junit.Before;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 
 import com.example.business.data.controllers.RestaurantController;
@@ -34,10 +39,10 @@ public class RestaurantControllerTests {
 	@Test
 	public void getRestaurantByIdTest() {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		when(restRepo.findById(1)).thenReturn(new Restaurant(1, "McDonalds", now));
+		when(restRepo.findById(1)).thenReturn(Optional.of(new Restaurant(1, "McDonalds", now)));
 		
-		Optional<Restaurant> rest = restCont.getRestaurant_OLD(1);
-
+		Optional<Restaurant> restO = restCont.getRestaurant_OLD(1);
+		Restaurant rest = restO.get();
 		assertEquals(1, rest.getRestaurant_id());
 		assertEquals("McDonalds", rest.getRestaurant_name());
 		assertEquals(now, rest.getLast_updated());
@@ -57,26 +62,48 @@ public class RestaurantControllerTests {
 
 		when(restRepo.findAll()).thenReturn(list);
 
-		List<Restaurant> restList = restCont.getRestaurants();
+		List<Restaurant> restList = (List<Restaurant>) restCont.getRestaurants();
 
 		assertEquals(3, restList.size());
-		verify(repo, times(1)).getAccountList();
+		verify(restRepo, times(1)).findAll();
 	}
 
 	@Test
 	public void createRestaurantTest() {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		List<Restaurant> list = new ArrayList<Restaurant>();
-		when(restRepo.findAll()).thenReturn(list);
+		Restaurant found = new Restaurant(1, "McDonalds", now);
+		when(restRepo.save(found)).thenReturn(new Restaurant());
 		
-		List<Restaurant> restList = restCont.getRestaurants();
-		
-		assertEquals(0, restList.size());
-		
-		list.add(new Restaurant(1, "McDonalds", now));
-		restList = restCont.getRestaurants();
-		assertEquals(1, restList.size());
+		JSONObject response = restCont.createRestaurant(found);
+		assertThat(restRepo.save(found), is(notNullValue()));
+		assertEquals(response.get("HttpStatus"), HttpStatus.OK);
+		assertEquals(response.get("status"), 204);	
 	}
 
+	@Test 
+	public void deleteRestaurantTest() {
+		when(restRepo.existsById(1)).thenReturn(true);
+
+		JSONObject response = restCont.deleteRestaurant(1);
+		verify(restRepo, times(1)).deleteById(1);
+		assertEquals(response.get("status"), 204);
+	}
+	
+	@Test
+	public void editRestaurantTest() {
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		Restaurant rest = new Restaurant(1, "McDonalds", now);
+		
+		when(restRepo.save(rest)).thenReturn(new Restaurant());
+		when(restRepo.existsById(1)).thenReturn(true);
+		
+		JSONObject response = restCont.editRestaurant(rest, 1);
+
+		assertThat(restRepo.save(rest), is(notNullValue()));
+		System.out.println(response.toString());
+		
+		assertEquals(response.get("status"), 200);
+
+	}
 	
 }

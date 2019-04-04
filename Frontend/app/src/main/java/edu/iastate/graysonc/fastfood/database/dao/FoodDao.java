@@ -23,6 +23,12 @@ public interface FoodDao {
     @Query("SELECT * FROM food WHERE id = :id")
     LiveData<Food> load(int id);
 
+    @Query("SELECT * FROM food")
+    LiveData<List<Food>> loadAll();
+
+    @Query("SELECT * FROM food WHERE id IN (SELECT foodId FROM favorite WHERE favorite.userEmail = :userEmail)")
+    LiveData<List<Food>> getFavoriteFoodsForUser(String userEmail);
+
     @Query("SELECT * FROM food WHERE id = :foodID AND lastRefresh > :lastRefreshMax LIMIT 1")
     Food hasFood(int foodID, Date lastRefreshMax);
 }

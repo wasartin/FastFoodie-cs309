@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import javax.inject.Inject;
 
 import dagger.android.DispatchingAndroidInjector;
@@ -17,6 +19,7 @@ public class App extends Application implements HasActivityInjector {
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 
     public static Context context;
+    public static GoogleSignInAccount account;
 
     @Override
     public void onCreate() {

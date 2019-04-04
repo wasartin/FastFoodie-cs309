@@ -3,56 +3,70 @@ package edu.iastate.graysonc.fastfood.recyclerClasses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import edu.iastate.graysonc.fastfood.database.entities.Food;
+
 public class recycler_card implements Parcelable {
-    private String mLine1;
+    private String name;
     private String mLine2;
     private int id;
     private boolean favored;
     private int foodId;
+    private Food foodObj;
+
+
+    //Food(@NonNull int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, int location)
+
 
     /**
-     *
-     * @param Name Name of card
+     * @param Name      Name of card
      * @param Misc_Data Secondary data On Card
      */
-    public recycler_card(int foodId, String Name, String Misc_Data){
-        this(foodId, Name, Misc_Data,true);
+    public recycler_card(int foodId, String Name, String Misc_Data) {
+        this(foodId, Name, Misc_Data, true);
     }
 
     /**
-     *
-     * @param Name Name of card
+     * @param Name      Name of card
      * @param Misc_Data Secondary data On Card
-     * @param fav Indicates if card is favored or not
+     * @param fav       Indicates if card is favored or not
      */
-    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav){
+    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav) {
         this.foodId = foodId;
-        mLine1=Name;
-        mLine2=Misc_Data;
-        favored=fav;
+        name = Name;
+        mLine2 = Misc_Data;
+        favored = fav;
     }
 
     /**
-     *
-     * @param Name Name of card
+     * @param Name      Name of card
      * @param Misc_Data Secondary data On Card
-     * @param fav Indicates if card is favored or not
-     * @param id Database UID of the card
+     * @param fav       Indicates if card is favored or not
+     * @param id        Database UID of the card
      */
-    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav, int id){
+    public recycler_card(int foodId, String Name, String Misc_Data, boolean fav, int id) {
         this.foodId = foodId;
-        mLine1=Name;
-        mLine2=Misc_Data;
-        favored=fav;
+        name = Name;
+        mLine2 = Misc_Data;
+        favored = fav;
         this.id = id;
+    }
+
+    public recycler_card(Food food) {
+        //Food(@NonNull int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, int location)
+        this.name = food.getName();
+        mLine2 = "";
+        id = food.getId();
+        foodId = food.getId();
+        foodObj = food;
+
     }
 
     protected recycler_card(Parcel in) {
         this.foodId = in.readInt();
-        mLine1 = in.readString();
+        name = in.readString();
         mLine2 = in.readString();
         favored = in.readByte() != 0;
-        id= in.readInt();
+        id = in.readInt();
     }
 
     public static final Creator<recycler_card> CREATOR = new Creator<recycler_card>() {
@@ -69,7 +83,7 @@ public class recycler_card implements Parcelable {
     };
 
     public String getFood() {
-        return mLine1;
+        return name;
     }
 
     public String getData() {
@@ -80,9 +94,9 @@ public class recycler_card implements Parcelable {
         return favored;
     }
 
-    public void setFavored(boolean val){favored=val;}
+    public void setFavored(boolean val) {favored = val;}
 
-    public void setID(int val){id=val;}
+    public void setID(int val) {id = val;}
 
     @Override
     public int describeContents() {
@@ -91,7 +105,7 @@ public class recycler_card implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mLine1);
+        dest.writeString(name);
         dest.writeString(mLine2);
         dest.writeValue(favored);
         dest.writeInt(id);
@@ -104,4 +118,10 @@ public class recycler_card implements Parcelable {
     public void setFoodId(int foodId) {
         this.foodId = foodId;
     }
+
+    public Food getFoodObj() {
+        return foodObj;
+    }
+
+    public void setmLine2(String text) {mLine2 = text; }
 }

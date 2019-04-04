@@ -118,7 +118,7 @@ public class FoodController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createFood(@RequestBody Food newFood) {
+	public JSONObject createFood(@RequestBody Food newFood) {
 		JSONObject response;
 		try {
 			if(foodRepository.existsById(newFood.getFood_id())) {
@@ -141,7 +141,7 @@ public class FoodController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteFood(@PathVariable int food_id) {
+	public JSONObject deleteFood(@PathVariable int food_id) {
 		JSONObject response;
 		try {
 			if(!foodRepository.existsById(food_id)) {
@@ -163,7 +163,7 @@ public class FoodController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject editFood(@RequestBody Food newFood, @PathVariable int food_id) {
+	public JSONObject editFood(@RequestBody Food newFood, @PathVariable int food_id) {
 		JSONObject response;
 		try {
 			if(!foodRepository.existsById(food_id)) {

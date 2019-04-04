@@ -1,6 +1,6 @@
 package com.example.business.data.controllers;
 
-import java.sql.Timestamp;
+import java.sql.Timestamp; 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +33,7 @@ public class RestaurantController {
 	 * Private method used for returned a list of restaurants
 	 * @return List of Restaurants
 	 */
-	private List<Restaurant> getRestaurants(){
+	public List<Restaurant> getRestaurants(){
 		Iterable<Restaurant> rIters = restaurantRepo.findAll();
 		List<Restaurant> rList = new ArrayList<Restaurant>();
 		rIters.forEach(rList::add);
@@ -101,7 +101,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
+	public Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
 		HashMap<String, Object> response = new HashMap<>();
 		try {
 			if(restaurantRepo.existsById(newRestaurant.getRestaurant_id())) {
@@ -132,7 +132,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
+	public Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
 			if(!restaurantRepo.existsById(restaurant_id)) {
@@ -161,7 +161,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
+	public Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
 		HashMap<String,Object> response = new HashMap<>();
 		try {
 			if(!restaurantRepo.existsById(restaurant_id)) {

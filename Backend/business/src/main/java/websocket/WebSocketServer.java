@@ -10,5 +10,4 @@ public class WebSocketServer {
 	private static Map<Session, String> sessionUserNameMap = new HashMap<>();
 	private static Map<String, Session> usernameSessionMap = new HashMap<>();
 	
-	
 }

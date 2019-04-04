@@ -28,21 +28,21 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
 
     public static class FavoriteViewHolder extends RecyclerView.ViewHolder {
         public TextView mNameTextView,
+                        mPriceTextView,
                         mCalorieTextView,
                         mProteinTextView,
                         mFatTextView,
-                        mCarbohydrateTextView,
-                        mLocationTextView;
+                        mCarbohydrateTextView;
         public ImageView mDeleteImage, mRestaurantLogo;
 
         public FavoriteViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             mNameTextView = itemView.findViewById(R.id.nameTextView);
+            mPriceTextView = itemView.findViewById(R.id.price_text);
             mCalorieTextView = itemView.findViewById(R.id.calorie_text);
             mProteinTextView = itemView.findViewById(R.id.protein_text);
             mFatTextView = itemView.findViewById(R.id.fat_text);
             mCarbohydrateTextView = itemView.findViewById(R.id.carbohydrate_text);
-            mLocationTextView = itemView.findViewById(R.id.location_text);
             mDeleteImage = itemView.findViewById(R.id.image_delete);
             mRestaurantLogo = itemView.findViewById(R.id.restaurant_logo);
 
@@ -93,18 +93,26 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
     @Override
     public void onBindViewHolder(FavoriteViewHolder holder, int position) {
         Food currentItem = mFavoritesList.get(position);
-
+        holder.mPriceTextView.setText(currentItem.getPrice());
         holder.mNameTextView.setText(currentItem.getName());
         holder.mCalorieTextView.setText("" + currentItem.getCalorieTotal());
         holder.mProteinTextView.setText("" + currentItem.getProteinTotal());
         holder.mFatTextView.setText("" + currentItem.getFatTotal());
         holder.mCarbohydrateTextView.setText("" + currentItem.getCarbTotal());
-        holder.mLocationTextView.setText("" + currentItem.getLocation());
         switch (currentItem.getLocation()) {
             case 0:
-                //holder.mRestaurantLogo.setImageDrawable(R.drawable.mcdonalds);
+                holder.mRestaurantLogo.setImageResource(R.drawable.mcdonalds);
+                break;
+            case 1:
+                holder.mRestaurantLogo.setImageResource(R.drawable.chickfila);
+                break;
+            case 2:
+                holder.mRestaurantLogo.setImageResource(R.drawable.subway);
+                break;
+            default:
+                // Maybe display "Image not found" image
+                break;
         }
-
     }
 
     @Override

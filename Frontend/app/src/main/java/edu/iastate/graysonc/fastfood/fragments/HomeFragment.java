@@ -41,6 +41,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
@@ -157,9 +158,9 @@ public class HomeFragment extends Fragment {
         String url="";
         if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood || mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom) {
             url = "http://cs309-bs-1.misc.iastate.edu:8080/foods/all";
-        }else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes){
+        } else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes) {
             url = "http://cs309-bs-1.misc.iastate.edu:8080/restaurants/all";
-        }else{
+        } else {
             Log.v("HomeFragCatERR","Invalid Selection on RadioGroup");
         }
 
@@ -218,10 +219,10 @@ public class HomeFragment extends Fragment {
                 //removeItem(position);
                 recycler_card temp = foodList.get(position);
                 if (temp.isFavored()) {
-                    viewModel.removeFavorite(getArguments().getString("USER_EMAIL"), temp.getFoodId());
+                    viewModel.removeFavorite(App.account.getEmail(), temp.getFoodId());
                     temp.setFavored(false);
                 } else {
-                    viewModel.addFavorite(getArguments().getString("USER_EMAIL"), temp.getFoodId());
+                    viewModel.addFavorite(App.account.getEmail(), temp.getFoodId());
                     temp.setFavored(true);
                 }
             }
@@ -275,7 +276,6 @@ public class HomeFragment extends Fragment {
     private void populateSpinners(){
         mSpinner2.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, macrosENUM.values()));
         mSpinner1.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, macrosENUM.values()));
-
     }
 
     /**

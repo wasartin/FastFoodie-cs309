@@ -66,6 +66,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:text="@string/food_price"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+
+                <TextView
+                    android:id="@+id/price_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="TextView"
+                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
                     android:text="@string/food_calorie_total"
                     android:textAlignment="textEnd"
                     android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
@@ -144,26 +165,6 @@
                     android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="@string/food_location"
-                    android:textAlignment="textEnd"
-                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
-
-                <TextView
-                    android:id="@+id/location_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="TextView"
-                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle" />
-            </TableRow>
         </TableLayout>
 
         <LinearLayout

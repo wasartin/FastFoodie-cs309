@@ -48,7 +48,7 @@ public class FavoritesFragment extends Fragment {
 
         // Configure ViewModel
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesViewModel.class);
-        mViewModel.init(((GoogleSignInAccount)getArguments().getParcelable("ACCOUNT")).getEmail());
+        mViewModel.init(App.account.getEmail());
         mViewModel.getFavorites().observe(this, f -> {
             if (f != null) {
                 buildRecyclerView();
@@ -65,7 +65,7 @@ public class FavoritesFragment extends Fragment {
     public void removeItem(int position) {
         Food selectedItem = mViewModel.getFavorites().getValue().get(position);
         Log.d(TAG, "removeItem: " + selectedItem.getName());
-        mViewModel.removeFavorite(((GoogleSignInAccount)getArguments().getParcelable("ACCOUNT")).getEmail(), selectedItem.getId());
+        mViewModel.removeFavorite(App.account.getEmail(), selectedItem.getId());
         mAdapter.notifyItemRemoved(position);
     }
 

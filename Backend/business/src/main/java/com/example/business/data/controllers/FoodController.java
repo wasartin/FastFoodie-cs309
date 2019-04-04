@@ -79,6 +79,7 @@ public class FoodController {
 		final String LOCATED_AT_KEY = "located_at";
 		final String PRICE_KEY = "price";
 		final String CATEGORY_KEY = "category";
+		final String RATING_KEY = "rating";
 		
 		JSONObject foodAsJSONObj = new JSONObject();
 		foodAsJSONObj.put(FOOD_ID_KEY, food.getFood_id());
@@ -90,6 +91,7 @@ public class FoodController {
 		foodAsJSONObj.put(LOCATED_AT_KEY, food.getLocated_at());
 		foodAsJSONObj.put(PRICE_KEY, food.getPrice());
 		foodAsJSONObj.put(CATEGORY_KEY, food.getCategory());
+		foodAsJSONObj.put(RATING_KEY, food.getRating());
 		return foodAsJSONObj;
 	}
 

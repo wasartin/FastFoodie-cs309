@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 
 import com.example.business.data.controllers.FoodController;
 import com.example.business.data.entities.Food;
-import com.example.business.data.entities.User;
 import com.example.business.data.repositories.FoodRepository;
 
 public class FoodControllerTest {
@@ -42,7 +41,7 @@ public class FoodControllerTest {
 		
 		when(repo.findById(66)).thenReturn((Optional.of(found)));
 		
-		Optional<Food> result = foodController.getFood(66);
+		foodController.getFood(66);
 		verify(repo, times(1)).findById(66);
 	}
 	
@@ -51,7 +50,7 @@ public class FoodControllerTest {
 		List<Food> list = new ArrayList<>();
 		when(repo.findAll()).thenReturn(list);
 
-		List<Food> uList = (List<Food>) foodController.getAllFood();
+		foodController.getAllFood();
 		verify(repo, times(1)).findAll();
 	}
 	

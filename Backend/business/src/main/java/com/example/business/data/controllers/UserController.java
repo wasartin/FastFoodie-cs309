@@ -48,7 +48,7 @@ public class UserController {
 	// 	Once 'getAllUsersJSONObject' method can be correctly parsed by 
 	//		front end, this will be deleted
 	@GetMapping("old/all")
-	public Iterable<User> getAllUsers_OLD() {
+	public Iterable<User> getAllUsers() {
 		return userRepository.findAll();
 	}
 

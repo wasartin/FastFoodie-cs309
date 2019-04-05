@@ -3,18 +3,19 @@ package com.example.business.data.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="foodRating")
-@IdClass(CompositeKey.class)
 public class FoodRating {
+	
 	@Id
+	@Column(name="rating_id")
+	private int rating_id;
+	
 	@Column(name="user_id")
 	private int user_id; 
 	
-	@Id
 	@Column(name="food_id")
 	private String food_id; 
 	
@@ -25,11 +26,20 @@ public class FoodRating {
 		super();
 	}
 
-	public FoodRating(int user_id, String food_id, int rating) {
+	public FoodRating(int rating_id, int user_id, String food_id, int rating) {
 		super();
+		this.rating_id = rating_id;
 		this.user_id = user_id;
 		this.food_id = food_id;
 		this.rating = rating;
+	}
+	
+	public int getRating_id() {
+		return rating_id;
+	}
+	
+	public void setRating_id(int rating_id) {
+		this.rating_id = rating_id;
 	}
 
 	public int getUser_id() {

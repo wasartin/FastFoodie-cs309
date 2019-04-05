@@ -37,7 +37,7 @@ public class FoodControllerTest {
 	
 	@Test
 	public void getFoodByIdTest() {
-		Food found = new Food(66, "Royal with Cheese", 31, 42, 28, 540, "$5.00", "Beef", 0);
+		Food found = new Food(66, "Royal with Cheese", 31, 42, 28, 540, "$5.00", "Beef", 0, 0);
 		
 		when(repo.findById(66)).thenReturn((Optional.of(found)));
 		
@@ -56,7 +56,7 @@ public class FoodControllerTest {
 	
 	@Test
 	public void createFoodTest() {
-		Food toAdd = new Food(100, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2);
+		Food toAdd = new Food(100, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
 		when(repo.existsById(toAdd.getFood_id())).thenReturn(false);
 		when(repo.save(toAdd)).thenReturn(new Food());
 		
@@ -68,7 +68,7 @@ public class FoodControllerTest {
 	
 	@Test
 	public void createFoodTest_Fail() {
-		Food toAdd = new Food(100, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2);
+		Food toAdd = new Food(100, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
 		when(repo.existsById(toAdd.getFood_id())).thenReturn(true);
 		when(repo.save(toAdd)).thenReturn(null);
 		
@@ -80,7 +80,7 @@ public class FoodControllerTest {
 	
 	@Test
 	public void editFoodTest() {
-		Food toAdd = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2);
+		Food toAdd = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
 		when(repo.existsById(toAdd.getFood_id())).thenReturn(true);
 		when(repo.save(toAdd)).thenReturn(new Food());
 		
@@ -92,7 +92,7 @@ public class FoodControllerTest {
 	
 	@Test
 	public void editFoodTest_Fail() {
-		Food toAdd = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2);
+		Food toAdd = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
 		when(repo.existsById(toAdd.getFood_id())).thenReturn(true);
 		when(repo.save(toAdd)).thenReturn(new Food());
 		

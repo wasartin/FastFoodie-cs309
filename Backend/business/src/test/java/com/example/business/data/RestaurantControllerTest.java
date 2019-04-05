@@ -106,7 +106,6 @@ public class RestaurantControllerTest {
 		System.out.println(response.toString());
 		
 		assertEquals(response.get("status"), 200);
-
 	}
-
+	
 }

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import org.json.simple.JSONObject;
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -35,21 +35,15 @@ public class FavoritesControllerTest {
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 	}
-
-
+	
 	@Test
 	public void getFavoritesByIdTest() {
 		Favorites newFav = new Favorites();
 		Optional<Favorites> favOp= Optional.of(newFav);
 		when(favRepo.findById(1)).thenReturn(favOp);
 		
-		Optional<Favorites> favO = favCont.getfavorite_OLD(1);
-//		Favorites fav = favO.get();
+		favCont.getfavorite_OLD(1);
 		verify(favRepo, times(1)).findById(1);
-
-//		assertEquals(1, fav.getFavorites_id());
-//		assertEquals("jongreaz@gmail.com", fav.getUser_id());
-//		assertEquals(214, fav.getFid());
 	}
 	
 	@Test

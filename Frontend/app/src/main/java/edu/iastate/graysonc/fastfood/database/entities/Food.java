@@ -36,12 +36,18 @@ public class Food {
     @SerializedName("calorie_total")
     private int calorieTotal;
 
+    @SerializedName("price")
+    private String price;
+
+    @SerializedName("category")
+    private String category;
+
     @SerializedName("located_at")
     private int location;
 
-    private Date lastRefresh;
+    private int isFavorite;
 
-    private boolean isFavorite;
+    private Date lastRefresh;
 
     public Food(@NonNull int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, int location) {
         this.id = id;
@@ -51,8 +57,8 @@ public class Food {
         this.fatTotal = fatTotal;
         this.calorieTotal = calorieTotal;
         this.location = location;
-        this.isFavorite = false;
         this.lastRefresh = getLastRefresh();
+        isFavorite = 0;
     }
 
     public int getId() {
@@ -99,6 +105,22 @@ public class Food {
         this.calorieTotal = calorieTotal;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public int getLocation() {
         return location;
     }
@@ -107,15 +129,19 @@ public class Food {
         this.location = location;
     }
 
-    public boolean isFavorite() { return isFavorite; }
-
-    public void setFavorite(boolean favorite) { isFavorite = favorite; }
-
     public Date getLastRefresh() {
         return lastRefresh;
     }
 
     public void setLastRefresh(Date lastRefresh) {
         this.lastRefresh = lastRefresh;
+    }
+
+    public int getIsFavorite() {
+        return isFavorite;
+    }
+
+    public void setIsFavorite(int favorite) {
+        isFavorite = favorite;
     }
 }

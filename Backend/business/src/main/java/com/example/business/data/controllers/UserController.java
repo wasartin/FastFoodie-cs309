@@ -38,13 +38,9 @@ public class UserController {
 	@Autowired
 	UserRepository userRepository;
 	
-	//TODO Be sure to delete this
-	//	This is only here so that the old way of pulling users still works. 
-	//		Once the 'getUserJSONObject' method can be parsed my Front end, 
-	//		this will then be deleted.
-	@RequestMapping(method = RequestMethod.GET, path = "old/{user_email}")
+	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}")
 	@ResponseBody
-	public Optional<User> getUser_OLD(@PathVariable String user_email){
+	public Optional<User> getUser(@PathVariable String user_email){
 		return userRepository.findById(user_email);
 	}
 
@@ -52,7 +48,7 @@ public class UserController {
 	// 	Once 'getAllUsersJSONObject' method can be correctly parsed by 
 	//		front end, this will be deleted
 	@GetMapping("old/all")
-	public Iterable<User> getAllUsers_OLD() {
+	public Iterable<User> getAllUsers() {
 		return userRepository.findAll();
 	}
 
@@ -62,7 +58,7 @@ public class UserController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, path = "json/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getUserJSONObject(@PathVariable String user_email) {//TODO will just be changed to getUser once conversion is complete
 		Optional<User> temp = userRepository.findById(user_email);
@@ -122,7 +118,7 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createUser(@RequestBody User newUser) {
+	public JSONObject createUser(@RequestBody User newUser) {
 		JSONObject response;
 		try {
 			if(userRepository.existsById(newUser.getUser_email())) {//User already exists
@@ -145,12 +141,14 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteUser(@PathVariable String user_email) {
+	public JSONObject deleteUser(@PathVariable String user_email) {
 		JSONObject response;
 		try {
 			if(!userRepository.existsById(user_email)) {//Checks to see if User is even in the DB
 				throw new IllegalArgumentException();
 			}
+			//User user = userRepository.findByID(user_email);
+			//userRepository.delete(user);
 			userRepository.deleteById(user_email);
 			response = generateResponse(204, HttpStatus.OK, "User has been deleted");
 		}catch (IllegalArgumentException e) {
@@ -171,7 +169,7 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject editUser(@RequestBody User newUserInfo, @PathVariable String user_email) {
+	public JSONObject editUser(@RequestBody User newUserInfo, @PathVariable String user_email) {
 		JSONObject response;
 		try {
 			if(!userRepository.existsById(user_email)) {//pretty sure that is how I want to do this.
@@ -187,8 +185,15 @@ public class UserController {
 		return response;
 	}
 	
+	/**
+	 * Made Public for testing
+	 * @param status
+	 * @param input
+	 * @param message
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	private JSONObject generateResponse(int status, HttpStatus input, String message) {
+	public JSONObject generateResponse(int status, HttpStatus input, String message) {
 		JSONObject response = new JSONObject();
 		response.put("status", status);
 		response.put("HttpStatus", input);

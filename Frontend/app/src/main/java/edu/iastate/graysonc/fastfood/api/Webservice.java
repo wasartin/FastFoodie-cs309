@@ -36,10 +36,10 @@ public interface Webservice {
     @GET("foods/old/all")
     Call<List<Food>> getAllFoods();
 
-    @GET("favorites/user/{user_email}")
-    Call<List<Favorite>> getFavoritesForUser(@Path("user_email") String userEmail);
+    @GET("api/favorites/{user_email}")
+    Call<List<Food>> getFavoriteFoodsForUser(@Path("user_email") String userEmail);
 
-    @GET("favorites/old/all")
+    @GET("favorites/old/all") // Might be deleted soon
     Call<List<Favorite>> getAllFavorites();
 
     @POST("favorites/create/{user_email}/{food_id}")

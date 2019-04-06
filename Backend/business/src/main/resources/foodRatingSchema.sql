@@ -1,4 +1,4 @@
-CREATE TABLE foodRating(
+CREATE TABLE food_Rating(
 	rating_id INT AUTO_INCREMENT,
 	user_email VARCHAR(50),
 	food_id INT,

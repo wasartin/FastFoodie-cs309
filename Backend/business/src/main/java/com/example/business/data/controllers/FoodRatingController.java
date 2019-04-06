@@ -23,13 +23,6 @@ public class FoodRatingController {
 
 		@Autowired
 		FoodRatingRepository foodRatingRepo;
-
-//		@RequestMapping(method = RequestMethod.GET, path = "/{user_email}/{food_id}")
-//		@ResponseBody
-//		public Optional<FoodRating> getFoodRatingForUser(@PathVariable String user_email, @PathVariable int food_id){
-//			return null;
-//			//return foodRatingRepo.findById(user_email, food_id);
-//		}
 		
 		@RequestMapping(method = RequestMethod.GET, path = "/all")
 		@ResponseBody
@@ -37,19 +30,25 @@ public class FoodRatingController {
 			return (List<FoodRating>) foodRatingRepo.findAll();
 		}
 		
-		@RequestMapping(method = RequestMethod.GET, path = "/{food_id}/all")
+		@RequestMapping(method = RequestMethod.GET, path = "all/user/{user_email}")
 		@ResponseBody
-		public List<Double> getFoodRatingList(@PathVariable int food_id){
+		public List<FoodRating> getAllForUser(@PathVariable String user_email){
+			return (List<FoodRating>) foodRatingRepo.getFoodRatingsForUser(user_email);
+		}
+		
+		@RequestMapping(method = RequestMethod.GET, path = "/all/food/{food_id}")
+		@ResponseBody
+		public List<Integer> getFoodRatingList(@PathVariable int food_id){
 			return foodRatingRepo.findAllRatingsForFood(food_id);
 		}
 		
 		@RequestMapping(method = RequestMethod.GET, path = "/{food_id}")
 		@ResponseBody
 		public double getFoodRating(@PathVariable int food_id){
-			List<Double> ratingList = foodRatingRepo.findAllRatingsForFood(food_id);
-			 Double sum = 0.0;
+			List<Integer> ratingList = foodRatingRepo.findAllRatingsForFood(food_id);
+			 double sum = 0;
 			  if(!ratingList.isEmpty()) {
-			    for (Double curr : ratingList) {
+			    for (int curr : ratingList) {
 			       sum += curr;
 			    }
 			    return sum / ratingList.size();
@@ -81,16 +80,53 @@ public class FoodRatingController {
 			FoodRating newRating = new FoodRating();
 			newRating.setFood_id(food_id);
 			newRating.setRating(rating);
-			newRating.setUser_id(user_email);
+			newRating.setUser_email(user_email);
 			JSONObject response;
 			try {
-				if(foodRatingRepo.existsById(newRating.getRating_id())) {
+				if(foodRatingRepo.getFoodRatingByUserAndFood(newRating.getUser_email(), newRating.getFood_id()) != null) {
 					throw new IllegalArgumentException();
 				}
 				foodRatingRepo.save(newRating);
-				response = generateResponse(204, HttpStatus.OK, "Food has bee rated");
+				response = generateResponse(204, HttpStatus.OK, "Food has been rated");
 			}catch (IllegalArgumentException e) {
 				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Rating might already exist, or your fields are incorrect, double check your request");
+			}catch (Exception e) {
+				response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
+			}
+			return response;
+		}
+		
+		@RequestMapping(method = RequestMethod.POST, path = "/edit/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
+		@ResponseBody
+		public JSONObject editFoodRating(@PathVariable String user_email, @PathVariable int food_id, @PathVariable int rating) {
+			JSONObject response;
+			try {
+				if(foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id) == null) {
+					throw new IllegalArgumentException();
+				}
+				foodRatingRepo.updateRating(rating, user_email, food_id);
+				response = generateResponse(204, HttpStatus.OK, "Food rating has been edited");
+			}catch (IllegalArgumentException e) {
+				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Rating might already exist, or your fields are incorrect, double check your request");
+			}catch (Exception e) {
+				response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
+			}
+			return response;
+		}
+		
+		//delete rating
+		@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
+		@ResponseBody
+		public JSONObject deleteFood(@PathVariable String user_email, @PathVariable int food_id) {
+			JSONObject response;
+			try {
+				if(foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id) == null) {
+					throw new IllegalArgumentException();
+				}
+				foodRatingRepo.deleteById(food_id);
+				response = generateResponse(204, HttpStatus.OK, "Food Rating has been deleted");
+			}catch (IllegalArgumentException e) {
+				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that food rating in the database, or your fields are incorrect, double check your request");
 			}catch (Exception e) {
 				response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
 			}

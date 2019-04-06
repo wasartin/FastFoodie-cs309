@@ -40,7 +40,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.continue_without_signin_button).setOnClickListener(this);
+        findViewById(R.id.continue_without_sign_in_button).setOnClickListener(this);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.sign_in_button:
                 signIn();
                 break;
-            case R.id.continue_without_signin_button:
+            case R.id.continue_without_sign_in_button:
                 startMainActivity(null);
                 break;
         }

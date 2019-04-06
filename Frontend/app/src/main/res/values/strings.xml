@@ -44,5 +44,6 @@
     <string name="food_price">Price </string>
     <string name="food_category">Category </string>
     <string name="food_location">Location </string>
+    <string name="continue_as_guest">Continue as guest</string>
 
 </resources>

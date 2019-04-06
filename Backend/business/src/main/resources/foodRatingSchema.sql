@@ -1,6 +1,6 @@
 CREATE TABLE foodRating(
 	rating_id INT NOT NULL AUTO_INCREMENT,
-	user_email VARCHAR(50)
+	user_email VARCHAR(50),
 	food_id INT,
 	PRIMARY KEY(rating_id),
 	FOREIGN KEY(user_email) REFERENCES user(user_email),

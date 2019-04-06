@@ -11,13 +11,12 @@ import com.example.business.data.entities.FoodRating;
 @Repository
 public interface FoodRatingRepository extends CrudRepository<FoodRating, Integer> {
 
-	//@Query(value = "select * from user where email = ?1", nativeQuery = true)
-	//List<User> findByID(String email);
+	@Query(value ="SELECT * FROM foodRating r WHERE r.user_email =?1", nativeQuery = true)
+	List<FoodRating> getFoodRatingsForUser(String user_email);
 	
-	@Query(value = "SELECT rating FROM foodRating WHERE food_id = 2", nativeQuery = true)
-	default
-	List<FoodRating> findAllRatingsForFood(int food_id){
-		
-		return null;
-	}
+	@Query(value="SELECT r.rating FROM foodRating r WHERE r.user_email = ?1 AND r.food_id = ?2", nativeQuery = true)
+	FoodRating getFoodRatingByUserAndFood(String user_email, int food_id);
+	
+	@Query(value = "SELECT rating FROM foodRating WHERE food_id = ?1", nativeQuery = true)
+	List<Double> findAllRatingsForFood(int food_id);
 }

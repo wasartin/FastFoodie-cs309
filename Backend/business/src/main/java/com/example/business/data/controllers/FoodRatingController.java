@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.business.data.entities.Food;
 import com.example.business.data.entities.FoodRating;
 import com.example.business.data.repositories.FoodRatingRepository;
 
@@ -27,27 +26,27 @@ public class FoodRatingController {
 
 		@RequestMapping(method = RequestMethod.GET, path = "/{user_email}/{food_id}")
 		@ResponseBody
-		public Optional<FoodRating> getFoodRating(@PathVariable String user_email, @PathVariable int food_id){
+		public Optional<FoodRating> getFoodRatingForUser(@PathVariable String user_email, @PathVariable int food_id){
 			return null;
 			//return foodRatingRepo.findById(user_email, food_id);
 		}
 		
 		@RequestMapping(method = RequestMethod.GET, path = "/{food_id}/all")
 		@ResponseBody
-		public List<FoodRating> getFoodRatingList(@PathVariable int food_id){
+		public List<Double> getFoodRatingList(@PathVariable int food_id){
 			return foodRatingRepo.findAllRatingsForFood(food_id);
 		}
 		
 		@RequestMapping(method = RequestMethod.GET, path = "/{food_id}")
 		@ResponseBody
 		public double getFoodRating(@PathVariable int food_id){
-			List<FoodRating> ratingList = foodRatingRepo.findAllRatingsForFood(food_id);
-			 Integer sum = 0;
+			List<Double> ratingList = foodRatingRepo.findAllRatingsForFood(food_id);
+			 Double sum = 0.0;
 			  if(!ratingList.isEmpty()) {
-			    for (FoodRating curr : ratingList) {
-			       sum += curr.getRating();
+			    for (Double curr : ratingList) {
+			       sum += curr;
 			    }
-			    return sum.doubleValue() / ratingList.size();
+			    return sum / ratingList.size();
 			  }
 			  return sum;
 		}

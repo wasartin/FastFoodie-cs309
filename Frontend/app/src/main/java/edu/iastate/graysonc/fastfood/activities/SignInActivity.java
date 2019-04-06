@@ -117,7 +117,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
      * @param account If null, MainActivity will be in "Unregistered User" mode.
      */
     private void startMainActivity(GoogleSignInAccount account) {
-        Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent startIntent = new Intent(App.context, MainActivity.class);
         if (account != null) {
             App.account = account;
         }

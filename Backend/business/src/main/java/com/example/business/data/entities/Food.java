@@ -38,7 +38,7 @@ public class Food {
 	private int located_at;
 	
 	@Column(name = "rating")
-	private int rating;
+	private double rating;
 	
 	public Food() {
 		super();
@@ -131,11 +131,11 @@ public class Food {
 		this.category = category;
 	}
 	
-	public int getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 

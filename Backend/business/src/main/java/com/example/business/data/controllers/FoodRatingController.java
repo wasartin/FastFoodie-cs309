@@ -24,11 +24,17 @@ public class FoodRatingController {
 		@Autowired
 		FoodRatingRepository foodRatingRepo;
 
-		@RequestMapping(method = RequestMethod.GET, path = "/{user_email}/{food_id}")
+//		@RequestMapping(method = RequestMethod.GET, path = "/{user_email}/{food_id}")
+//		@ResponseBody
+//		public Optional<FoodRating> getFoodRatingForUser(@PathVariable String user_email, @PathVariable int food_id){
+//			return null;
+//			//return foodRatingRepo.findById(user_email, food_id);
+//		}
+		
+		@RequestMapping(method = RequestMethod.GET, path = "/all")
 		@ResponseBody
-		public Optional<FoodRating> getFoodRatingForUser(@PathVariable String user_email, @PathVariable int food_id){
-			return null;
-			//return foodRatingRepo.findById(user_email, food_id);
+		public List<FoodRating> getAll(){
+			return (List<FoodRating>) foodRatingRepo.findAll();
 		}
 		
 		@RequestMapping(method = RequestMethod.GET, path = "/{food_id}/all")

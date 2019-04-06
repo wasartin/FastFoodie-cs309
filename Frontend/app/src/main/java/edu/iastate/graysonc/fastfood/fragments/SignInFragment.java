@@ -28,7 +28,6 @@ import edu.iastate.graysonc.fastfood.activities.MainActivity;
  * A simple {@link Fragment} subclass.
  */
 public class SignInFragment extends Fragment implements View.OnClickListener{
-    private Button signInButton; // TODO: make this open SignInActivity
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient googleSignInClient;

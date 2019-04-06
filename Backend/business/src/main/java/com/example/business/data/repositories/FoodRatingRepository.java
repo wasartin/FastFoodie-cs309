@@ -2,10 +2,8 @@ package com.example.business.data.repositories;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.business.data.entities.FoodRating;
@@ -21,9 +19,4 @@ public interface FoodRatingRepository extends CrudRepository<FoodRating, Integer
 	
 	@Query(value = "SELECT rating FROM food_rating WHERE food_id = ?1", nativeQuery = true)
 	List<Integer> findAllRatingsForFood(int food_id);
-	
-	@Modifying(clearAutomatically = true)
-	@Query(value = "DELETE FROM food_rating WHERE r.user_email = ?1 AND r.food_id ?2", 
-	  nativeQuery = true)
-	void removeRating(String user_email, int food_id);
 }

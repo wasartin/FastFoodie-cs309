@@ -1,7 +1,6 @@
 package com.example.business.data.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +47,7 @@ public class FoodRatingController {
 			return foodRatingRepo.findAllRatingsForFood(food_id);
 		}
 		
-		@RequestMapping(method = RequestMethod.GET, path = "/{food_id}")
+		@RequestMapping(method = RequestMethod.GET, path = "/average/{food_id}")
 		@ResponseBody
 		public double getFoodRating(@PathVariable int food_id){
 			List<Integer> ratingList = foodRatingRepo.findAllRatingsForFood(food_id);

@@ -45,7 +45,7 @@ public class Food {
 	}
 
 	public Food(int food_id, String food_name, int protein_total, int carb_total, int fat_total, int calorie_total,
-			String price, String category, int located_at, int rating) {
+			String price, String category, int located_at, double rating) {
 		super();
 		this.food_id = food_id;
 		this.food_name = food_name;

@@ -30,6 +30,12 @@ public class FoodRatingController {
 			return (List<FoodRating>) foodRatingRepo.findAll();
 		}
 		
+		@RequestMapping(method = RequestMethod.GET, path = "/{user_email}/{food_id}")
+		@ResponseBody
+		public FoodRating getSpecific(@PathVariable String user_email, @PathVariable int food_id){
+			return foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id);
+		}
+		
 		@RequestMapping(method = RequestMethod.GET, path = "all/user/{user_email}")
 		@ResponseBody
 		public List<FoodRating> getAllForUser(@PathVariable String user_email){
@@ -51,9 +57,8 @@ public class FoodRatingController {
 			    for (int curr : ratingList) {
 			       sum += curr;
 			    }
-			    return sum / ratingList.size();
 			  }
-			  return sum;
+			    return sum / ratingList.size();
 		}
 		
 		@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -96,15 +101,17 @@ public class FoodRatingController {
 			return response;
 		}
 		
-		@RequestMapping(method = RequestMethod.POST, path = "/edit/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
+		@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
 		public JSONObject editFoodRating(@PathVariable String user_email, @PathVariable int food_id, @PathVariable int rating) {
+			FoodRating findOldVersion = foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id);
 			JSONObject response;
 			try {
-				if(foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id) == null) {
+				if(findOldVersion == null) {
 					throw new IllegalArgumentException();
 				}
-				foodRatingRepo.updateRating(rating, user_email, food_id);
+				findOldVersion.setRating(rating);
+				foodRatingRepo.save(findOldVersion);
 				response = generateResponse(204, HttpStatus.OK, "Food rating has been edited");
 			}catch (IllegalArgumentException e) {
 				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Rating might already exist, or your fields are incorrect, double check your request");
@@ -114,16 +121,16 @@ public class FoodRatingController {
 			return response;
 		}
 		
-		//delete rating
 		@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 		@ResponseBody
 		public JSONObject deleteFood(@PathVariable String user_email, @PathVariable int food_id) {
+			FoodRating oldVersion = foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id);
 			JSONObject response;
 			try {
-				if(foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id) == null) {
+				if(oldVersion == null) {
 					throw new IllegalArgumentException();
 				}
-				foodRatingRepo.deleteById(food_id);
+				foodRatingRepo.deleteById(oldVersion.getRating_id());
 				response = generateResponse(204, HttpStatus.OK, "Food Rating has been deleted");
 			}catch (IllegalArgumentException e) {
 				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that food rating in the database, or your fields are incorrect, double check your request");
@@ -132,7 +139,6 @@ public class FoodRatingController {
 			}
 			return response;
 		}
-		
 		
 		@SuppressWarnings("unchecked")
 		private JSONObject generateResponse(int status, HttpStatus input, String message) {

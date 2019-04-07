@@ -37,12 +37,15 @@ public class Food {
 	@Column (name="located_at")
 	private int located_at;
 	
+	@Column(name = "rating")
+	private double rating;
+	
 	public Food() {
 		super();
 	}
 
 	public Food(int food_id, String food_name, int protein_total, int carb_total, int fat_total, int calorie_total,
-			String price, String category, int located_at) {
+			String price, String category, int located_at, double rating) {
 		super();
 		this.food_id = food_id;
 		this.food_name = food_name;
@@ -53,6 +56,7 @@ public class Food {
 		this.price = price;
 		this.category = category;
 		this.located_at = located_at;
+		this.rating = rating;
 	}
 	
 	public int getLocated_at() {
@@ -125,6 +129,14 @@ public class Food {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
 
 }

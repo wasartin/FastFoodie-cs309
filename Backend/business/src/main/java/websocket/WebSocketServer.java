@@ -37,6 +37,12 @@ public class WebSocketServer {
 		update(message);
 	}
 	
+	//TODO update DB here
+	private boolean updateDataBase(String username, String message) {
+		
+		return false;
+	}
+	
 	@OnClose
 	public void onClose(Session session) throws IOException{
 		String username = sessionUserNameMap.get(session);

@@ -54,7 +54,10 @@ public class FoodRatingController {
 			 double sum = 0;
 			  if(!ratingList.isEmpty()) {
 			    for (int curr : ratingList) {
-			       sum += curr;
+			    	if (curr > 0 && curr < 6) {
+					       sum += curr;
+			    	}
+
 			    }
 			  }
 			    return sum / ratingList.size();
@@ -81,6 +84,9 @@ public class FoodRatingController {
 		@RequestMapping(method = RequestMethod.POST, path = "/create/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
 		public JSONObject createFoodRating(@PathVariable String user_email, @PathVariable int food_id, @PathVariable int rating) {
+			if(rating < 0 || rating > 5) {
+				throw new IllegalArgumentException();
+			}
 			FoodRating newRating = new FoodRating();
 			newRating.setFood_id(food_id);
 			newRating.setRating(rating);
@@ -103,6 +109,9 @@ public class FoodRatingController {
 		@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
 		public JSONObject editFoodRating(@PathVariable String user_email, @PathVariable int food_id, @PathVariable int rating) {
+			if(rating < 0 || rating > 5) {
+				throw new IllegalArgumentException();
+			}
 			FoodRating findOldVersion = foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id);
 			JSONObject response;
 			try {

@@ -66,4 +66,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.7.22'
     androidTestImplementation 'org.mockito:mockito-android:2.7.22'
+
+    //Custom Buttons
+    implementation 'com.shobhitpuri.custombuttons:google-signin:1.0.0'
 }

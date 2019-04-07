@@ -1,4 +1,4 @@
-package websocket;
+package com.example.business.websocket;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;

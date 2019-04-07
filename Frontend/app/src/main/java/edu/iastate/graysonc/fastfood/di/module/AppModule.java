@@ -44,10 +44,6 @@ public class AppModule {
     @Singleton
     FoodDao provideFoodDao(MyDatabase database) { return database.foodDao(); }
 
-    @Provides
-    @Singleton
-    FavoriteDao provideFavoriteDao(MyDatabase database) { return database.favoriteDao(); }
-
     // --- REPOSITORY INJECTION ---
 
     @Provides
@@ -57,8 +53,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    Repository provideRepository(Webservice webservice, UserDao userDAO, FoodDao foodDAO, FavoriteDao favoriteDao, Executor executor) {
-        return new Repository(webservice, userDAO, foodDAO, favoriteDao, executor);
+    Repository provideRepository(Webservice webservice, UserDao userDAO, FoodDao foodDAO, Executor executor) {
+        return new Repository(webservice, userDAO, foodDAO, executor);
     }
 
     // --- NETWORK INJECTION ---

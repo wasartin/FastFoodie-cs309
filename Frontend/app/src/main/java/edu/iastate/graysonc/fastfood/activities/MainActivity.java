@@ -1,8 +1,10 @@
 package edu.iastate.graysonc.fastfood.activities;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,9 +23,12 @@ import edu.iastate.graysonc.fastfood.fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String TAG = "MainActivity";
+    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
+    private FragmentManager fragmentManager;
     private Fragment homeFragment;
     private Fragment favoritesFragment;
     private Fragment profileFragment;
+    private Fragment currentFragment;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
         AndroidInjection.inject(this);
@@ -39,15 +45,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         homeFragment = new HomeFragment();
         favoritesFragment = new FavoritesFragment();
         profileFragment = new ProfileFragment();
-
-        // Pass the current user's email address and GoogleSignInAccount object to each fragment
-        GoogleSignInAccount account = getIntent().getExtras().getParcelable("edu.iastate.graysonc.fastfood.ACCOUNT");
-        Bundle bundle = new Bundle();
-        bundle.putString("USER_EMAIL", account.getEmail());
-        bundle.putParcelable("ACCOUNT", account);
-        homeFragment.setArguments(bundle);
-        favoritesFragment.setArguments(bundle);
-        profileFragment.setArguments(bundle);
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.main_frame, profileFragment, "profile").hide(profileFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.main_frame, favoritesFragment, "favorites").hide(favoritesFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.main_frame, homeFragment, "home").commit();
+        currentFragment = homeFragment;
 
         // Start in home fragment
         if (savedInstanceState == null) {
@@ -79,8 +81,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     private void setFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame, fragment);
-        fragmentTransaction.commit();
+        fragmentManager.beginTransaction().hide(currentFragment).show(fragment).commit();
+        currentFragment = fragment;
     }
 }

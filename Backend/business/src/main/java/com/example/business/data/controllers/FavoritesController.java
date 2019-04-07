@@ -65,7 +65,7 @@ public class FavoritesController {
 	 * This private helper method is used to pull all the favorite from the Data base so it is easier to parse into a JSONObject
 	 * @return List<favorite>
 	 */
-	private List<Favorites> getFavorites(){
+	public List<Favorites> getFavorites(){
 		Iterable<Favorites> uIters = favoritesRepository.findAll();
 		List<Favorites> uList = new ArrayList<Favorites>();
 		uIters.forEach(uList::add);
@@ -127,7 +127,7 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createFavorite(@RequestBody Favorites newfavorite) {
+	public JSONObject createFavorite(@RequestBody Favorites newfavorite) {
 		JSONObject response;
 		try {
 			if(favoritesRepository.existsById(newfavorite.getFavorites_id())) {
@@ -187,7 +187,7 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteFavorite(@PathVariable int favorites_id) {
+	public JSONObject deleteFavorite(@PathVariable int favorites_id) {
 		JSONObject response;
 		try {
 			if(!favoritesRepository.existsById(favorites_id)) {

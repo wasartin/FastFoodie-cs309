@@ -3,9 +3,11 @@ package edu.iastate.graysonc.fastfood.fragments;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -48,13 +50,19 @@ public class FavoritesFragment extends Fragment {
 
         // Configure ViewModel
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesViewModel.class);
-        mViewModel.init(((GoogleSignInAccount)getArguments().getParcelable("ACCOUNT")).getEmail());
-        mViewModel.getFavorites().observe(this, f -> {
-            if (f != null) {
-                buildRecyclerView();
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+        if (App.account != null) {
+            mViewModel.init(App.account.getEmail());
+            mViewModel.getFavorites().observe(this, f -> {
+                if (f != null) {
+                    buildRecyclerView();
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+        }else{
+            Fragment newFragment = new SignInFragment();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(R.id.MasterLayoutFave, newFragment).commit();
+        }
     }
 
     @Override
@@ -65,7 +73,7 @@ public class FavoritesFragment extends Fragment {
     public void removeItem(int position) {
         Food selectedItem = mViewModel.getFavorites().getValue().get(position);
         Log.d(TAG, "removeItem: " + selectedItem.getName());
-        mViewModel.removeFavorite(((GoogleSignInAccount)getArguments().getParcelable("ACCOUNT")).getEmail(), selectedItem.getId());
+        mViewModel.removeFavorite(App.account.getEmail(), selectedItem.getId());
         mAdapter.notifyItemRemoved(position);
     }
 
@@ -81,7 +89,7 @@ public class FavoritesFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(App.context);
         mAdapter = new FavoritesListAdapter(mViewModel.getFavorites().getValue());
 
-        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

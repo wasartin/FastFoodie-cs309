@@ -9,7 +9,9 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,6 +34,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.DownloadImageTask;
 import edu.iastate.graysonc.fastfood.PopUps.submitPopUp;
 import edu.iastate.graysonc.fastfood.R;
@@ -43,11 +46,13 @@ import static android.support.constraint.Constraints.TAG;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedChangeListener{
+public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private ProfileViewModel viewModel;
+
+    private ConstraintLayout mMasterLayout;
 
     private ImageView avatarImageView;
     private TextView nameTextView;
@@ -82,26 +87,28 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
         mMenuExpand = getView().findViewById(R.id.MenuButton);
         mHorizontalScroller = getView().findViewById(R.id.HorizontalScroller);
         mProfileGroupRadioGroup = getView().findViewById(R.id.ProfileGroupRadioGroup);
+       mMasterLayout = getView().findViewById(R.id.MasterLayout);
+
         fINAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
         fINAnim.setDuration(600);
         fOUTAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
         fOUTAnim.setDuration(300);
 
-
-        // Get profile picture and name from Google Signin
-        GoogleSignInAccount account = getArguments().getParcelable("ACCOUNT");
-        Log.e(TAG, "onActivityCreated: Account received from " + account.getDisplayName());
-        initUI(account);
-
         // Configure ViewModel
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
-        viewModel.init(account.getEmail());
-        viewModel.getUser().observe(this, user -> {
-            if (user != null) {
-                updateUI(user);
-            }
-        });
-
+        if (App.account != null) {
+            viewModel.init(App.account.getEmail());
+            initUI(App.account);
+            viewModel.getUser().observe(this, user -> {
+                if (user != null) {
+                    updateUI(user);
+                }
+            });
+        }else{
+            Fragment newFragment = new SignInFragment();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(R.id.MasterLayout, newFragment).commit();
+        }
         // Create Click Listeners
         mProfileGroupRadioGroup.setOnCheckedChangeListener(this);
         mMenuExpand.setOnClickListener(v -> toggleMenuVisible());
@@ -120,6 +127,7 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     /**
      * Is called automatically whenever data in ProfileViewModel is changed.
+     *
      * @param user
      */
     private void updateUI(User user) {
@@ -152,23 +160,24 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
     public void toggleMenuVisible() {
         mProfileGroupRadioGroup.check(R.id.emptyRadioButton);
         if (toggled) {
-              mMenuExpand.setImageResource(R.drawable.drop_down_light);
-              mProfileGroupRadioGroup.setVisibility(View.GONE);
+            mMenuExpand.setImageResource(R.drawable.drop_down_light);
+            mProfileGroupRadioGroup.setVisibility(View.GONE);
             mProfileGroupRadioGroup.startAnimation(fOUTAnim);
 
         } else {
             mMenuExpand.setImageResource(R.drawable.drop_down_dark);
-              mProfileGroupRadioGroup.setVisibility(View.VISIBLE);
-              mProfileGroupRadioGroup.startAnimation(fINAnim);
+            mProfileGroupRadioGroup.setVisibility(View.VISIBLE);
+            mProfileGroupRadioGroup.startAnimation(fINAnim);
         }
         toggled = !toggled;
     }
 
     /**
      * Creates A Toast Message With Content @message
+     *
      * @param message The message to be displayed
      */
-    public  void createWarning(String message) {
+    public void createWarning(String message) {
         Context context = getContext();
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }

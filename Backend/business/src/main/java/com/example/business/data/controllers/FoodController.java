@@ -31,14 +31,14 @@ public class FoodController {
 	@Autowired
 	FoodRepository foodRepository;
 	
-	@RequestMapping(method = RequestMethod.GET, path = "old/{food_id}")
+	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}")
 	@ResponseBody
-	public Optional<Food> getFood_OLD(@PathVariable int food_id){
+	public Optional<Food> getFood(@PathVariable int food_id){
 		return foodRepository.findById(food_id);
 	}
 
-	@GetMapping("old/all")
-	public Iterable<Food> getAllFood_OLD() {
+	@GetMapping("/all")
+	public Iterable<Food> getAllFood() {
 		return foodRepository.findAll();
 	}
 
@@ -48,7 +48,7 @@ public class FoodController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, path = "json/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getFoodJSONObject(@PathVariable int food_id) {
 		Optional<Food> temp = foodRepository.findById(food_id);
@@ -79,6 +79,7 @@ public class FoodController {
 		final String LOCATED_AT_KEY = "located_at";
 		final String PRICE_KEY = "price";
 		final String CATEGORY_KEY = "category";
+		final String RATING_KEY = "rating";
 		
 		JSONObject foodAsJSONObj = new JSONObject();
 		foodAsJSONObj.put(FOOD_ID_KEY, food.getFood_id());
@@ -90,6 +91,7 @@ public class FoodController {
 		foodAsJSONObj.put(LOCATED_AT_KEY, food.getLocated_at());
 		foodAsJSONObj.put(PRICE_KEY, food.getPrice());
 		foodAsJSONObj.put(CATEGORY_KEY, food.getCategory());
+		foodAsJSONObj.put(RATING_KEY, food.getRating());
 		return foodAsJSONObj;
 	}
 
@@ -98,7 +100,7 @@ public class FoodController {
 	 * @return JSONObject 
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "json/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JSONObject getAllFoodJSONObject()  {
 		JSONObject toReturn = new JSONObject();
 		String key1 = JSON_OBJECT_RESPONSE_KEY1;
@@ -118,7 +120,7 @@ public class FoodController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createFood(@RequestBody Food newFood) {
+	public JSONObject createFood(@RequestBody Food newFood) {
 		JSONObject response;
 		try {
 			if(foodRepository.existsById(newFood.getFood_id())) {
@@ -141,7 +143,7 @@ public class FoodController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteFood(@PathVariable int food_id) {
+	public JSONObject deleteFood(@PathVariable int food_id) {
 		JSONObject response;
 		try {
 			if(!foodRepository.existsById(food_id)) {
@@ -163,7 +165,7 @@ public class FoodController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject editFood(@RequestBody Food newFood, @PathVariable int food_id) {
+	public JSONObject editFood(@RequestBody Food newFood, @PathVariable int food_id) {
 		JSONObject response;
 		try {
 			if(!foodRepository.existsById(food_id)) {

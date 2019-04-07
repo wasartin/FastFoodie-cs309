@@ -105,6 +105,7 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
                 }
             });
         }else{
+            mHorizontalScroller.setVisibility(View.GONE);
             Fragment newFragment = new SignInFragment();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.add(R.id.MasterLayout, newFragment).commit();

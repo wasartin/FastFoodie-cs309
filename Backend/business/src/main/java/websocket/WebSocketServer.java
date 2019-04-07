@@ -15,37 +15,34 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.example.business.data.entities.FoodRating;
 import com.example.business.data.repositories.FoodRatingRepository;
 
-@ServerEndpoint("/websocket/{username}")
-@Component
+@ServerEndpoint("/websocket/{user_email}")
 public class WebSocketServer {
-	
 	@Autowired
 	FoodRatingRepository foodRatingRepo;
 
-	private static Map<Session, String> sessionUserNameMap = new HashMap<>();
+	private static Map<Session, String> sessionUserEmailMap = new HashMap<>();
 	private static Map<String, Session> usernameSessionMap = new HashMap<>();
 	
 	private final Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
 	
 	@OnOpen
-	public void onOpen(Session session, @PathParam("username") String username) throws IOException {
-		sessionUserNameMap.put(session, username);
-		usernameSessionMap.put(username, session);
+	public void onOpen(Session session, @PathParam("user_email") String user_email) throws IOException {
+		sessionUserEmailMap.put(session, user_email);
+		usernameSessionMap.put(user_email, session);
 	}
 	
 	@OnMessage
 	public void onMessage(Session session, String message) throws IOException{
-		String username = sessionUserNameMap.get(session);
-		updateDataBase(username, message);
+		String user_email = sessionUserEmailMap.get(session);
+		updateDataBase(user_email, message);
 		update(message);
 	}
 	
-	private boolean updateDataBase(String username, String message) {
+	private boolean updateDataBase(String user_email, String message) {
 		//"299, 5"
 		String[] parsedMessage = message.split(",");
 		int food_id = Integer.valueOf(parsedMessage[0]);
@@ -53,7 +50,7 @@ public class WebSocketServer {
 		FoodRating newRating = new FoodRating();
 		newRating.setFood_id(food_id);
 		newRating.setRating(rating);
-		newRating.setUser_email(username);
+		newRating.setUser_email(user_email);
 		try {
 			foodRatingRepo.save(newRating);
 		}catch(Exception e) {
@@ -64,9 +61,9 @@ public class WebSocketServer {
 	
 	@OnClose
 	public void onClose(Session session) throws IOException{
-		String username = sessionUserNameMap.get(session);
-		sessionUserNameMap.remove(session);
-    	usernameSessionMap.remove(username);
+		String user_email = sessionUserEmailMap.get(session);
+		sessionUserEmailMap.remove(session);
+    	usernameSessionMap.remove(user_email);
 	}
 	
 	@OnError
@@ -75,7 +72,7 @@ public class WebSocketServer {
 	}
 	
 	private static void update(String message) throws IOException{
-		sessionUserNameMap.forEach((session, username) -> {
+		sessionUserEmailMap.forEach((session, username) -> {
     		synchronized (session) {
 	            try {
 	                session.getBasicRemote().sendText(message);

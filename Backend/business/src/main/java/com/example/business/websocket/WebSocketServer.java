@@ -15,11 +15,13 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.example.business.data.entities.FoodRating;
 import com.example.business.data.repositories.FoodRatingRepository;
 
 @ServerEndpoint("/websocket/{user_email}")
+@Component
 public class WebSocketServer {
 	@Autowired
 	FoodRatingRepository foodRatingRepo;

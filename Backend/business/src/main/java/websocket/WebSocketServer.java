@@ -14,11 +14,18 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.example.business.data.entities.FoodRating;
+import com.example.business.data.repositories.FoodRatingRepository;
 
 @ServerEndpoint("/websocket/{username}")
 @Component
 public class WebSocketServer {
+	
+	@Autowired
+	FoodRatingRepository foodRatingRepo;
 
 	private static Map<Session, String> sessionUserNameMap = new HashMap<>();
 	private static Map<String, Session> usernameSessionMap = new HashMap<>();
@@ -34,13 +41,25 @@ public class WebSocketServer {
 	@OnMessage
 	public void onMessage(Session session, String message) throws IOException{
 		String username = sessionUserNameMap.get(session);
+		updateDataBase(username, message);
 		update(message);
 	}
 	
-	//TODO update DB here
 	private boolean updateDataBase(String username, String message) {
-		
-		return false;
+		//"299, 5"
+		String[] parsedMessage = message.split(",");
+		int food_id = Integer.valueOf(parsedMessage[0]);
+		int rating = Integer.valueOf(parsedMessage[1]);
+		FoodRating newRating = new FoodRating();
+		newRating.setFood_id(food_id);
+		newRating.setRating(rating);
+		newRating.setUser_email(username);
+		try {
+			foodRatingRepo.save(newRating);
+		}catch(Exception e) {
+			return false;
+		}
+		return true;
 	}
 	
 	@OnClose
@@ -65,11 +84,6 @@ public class WebSocketServer {
 	            }
 	        }
 	    });
-
-	}
-	
-	private String parseMessage(String message) {
-		return null;
 	}
 	
 }

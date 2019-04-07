@@ -100,7 +100,7 @@ public class WebSocketServer {
 	}
 	
 	private void sendMessage(String user_email, boolean success) {	
-		String message = (success) ? "The database has been updated" : "There was an error";
+		String message = (success) ? "@ The database has been updated" : "@ There was an error";
     	try {
     		usernameSessionMap.get(user_email).getBasicRemote().sendText(message);
         } catch (IOException e) {

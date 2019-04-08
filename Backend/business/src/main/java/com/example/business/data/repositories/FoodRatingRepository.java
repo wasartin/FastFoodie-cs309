@@ -17,6 +17,6 @@ public interface FoodRatingRepository extends CrudRepository<FoodRating, Integer
 	@Query(value="SELECT * FROM food_rating r WHERE r.user_email = ?1 AND r.food_id = ?2", nativeQuery = true)
 	FoodRating getFoodRatingByUserAndFood(String user_email, int food_id);
 	
-	@Query(value = "SELECT rating FROM food_rating WHERE food_id = ?1", nativeQuery = true)
+	@Query(value = "SELECT rating FROM food_rating WHERE food_id = ?1 AND rating > 0 ", nativeQuery = true)
 	List<Integer> findAllRatingsForFood(int food_id);
 }

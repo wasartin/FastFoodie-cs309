@@ -31,13 +31,13 @@ public class FoodController {
 	@Autowired
 	FoodRepository foodRepository;
 	
-	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}")
+	@RequestMapping(method = RequestMethod.GET, path = "old/{food_id}")
 	@ResponseBody
 	public Optional<Food> getFood(@PathVariable int food_id){
 		return foodRepository.findById(food_id);
 	}
 
-	@GetMapping("/all")
+	@GetMapping("old/all")
 	public Iterable<Food> getAllFood() {
 		return foodRepository.findAll();
 	}

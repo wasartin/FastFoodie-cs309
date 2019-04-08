@@ -47,12 +47,13 @@ public class WebSocketServer {
 	@OnMessage
 	public void onMessage(Session session, String message) throws IOException{
 		String user_email = sessionUserEmailMap.get(session);
-		boolean success = updateDataBase(user_email, message);
-		sendMessage(user_email, success);
+		String result = updateDataBase(user_email, message);
+		sendMessage(user_email, result);
 		update(message);
 	}
 	
-	private boolean updateDataBase(String user_email, String message) {
+	private String updateDataBase(String user_email, String message) {
+		String result = "@";
 		//"299, 5"
 		String[] parsedMessage = message.split(",");
 		int food_id = Integer.valueOf(parsedMessage[0]);
@@ -66,7 +67,8 @@ public class WebSocketServer {
 		try {
 			foodRatingRepo.save(newRating);
 		}catch(Exception e) {
-			return false;
+			logger.info("There was an error saving the rating in the food_rating table");
+			logger.info(e.getMessage());
 		}
 		Food foundFood = foodRepo.findById(food_id).get();
 		try {
@@ -74,9 +76,12 @@ public class WebSocketServer {
 			foundFood.setRating(newRatingValue);
 			foodRepo.save(foundFood);
 		}catch(Exception e) {
-			return false;
+			logger.info("There was an error saving the new food rating in the food table");
+			logger.info(e.getMessage());
+			result += e.getMessage();
 		}
-		return true;
+		result += "success";
+		return "@ The database has been updated";
 	}
 	
 	private double getRating(int food_id) {
@@ -92,7 +97,6 @@ public class WebSocketServer {
 		return sum / ratingList.size();
 	}
 	
-	
 	@OnClose
 	public void onClose(Session session) throws IOException{
 		String user_email = sessionUserEmailMap.get(session);
@@ -105,8 +109,8 @@ public class WebSocketServer {
 		logger.info("Entered into Error");
 	}
 	
-	private void sendMessage(String user_email, boolean success) {	
-		String message = (success) ? "@ The database has been updated" : "@ There was an error";
+	private void sendMessage(String user_email, String result) {	
+		String message = result;
     	try {
     		usernameSessionMap.get(user_email).getBasicRemote().sendText(message);
         } catch (IOException e) {
@@ -115,7 +119,6 @@ public class WebSocketServer {
         }
     }
 
-	
 	private static void update(String message) throws IOException{
 		sessionUserEmailMap.forEach((session, username) -> {
     		synchronized (session) {

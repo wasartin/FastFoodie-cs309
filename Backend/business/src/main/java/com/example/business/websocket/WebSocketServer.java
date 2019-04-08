@@ -57,15 +57,21 @@ public class WebSocketServer {
 		String[] parsedMessage = message.split(",");
 		int food_id = Integer.valueOf(parsedMessage[0]);
 		int rating = Integer.valueOf(parsedMessage[1]);
+		
 		FoodRating newRating = new FoodRating();
 		newRating.setFood_id(food_id);
 		newRating.setRating(rating);
 		newRating.setUser_email(user_email);
-		
-		Food foundFood = foodRepo.findById(food_id).get();
+
 		try {
 			foodRatingRepo.save(newRating);
-			foundFood.setRating(getRating(food_id));
+		}catch(Exception e) {
+			return false;
+		}
+		Food foundFood = foodRepo.findById(food_id).get();
+		try {
+			double newRatingValue = getRating(food_id);
+			foundFood.setRating(newRatingValue);
 			foodRepo.save(foundFood);
 		}catch(Exception e) {
 			return false;

@@ -24,7 +24,7 @@ public class FavoritesController {
 
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
 	
-	
+	//refactored to add services (increase modularity)
 	@Autowired
 	FavoritesService favoritesService;
 	

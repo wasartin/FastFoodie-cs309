@@ -91,3 +91,73 @@ org.eclipse.ui.PartInitException: Unable to open editor, unknown editor ID: 'org
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1501)
 !SUBENTRY 1 org.eclipse.ui 4 0 2019-02-13 17:36:57.796
 !MESSAGE Unable to open editor, unknown editor ID: 'org.springsource.ide.eclipse.commons.gettingstarted.dashboard.WelcomeDashboard'
+!SESSION 2019-03-26 18:45:34.082 -----------------------------------------------
+eclipse.buildId=3.9.7.201812201326-RELEASE-e410
+java.version=1.8.0_151
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.springsource.sts.ide -product org.springsource.sts.ide
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springsource.sts.ide -data C:\Users\Jonathan\Desktop\team_36\Backend\business -product org.springsource.sts.ide
+
+!ENTRY org.eclipse.jface 2 0 2019-03-26 18:45:41.032
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-03-26 18:45:41.032
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7e2f16bd,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@594fcb22,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-03-26 18:45:41.032
+!MESSAGE A conflict occurred for CTRL+SHIFT+L:
+Binding(CTRL+SHIFT+L,
+	ParameterizedCommand(Command(org.eclipse.ui.window.showKeyAssist,Show Key Assist,
+		Show the key assist dialog,
+		Category(org.eclipse.ui.category.window,Window,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1399ad68,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.dialogAndWindow,,,system)
+Binding(CTRL+SHIFT+L,
+	ParameterizedCommand(Command(org.springsource.ide.eclipse.quicksearch.commands.quicksearchCommand,Quick Search Command,
+		,
+		Category(org.springsource.ide.eclipse.quicksearch.commands.category,Quick Search Category,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@41c83af0,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+L,
+	ParameterizedCommand(Command(jp.co.future.eclipse.usqlfmt.commands.formatCommand,Format SQL,
+		,
+		Category(org.eclipse.jdt.ui.category.source,Source,Java Source Actions,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@47d4468a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.jface.text 2 0 2019-03-26 18:45:44.774
+!MESSAGE Duplicate template id: 'org.eclipse.wst.xslt.templates.xpath.boolean'
+
+!ENTRY org.eclipse.jface.text 2 0 2019-03-26 18:45:45.652
+!MESSAGE Duplicate template id: 'org.eclipse.wst.xslt.templates.xpath.boolean'
+
+!ENTRY org.eclipse.egit.ui 2 0 2019-03-26 18:45:50.281
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Jonathan'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.e4.ui.workbench 2 0 2019-03-26 18:45:50.400
+!MESSAGE Removing part descriptor with the 'org.springsource.ide.eclipse.commons.browser.View' id and the 'Browser View' description. Points to the invalid 'bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView' class.

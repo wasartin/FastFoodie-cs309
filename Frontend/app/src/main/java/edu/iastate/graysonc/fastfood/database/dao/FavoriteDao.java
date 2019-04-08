@@ -25,8 +25,12 @@ public interface FavoriteDao {
     @Query("DELETE FROM favorite WHERE userEmail = :userEmail AND foodId = :foodId")
     void delete(String userEmail, int foodId);
 
-    @Query("SELECT food.id, name, proteinTotal, carbTotal, fatTotal, calorieTotal, location, isFavorite, food.lastRefresh FROM food INNER JOIN favorite ON food.id = favorite.foodId WHERE favorite.userEmail = :userEmail")
-    LiveData<List<Food>> getFavoritesForUser(final String userEmail);
+    @Query("DELETE FROM favorite")
+    void deleteAll();
+
+    //@Query("SELECT food.id, name, proteinTotal, carbTotal, fatTotal, calorieTotal, location, isFavorite, food.lastRefresh FROM food INNER JOIN favorite ON food.id = favorite.foodId WHERE favorite.userEmail = :userEmail")
+    @Query("SELECT * FROM favorite WHERE userEmail = :userEmail")
+    LiveData<List<Favorite>> getFavoritesForUser(final String userEmail);
 
     @Query("SELECT * FROM favorite WHERE userEmail = :userEmail AND foodId = :foodId AND lastRefresh > :lastRefreshMax LIMIT 1")
     Favorite hasFavorite(String userEmail, int foodId, Date lastRefreshMax);

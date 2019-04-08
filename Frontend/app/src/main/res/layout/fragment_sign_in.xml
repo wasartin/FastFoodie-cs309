@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_google_signin_btn_text_dark_default"
     tools:context=".fragments.SignInFragment">
 
     <android.support.constraint.ConstraintLayout
@@ -11,7 +12,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
+            android:id="@+id/sign_in_button_frag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -23,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -31,7 +32,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Sign in to access more features."
-            app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
+            app:layout_constraintBottom_toTopOf="@+id/sign_in_button_frag"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

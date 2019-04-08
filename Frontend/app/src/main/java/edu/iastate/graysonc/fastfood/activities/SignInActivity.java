@@ -15,6 +15,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
@@ -39,7 +40,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.continue_without_signin_button).setOnClickListener(this);
+        findViewById(R.id.continue_without_sign_in_button).setOnClickListener(this);
     }
 
     @Override
@@ -105,7 +106,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.sign_in_button:
                 signIn();
                 break;
-            case R.id.continue_without_signin_button:
+            case R.id.continue_without_sign_in_button:
                 startMainActivity(null);
                 break;
         }
@@ -116,10 +117,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
      * @param account If null, MainActivity will be in "Unregistered User" mode.
      */
     private void startMainActivity(GoogleSignInAccount account) {
-        Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent startIntent = new Intent(App.context, MainActivity.class);
         if (account != null) {
-            // Give MainActivity access to the Google account
-            startIntent.putExtra("edu.iastate.graysonc.fastfood.ACCOUNT", account);
+            App.account = account;
         }
         startActivity(startIntent);
     }

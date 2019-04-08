@@ -26,7 +26,6 @@ import com.example.business.data.services.UserService;
 @RequestMapping(value="/users")
 public class UserController {
 	
-	//TODO Ensure this is the key that Frontend would like to see
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
 	@SuppressWarnings("unused")
 	private final String JSON_OBJECT_RESPONSE_KEY2 = "info";
@@ -49,7 +48,7 @@ public class UserController {
 		return userService.getUser_OLD(user_email);
 	}
 
-	//TODO Be sure to delete this 
+	//TODO change the mapping here, as well as method name. the json one should have '/json/' in the url
 	// 	Once 'getAllUsersJSONObject' method can be correctly parsed by 
 	//		front end, this will be deleted
 	@GetMapping("old/all")

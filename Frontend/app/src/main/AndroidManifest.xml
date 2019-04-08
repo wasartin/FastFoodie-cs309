@@ -23,6 +23,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".PopUps.submitPopUp" android:theme = "@style/AppTheme.CustomThemeTrans"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

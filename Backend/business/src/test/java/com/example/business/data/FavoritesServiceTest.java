@@ -23,10 +23,11 @@ import org.springframework.http.HttpStatus;
 import com.example.business.data.controllers.FavoritesController;
 import com.example.business.data.entities.Favorites;
 import com.example.business.data.repositories.FavoritesRepository;
+import com.example.business.data.services.FavoritesService;
 
-public class FavoritesControllerTest {
+public class FavoritesServiceTest {
 	@InjectMocks
-	FavoritesController favCont;
+	FavoritesService favService;
 	
 	@Mock
 	FavoritesRepository favRepo;
@@ -42,7 +43,7 @@ public class FavoritesControllerTest {
 		Optional<Favorites> favOp= Optional.of(newFav);
 		when(favRepo.findById(1)).thenReturn(favOp);
 		
-		favCont.getfavorite(1);
+		favService.getfavorite(1);
 		verify(favRepo, times(1)).findById(1);
 	}
 	
@@ -59,7 +60,7 @@ public class FavoritesControllerTest {
 
 		when(favRepo.findAll()).thenReturn(list);
 
-		List<Favorites> favList = (List<Favorites>) favCont.getAllfavoritesList();
+		List<Favorites> favList = (List<Favorites>) favService.getAllfavorite();
 
 		assertEquals(3, favList.size());
 		verify(favRepo, times(1)).findAll();
@@ -70,7 +71,7 @@ public class FavoritesControllerTest {
 		Favorites found = new Favorites(3, "jongreaz@gmail.com", 34);
 		when(favRepo.save(found)).thenReturn(new Favorites());
 		
-		JSONObject response = favCont.createFavorite(found);
+		JSONObject response = favService.createFavorite(found);
 		assertThat(favRepo.save(found), is(notNullValue()));
 		assertEquals(response.get("HttpStatus"), HttpStatus.OK);
 		assertEquals(response.get("message"), "favorite has been created");
@@ -81,7 +82,7 @@ public class FavoritesControllerTest {
 	public void deleteFavoriteTest() {
 		when(favRepo.existsById(1)).thenReturn(true);
 
-		JSONObject response = favCont.deleteFavorite(1);
+		JSONObject response = favService.deleteFavorite(1);
 		verify(favRepo, times(1)).deleteById(1);
 		assertEquals(response.get("status"), 204);
 		assertEquals(response.get("HttpStatus"), HttpStatus.OK);

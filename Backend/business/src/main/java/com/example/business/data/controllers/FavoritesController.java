@@ -31,12 +31,12 @@ public class FavoritesController {
 	@RequestMapping(method = RequestMethod.GET, path = "old/{fav_id}")
 	@ResponseBody
 	public Optional<Favorites> getfavorite(@PathVariable int fav_id){
-		return favoritesService.getfavorite_OLD(fav_id);
+		return favoritesService.getfavorite(fav_id);
 	}
 
 	@GetMapping("old/all")
 	public Iterable<Favorites> getAllfavoritesList() {
-		return favoritesService.getAllfavorite_OLD();
+		return favoritesService.getAllfavorite();
 	}
 
 	/**

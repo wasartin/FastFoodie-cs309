@@ -45,7 +45,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET, path = "old/{user_email}")
 	@ResponseBody
 	public Optional<User> getUser(@PathVariable String user_email){
-		return userService.getUser_OLD(user_email);
+		return userService.getUser(user_email);
 	}
 
 	//TODO change the mapping here, as well as method name. the json one should have '/json/' in the url
@@ -53,7 +53,7 @@ public class UserController {
 	//		front end, this will be deleted
 	@GetMapping("old/all")
 	public Iterable<User> getAllUsers() {
-		return userService.getAllUsers_OLD();
+		return userService.getAllUsers();
 	}
 
 	/**

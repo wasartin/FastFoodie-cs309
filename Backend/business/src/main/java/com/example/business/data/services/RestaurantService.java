@@ -26,7 +26,7 @@ public class RestaurantService {
 	 * Private method used for returned a list of restaurants
 	 * @return List of Restaurants
 	 */
-	public List<Restaurant> getRestaurants(){
+	public List<Restaurant> getAllRestaurantsList(){
 		Iterable<Restaurant> rIters = restaurantRepo.findAll();
 		List<Restaurant> rList = new ArrayList<Restaurant>();
 		rIters.forEach(rList::add);
@@ -38,7 +38,7 @@ public class RestaurantService {
 		JSONObject toReturn = new JSONObject();
 		String key1 = "data";
 		JSONArray listOfRestaurants = new JSONArray(); 
-		List<Restaurant> uList = getRestaurants(); 
+		List<Restaurant> uList = getAllRestaurantsList(); 
 		for(int i = 0; i < uList.size(); i++) {
 			JSONObject temp = new JSONObject(); 
 			temp.put("last_updated", uList.get(i).getLast_updated());
@@ -62,7 +62,7 @@ public class RestaurantService {
 		return toReturn;
 	}
 	
-	public Optional<Restaurant> getRestaurant_OLD(int restaurant_id){
+	public Optional<Restaurant> getRestaurant(int restaurant_id){
 		return restaurantRepo.findById(restaurant_id);
 	}
 	

@@ -30,7 +30,7 @@ public class RestaurantController {
 	
 	@RequestMapping(value ="old/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Restaurant> getAllRestaurantsList(){
-		return restService.getRestaurants();
+		return restService.getAllRestaurantsList();
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class RestaurantController {
 	@RequestMapping(method = RequestMethod.GET, path = "old/{restaurant_id}")
 	@ResponseBody
 	public Optional<Restaurant> getRestaurant_OLD(@PathVariable int restaurant_id){
-		return restService.getRestaurant_OLD(restaurant_id);
+		return restService.getRestaurant(restaurant_id);
 	}
 
 	/**

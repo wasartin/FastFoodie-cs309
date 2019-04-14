@@ -24,11 +24,11 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public Optional<User> getUser_OLD(String user_email){
+	public Optional<User> getUser(String user_email){
 		return userRepository.findById(user_email);
 	}
 	
-	public Iterable<User> getAllUsers_OLD() {
+	public Iterable<User> getAllUsers() {
 		return userRepository.findAll();
 	}
 	

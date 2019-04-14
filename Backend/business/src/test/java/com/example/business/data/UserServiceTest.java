@@ -24,15 +24,16 @@ import org.springframework.http.HttpStatus;
 import com.example.business.data.controllers.UserController;
 import com.example.business.data.entities.User;
 import com.example.business.data.repositories.UserRepository;
+import com.example.business.data.services.UserService;
 
 /**
  * @author watis
  *
  */
-public class UserControllerTest {
+public class UserServiceTest {
 	
 	@InjectMocks
-	UserController userController;
+	UserService userService;
 
 	@Mock
 	UserRepository repo;
@@ -46,7 +47,7 @@ public class UserControllerTest {
 	public void getUserByIdTest() {
 		when(repo.findById("TomDodge@gmail.com")).thenReturn(Optional.of(new User("TomDodge@gmail.com", "registered")));
 	
-		Optional<User> uO = userController.getUser("TomDodge@gmail.com");
+		Optional<User> uO = userService.getUser("TomDodge@gmail.com");
 		
 		User found = uO.get();
 		assertEquals("TomDodge@gmail.com", found.getUser_email());
@@ -72,7 +73,7 @@ public class UserControllerTest {
 
 		when(repo.findAll()).thenReturn(list);
 
-		List<User> uList = (List<User>) userController.getAllUsers();
+		List<User> uList = (List<User>) userService.getAllUsers();
 
 		assertEquals(13, uList.size());
 		verify(repo, times(1)).findAll();
@@ -84,7 +85,7 @@ public class UserControllerTest {
 		
 		when(repo.save(found)).thenReturn(new User());
 
-		JSONObject response = userController.createUser(found);
+		JSONObject response = userService.createUser(found);
 		assertThat(repo.save(found), is(notNullValue()));
 		assertEquals(response.get("HttpStatus"), HttpStatus.OK);
 		assertEquals(response.get("message"), "User has been created");
@@ -98,7 +99,7 @@ public class UserControllerTest {
 		when(repo.existsById("TomDodge@gmail.com")).thenReturn(true);
 		when(repo.save(alreadyInDB)).thenReturn(new User());
 
-		JSONObject response = userController.createUser(alreadyInDB);
+		JSONObject response = userService.createUser(alreadyInDB);
 		assertEquals(response.get("HttpStatus"), HttpStatus.BAD_REQUEST);
 		assertEquals(response.get("message"), "User might already exist, or your fields are incorrect, double check your request");
 		assertEquals(response.get("status"), 400);
@@ -108,7 +109,7 @@ public class UserControllerTest {
 	public void deleteUserTest() {
 		when(repo.existsById("wasartin@iastate.edu")).thenReturn(true);
 
-		JSONObject response = userController.deleteUser("wasartin@iastate.edu");
+		JSONObject response = userService.deleteUser("wasartin@iastate.edu");
 		verify(repo, times(1)).deleteById("wasartin@iastate.edu");
 		assertEquals(response.get("HttpStatus"), HttpStatus.OK);
 		assertEquals(response.get("message"), "User has been deleted");
@@ -119,7 +120,7 @@ public class UserControllerTest {
 	public void deleteUserTest_Fail() {
 		when(repo.existsById("thisGuy@Gmail.com")).thenReturn(true);
 
-		JSONObject response = userController.deleteUser("thisGuy@gmail.com");
+		JSONObject response = userService.deleteUser("thisGuy@gmail.com");
 		verify(repo, never()).deleteById("thisGuy@gmail.com");
 		assertEquals(response.get("HttpStatus"), HttpStatus.BAD_REQUEST);
 		assertEquals(response.get("message"), "Could not find that user in the database, or your fields are incorrect, double check your request");
@@ -130,7 +131,7 @@ public class UserControllerTest {
 	public void deleteUserTest_Exception() {
 		when(repo.existsById("thisGuy@Gmail.com")).thenThrow(IllegalArgumentException.class);
 
-		JSONObject response = userController.deleteUser("thisGuy@gmail.com");
+		JSONObject response = userService.deleteUser("thisGuy@gmail.com");
 		verify(repo, never()).deleteById("thisGuy@gmail.com");
 		assertEquals(response.get("HttpStatus"), HttpStatus.BAD_REQUEST);
 		assertEquals(response.get("message"), "Could not find that user in the database, or your fields are incorrect, double check your request");
@@ -144,7 +145,7 @@ public class UserControllerTest {
 		when(repo.save(userInDB)).thenReturn(new User());
 		when(repo.existsById("TomDodge@gmail.com")).thenReturn(true);
 
-		JSONObject response = userController.editUser(userInDB, "TomDodge@gmail.com");
+		JSONObject response = userService.editUser(userInDB, "TomDodge@gmail.com");
 
 		assertThat(repo.save(userInDB), is(notNullValue()));
 		System.out.println(response.toString());
@@ -161,7 +162,7 @@ public class UserControllerTest {
 		when(repo.save(userInDB)).thenReturn(new User());
 		when(repo.existsById("TomDodge@gmail.com")).thenReturn(false);
 
-		JSONObject response = userController.editUser(userInDB, "TomDodge@gmail.com");
+		JSONObject response = userService.editUser(userInDB, "TomDodge@gmail.com");
 
 		assertThat(repo.save(userInDB), is(notNullValue()));
 		

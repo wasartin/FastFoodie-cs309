@@ -148,7 +148,6 @@ public class UserServiceTest {
 		JSONObject response = userService.editUser(userInDB, "TomDodge@gmail.com");
 
 		assertThat(repo.save(userInDB), is(notNullValue()));
-		System.out.println(response.toString());
 		
 		assertEquals(response.get("HttpStatus"), HttpStatus.OK);
 		assertEquals(response.get("message"), "User has been edited");

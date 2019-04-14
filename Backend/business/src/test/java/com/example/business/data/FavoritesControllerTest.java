@@ -42,7 +42,7 @@ public class FavoritesControllerTest {
 		Optional<Favorites> favOp= Optional.of(newFav);
 		when(favRepo.findById(1)).thenReturn(favOp);
 		
-		favCont.getfavorite_OLD(1);
+		favCont.getfavorite(1);
 		verify(favRepo, times(1)).findById(1);
 	}
 	
@@ -59,7 +59,7 @@ public class FavoritesControllerTest {
 
 		when(favRepo.findAll()).thenReturn(list);
 
-		List<Favorites> favList = (List<Favorites>) favCont.getFavorites();
+		List<Favorites> favList = (List<Favorites>) favCont.getAllfavoritesList();
 
 		assertEquals(3, favList.size());
 		verify(favRepo, times(1)).findAll();

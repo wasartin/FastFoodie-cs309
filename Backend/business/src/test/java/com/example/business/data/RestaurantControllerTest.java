@@ -65,7 +65,7 @@ public class RestaurantControllerTest {
 
 		when(restRepo.findAll()).thenReturn(list);
 
-		List<Restaurant> restList = (List<Restaurant>) restCont.getRestaurants();
+		List<Restaurant> restList = (List<Restaurant>) restCont.getAllRestaurantsList();
 
 		assertEquals(3, restList.size());
 		verify(restRepo, times(1)).findAll();

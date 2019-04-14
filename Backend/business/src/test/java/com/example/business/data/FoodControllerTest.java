@@ -37,12 +37,12 @@ public class FoodControllerTest {
 	
 	@Test
 	public void getFoodByIdTest() {
-		Food found = new Food(66, "Royal with Cheese", 31, 42, 28, 540, "$5.00", "Beef", 0, 0);
+		Food found = new Food(63, "Royal with Cheese", 31, 42, 28, 540, "$5.00", "Beef", 0, 0);
 		
-		when(repo.findById(66)).thenReturn((Optional.of(found)));
+		when(repo.findById(63)).thenReturn((Optional.of(found)));
 		
-		foodController.getFood(66);
-		verify(repo, times(1)).findById(66);
+		foodController.getFood(63);
+		verify(repo, times(1)).findById(63);
 	}
 	
 	@Test
@@ -50,7 +50,7 @@ public class FoodControllerTest {
 		List<Food> list = new ArrayList<>();
 		when(repo.findAll()).thenReturn(list);
 
-		foodController.getAllFood();
+		foodController.getAllFoodList();
 		verify(repo, times(1)).findAll();
 	}
 	

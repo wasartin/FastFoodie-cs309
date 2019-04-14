@@ -30,12 +30,12 @@ public class FavoritesController {
 	
 	@RequestMapping(method = RequestMethod.GET, path = "old/{fav_id}")
 	@ResponseBody
-	public Optional<Favorites> getfavorite_OLD(@PathVariable int fav_id){
+	public Optional<Favorites> getfavorite(@PathVariable int fav_id){
 		return favoritesService.getfavorite_OLD(fav_id);
 	}
 
 	@GetMapping("old/all")
-	public Iterable<Favorites> getAllfavorite_OLD() {
+	public Iterable<Favorites> getAllfavoritesList() {
 		return favoritesService.getAllfavorite_OLD();
 	}
 
@@ -76,7 +76,7 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createFavorite(@RequestBody Favorites newfavorite) {
+	public JSONObject createFavorite(@RequestBody Favorites newfavorite) {
 		return favoritesService.createFavorite(newfavorite);
 	}
 	
@@ -87,7 +87,7 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create/{user_id}/{fid}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createFavoriteForUser(@PathVariable String user_id, @PathVariable int fid) {
+	public JSONObject createFavoriteForUser(@PathVariable String user_id, @PathVariable int fid) {
 		return favoritesService.createFavoriteForUser(user_id, fid);
 	}
 	
@@ -100,7 +100,7 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteFavorite(@PathVariable int favorites_id) {
+	public JSONObject deleteFavorite(@PathVariable int favorites_id) {
 		return favoritesService.deleteFavorite(favorites_id);
 	}
 	
@@ -111,9 +111,8 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_id}/{fid}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteFavoriteByUser(@PathVariable String user_id, @PathVariable int fid) {
+	public JSONObject deleteFavoriteByUser(@PathVariable String user_id, @PathVariable int fid) {
 		return favoritesService.deleteFavoriteByUser(user_id, fid);
 	}
-	
-	
+
 }

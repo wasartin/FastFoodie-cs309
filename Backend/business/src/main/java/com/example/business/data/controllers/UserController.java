@@ -44,7 +44,7 @@ public class UserController {
 	//		this will then be deleted.
 	@RequestMapping(method = RequestMethod.GET, path = "old/{user_email}")
 	@ResponseBody
-	public Optional<User> getUser_OLD(@PathVariable String user_email){
+	public Optional<User> getUser(@PathVariable String user_email){
 		return userService.getUser_OLD(user_email);
 	}
 
@@ -52,7 +52,7 @@ public class UserController {
 	// 	Once 'getAllUsersJSONObject' method can be correctly parsed by 
 	//		front end, this will be deleted
 	@GetMapping("old/all")
-	public Iterable<User> getAllUsers_OLD() {
+	public Iterable<User> getAllUsers() {
 		return userService.getAllUsers_OLD();
 	}
 
@@ -83,7 +83,7 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject createUser(@RequestBody User newUser) {
+	public JSONObject createUser(@RequestBody User newUser) {
 		return userService.createUser(newUser);
 	}
 	
@@ -94,7 +94,7 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	private JSONObject deleteUser(@PathVariable String user_email) {
+	public JSONObject deleteUser(@PathVariable String user_email) {
 		return userService.deleteUser(user_email);
 	}
 	
@@ -108,7 +108,7 @@ public class UserController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private JSONObject editUser(@RequestBody User newUserInfo, @PathVariable String user_email) {
+	public JSONObject editUser(@RequestBody User newUserInfo, @PathVariable String user_email) {
 		return userService.editUser(newUserInfo, user_email);
 	}
 	

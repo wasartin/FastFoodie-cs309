@@ -24,11 +24,12 @@ import org.springframework.http.HttpStatus;
 import com.example.business.data.controllers.RestaurantController;
 import com.example.business.data.entities.Restaurant;
 import com.example.business.data.repositories.RestaurantRepository;
+import com.example.business.data.services.RestaurantService;
 
-public class RestaurantControllerTest {
+public class RestaurantServiceTest {
 
 	@InjectMocks
-	RestaurantController restCont;
+	RestaurantService restService;
 	
 	@Mock
 	RestaurantRepository restRepo;
@@ -44,7 +45,7 @@ public class RestaurantControllerTest {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		when(restRepo.findById(1)).thenReturn(Optional.of(new Restaurant(1, "McDonalds", now)));
 		
-		Optional<Restaurant> restO = restCont.getRestaurant_OLD(1);
+		Optional<Restaurant> restO = restService.getRestaurant(1);
 		Restaurant rest = restO.get();
 		assertEquals(1, rest.getRestaurant_id());
 		assertEquals("McDonalds", rest.getRestaurant_name());
@@ -65,7 +66,7 @@ public class RestaurantControllerTest {
 
 		when(restRepo.findAll()).thenReturn(list);
 
-		List<Restaurant> restList = (List<Restaurant>) restCont.getRestaurants();
+		List<Restaurant> restList = (List<Restaurant>) restService.getAllRestaurantsList();
 
 		assertEquals(3, restList.size());
 		verify(restRepo, times(1)).findAll();
@@ -77,7 +78,7 @@ public class RestaurantControllerTest {
 		Restaurant found = new Restaurant(1, "McDonalds", now);
 		when(restRepo.save(found)).thenReturn(new Restaurant());
 		
-		Map<String,Object> response = restCont.createRestaurant(found);
+		Map<String,Object> response = restService.createRestaurant(found);
 		assertThat(restRepo.save(found), is(notNullValue()));
 		assertEquals(response.get("message"), HttpStatus.OK);
 		assertEquals(response.get("status"), 200);	
@@ -87,7 +88,7 @@ public class RestaurantControllerTest {
 	public void deleteRestaurantTest() {
 		when(restRepo.existsById(1)).thenReturn(true);
 
-		Map<String, Object> response = restCont.deleteRestaurant(1);
+		Map<String, Object> response = restService.deleteRestaurant(1);
 		verify(restRepo, times(1)).deleteById(1);
 		assertEquals(response.get("status"), 200);
 	}
@@ -100,7 +101,7 @@ public class RestaurantControllerTest {
 		when(restRepo.save(rest)).thenReturn(new Restaurant());
 		when(restRepo.existsById(1)).thenReturn(true);
 		
-		Map<String, Object> response = restCont.editRestaurant(rest, 1);
+		Map<String, Object> response = restService.editRestaurant(rest, 1);
 
 		assertThat(restRepo.save(rest), is(notNullValue()));
 		System.out.println(response.toString());

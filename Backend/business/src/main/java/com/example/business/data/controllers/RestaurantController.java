@@ -1,5 +1,6 @@
 package com.example.business.data.controllers;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,7 +26,12 @@ public class RestaurantController {
 	RestaurantRepository restaurantRepo;
 	
 	@Autowired
-	RestaurantService restService;
+	RestaurantService restService = new RestaurantService();
+	
+	@RequestMapping(value ="old/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Restaurant> getAllRestaurantsList(){
+		return restService.getAllRestaurantsList();
+	}
 	
 	/**
 	 * 
@@ -55,11 +61,9 @@ public class RestaurantController {
 	@RequestMapping(method = RequestMethod.GET, path = "old/{restaurant_id}")
 	@ResponseBody
 	public Optional<Restaurant> getRestaurant_OLD(@PathVariable int restaurant_id){
-		return restService.getRestaurant_OLD(restaurant_id);
+		return restService.getRestaurant(restaurant_id);
 	}
 
-
-	
 	/**
 	 * adds a new restaurant to the database if said restaurant doesn't already exist
 	 * @param newRestaurant
@@ -67,7 +71,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
+	public Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
 		return restService.createRestaurant(newRestaurant);
 	}
 	
@@ -78,7 +82,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
+	public Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
 		return restService.deleteRestaurant(restaurant_id);
 	}
 	
@@ -90,7 +94,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
+	public Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
 		return restService.editRestaurant(updatedRestaurant, restaurant_id);
 	}
 }

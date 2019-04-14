@@ -21,11 +21,11 @@ public class FavoritesService {
 	@Autowired 
 	FavoritesRepository favoritesRepository;
 	
-	public Optional<Favorites> getfavorite_OLD(int fav_id){
+	public Optional<Favorites> getfavorite(int fav_id){
 		return favoritesRepository.findById(fav_id);
 	}
 	
-	public Iterable<Favorites> getAllfavorite_OLD() {
+	public Iterable<Favorites> getAllfavorite() {
 		return favoritesRepository.findAll();
 	}
 	
@@ -47,7 +47,7 @@ public class FavoritesService {
 	 * This private helper method is used to pull all the favorite from the Data base so it is easier to parse into a JSONObject
 	 * @return List<favorite>
 	 */
-	private List<Favorites> getFavorites(){
+	public List<Favorites> getFavorites(){
 		Iterable<Favorites> uIters = favoritesRepository.findAll();
 		List<Favorites> uList = new ArrayList<Favorites>();
 		uIters.forEach(uList::add);
@@ -55,7 +55,7 @@ public class FavoritesService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private JSONObject parsefavoriteIntoJSONObject(Favorites favorite) {
+	public JSONObject parsefavoriteIntoJSONObject(Favorites favorite) {
 		final String favorite_USER_ID_KEY = "user_id";
 		final String favorite_fid_KEY = "fid";
 		
@@ -102,7 +102,7 @@ public class FavoritesService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private JSONObject generateResponse(int status, HttpStatus input, String message) {
+	public JSONObject generateResponse(int status, HttpStatus input, String message) {
 		JSONObject response = new JSONObject();
 		response.put("status", status);
 		response.put("HttpStatus", input);

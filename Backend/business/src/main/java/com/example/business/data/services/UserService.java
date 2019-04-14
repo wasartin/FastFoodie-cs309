@@ -15,7 +15,6 @@ import com.example.business.data.repositories.UserRepository;
 @Service
 public class UserService {
 
-	//TODO Ensure this is the key that Frontend would like to see
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
 	@SuppressWarnings("unused")
 	private final String JSON_OBJECT_RESPONSE_KEY2 = "info";
@@ -25,11 +24,11 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public Optional<User> getUser_OLD(String user_email){
+	public Optional<User> getUser(String user_email){
 		return userRepository.findById(user_email);
 	}
 	
-	public Iterable<User> getAllUsers_OLD() {
+	public Iterable<User> getAllUsers() {
 		return userRepository.findAll();
 	}
 	

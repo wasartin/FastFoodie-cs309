@@ -18,13 +18,13 @@ public class FoodService {
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
 	
 	@Autowired
-	private FoodRepository foodRepo;
+	FoodRepository foodRepo;
 
-	public Optional<Food> oldGetFood(int food_id){
+	public Optional<Food> getFood(int food_id){
 		return foodRepo.findById(food_id);
 	}
 	
-	public Iterable<Food> oldGetAllFood(){
+	public Iterable<Food> getAllFoodList(){
 		return foodRepo.findAll();
 	}
 	
@@ -36,7 +36,7 @@ public class FoodService {
 		return response;
 	}
 	
-	private List<Food> getFoods(){
+	public List<Food> getFoods(){
 		Iterable<Food> uIters = foodRepo.findAll();
 		List<Food> uList = new ArrayList<Food>();
 		uIters.forEach(uList::add);
@@ -44,7 +44,7 @@ public class FoodService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private JSONObject parseFoodIntoJSONObject(Food food) {
+	public JSONObject parseFoodIntoJSONObject(Food food) {
 		final String FOOD_ID_KEY = "food_id";
 		final String FOOD_NAME_KEY = "food_name";
 		final String PROTEIN_KEY = "protein_total";
@@ -78,7 +78,7 @@ public class FoodService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private JSONObject generateResponse(int status, HttpStatus input, String message) {
+	public JSONObject generateResponse(int status, HttpStatus input, String message) {
 		JSONObject response = new JSONObject();
 		response.put("status", status);
 		response.put("HttpStatus", input);

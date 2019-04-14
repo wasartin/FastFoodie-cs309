@@ -21,7 +21,7 @@ import com.example.business.data.services.FoodService;
 public class FoodController {
 	
 	@Autowired
-	FoodService foodService;
+	private static FoodService foodService = new FoodService();
 	
 	@RequestMapping(method = RequestMethod.GET, path = "old/{food_id}")
 	@ResponseBody

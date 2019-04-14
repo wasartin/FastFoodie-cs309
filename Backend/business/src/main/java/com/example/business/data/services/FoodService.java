@@ -18,7 +18,7 @@ public class FoodService {
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
 	
 	@Autowired
-	private FoodRepository foodRepo;
+	private static FoodRepository foodRepo;
 
 	public Optional<Food> oldGetFood(int food_id){
 		return foodRepo.findById(food_id);

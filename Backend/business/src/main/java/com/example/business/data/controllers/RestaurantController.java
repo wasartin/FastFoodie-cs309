@@ -26,7 +26,7 @@ public class RestaurantController {
 	RestaurantRepository restaurantRepo;
 	
 	@Autowired
-	RestaurantService restService;
+	RestaurantService restService = new RestaurantService();
 	
 	@RequestMapping(value ="old/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Restaurant> getAllRestaurantsList(){

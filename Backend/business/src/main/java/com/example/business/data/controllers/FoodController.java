@@ -21,17 +21,17 @@ import com.example.business.data.services.FoodService;
 public class FoodController {
 	
 	@Autowired
-	private static FoodService foodService = new FoodService();
+	FoodService foodService;
 	
 	@RequestMapping(method = RequestMethod.GET, path = "old/{food_id}")
 	@ResponseBody
 	public Optional<Food> getFood(@PathVariable int food_id){
-		return foodService.oldGetFood(food_id);
+		return foodService.getFood(food_id);
 	}
 
 	@GetMapping("old/all")
 	public Iterable<Food> getAllFoodList() {
-		return foodService.oldGetAllFood();
+		return foodService.getAllFoodList();
 	}
 
 	/**

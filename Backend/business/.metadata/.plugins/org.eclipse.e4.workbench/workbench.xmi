@@ -9,7 +9,7 @@
     <persistedState key="isRestored" value="true"/>
     <persistedState key="show_in_time" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;show_in_time/>"/>
     <persistedState key="workingSets" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workingSets/>"/>
-    <persistedState key="aggregateWorkingSetId"/>
+    <persistedState key="aggregateWorkingSetId" value="Aggregate for window 1553643951305"/>
     <tags>topLevel</tags>
     <tags>shellMaximized</tags>
     <children xsi:type="basic:PartSashContainer" xmi:id="_PBV8cy_oEemOH87v_7BsEg" selectedElement="_PBV8dC_oEemOH87v_7BsEg" horizontal="true">
@@ -411,7 +411,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_PDtT8i_oEemOH87v_7BsEg" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_PEAO4C_oEemOH87v_7BsEg" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" enabled="false" command="_OsDB5y_oEemOH87v_7BsEg"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_REnwcFAhEemZgde5eB6dtA" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_OsDB5y_oEemOH87v_7BsEg"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_PDtT8y_oEemOH87v_7BsEg" elementId="group.edit" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -442,7 +442,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_PDtT-i_oEemOH87v_7BsEg" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_PEAO7S_oEemOH87v_7BsEg" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_Or-LMi_oEemOH87v_7BsEg"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_REra0FAhEemZgde5eB6dtA" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_Or-LMi_oEemOH87v_7BsEg"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_PDtT-y_oEemOH87v_7BsEg" elementId="group.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -751,6 +751,7 @@
     <bindings xmi:id="_Os1sWy_oEemOH87v_7BsEg" keySequence="CTRL+F9" command="_Or4Dpi_oEemOH87v_7BsEg"/>
     <bindings xmi:id="_Os1sXy_oEemOH87v_7BsEg" keySequence="CTRL+F11" command="_OsDCEC_oEemOH87v_7BsEg"/>
     <bindings xmi:id="_Os1sYC_oEemOH87v_7BsEg" keySequence="CTRL+F12" command="_Or4Dki_oEemOH87v_7BsEg"/>
+    <bindings xmi:id="_QjXdgFAhEemZgde5eB6dtA" keySequence="CTRL+SHIFT+L" command="_QisIEVAhEemZgde5eB6dtA"/>
   </bindingTables>
   <bindingTables xmi:id="_OsjYOS_oEemOH87v_7BsEg" elementId="org.eclipse.ant.ui.AntEditorScope" bindingContext="_OsEQQC_oEemOH87v_7BsEg">
     <bindings xmi:id="_OsjYOi_oEemOH87v_7BsEg" keySequence="F3" command="_Or4DCC_oEemOH87v_7BsEg"/>
@@ -3010,6 +3011,8 @@
   <commands xmi:id="_PA20RS_oEemOH87v_7BsEg" elementId="AUTOGEN:::org.springframework.ide.eclipse.aop.mylyn.ui.filter/org.springframework.ide.eclipse.beans.mylyn.ui.actions.filterSpringExplorerAction" commandName="Focus on Active Task" description="Focus on Active Task (Alt+click to reveal filtered elements)" category="_Or4C0S_oEemOH87v_7BsEg"/>
   <commands xmi:id="_PA20Ri_oEemOH87v_7BsEg" elementId="AUTOGEN:::org.eclipse.mylyn.ui.projectexplorer.filter/org.springframework.ide.eclipse.beans.mylyn.ui.actions.filterSpringExplorerAction" commandName="Focus on Active Task" description="Focus on Active Task (Alt+click to reveal filtered elements)" category="_Or4C0S_oEemOH87v_7BsEg"/>
   <commands xmi:id="_PA20Ry_oEemOH87v_7BsEg" elementId="AUTOGEN:::org.springframework.ide.eclipse.ui.navigator.springExplorer.sorting/org.springframework.ide.eclipse.ui.navigator.springExplorer.sortingAction" commandName="Sort" description="Sort" category="_Or4C0S_oEemOH87v_7BsEg"/>
+  <commands xmi:id="_QisIEFAhEemZgde5eB6dtA" elementId="com.sqldalmaker.open_dal_file.command_id" commandName="DAL Command" category="_Qiq58FAhEemZgde5eB6dtA"/>
+  <commands xmi:id="_QisIEVAhEemZgde5eB6dtA" elementId="jp.co.future.eclipse.usqlfmt.commands.formatCommand" commandName="Format SQL" category="_Or4C6y_oEemOH87v_7BsEg"/>
   <addons xmi:id="_OrTbCy_oEemOH87v_7BsEg" elementId="org.eclipse.e4.core.commands.service" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_OrTbDC_oEemOH87v_7BsEg" elementId="org.eclipse.e4.ui.contexts.service" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_OrTbDS_oEemOH87v_7BsEg" elementId="org.eclipse.e4.ui.bindings.service" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
@@ -3021,7 +3024,7 @@
   <addons xmi:id="_OrTbEy_oEemOH87v_7BsEg" elementId="MinMax Addon" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
   <addons xmi:id="_OrTbFC_oEemOH87v_7BsEg" elementId="org.eclipse.ui.workbench.addon.0" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_OrZhoC_oEemOH87v_7BsEg" elementId="SplitterAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.splitteraddon.SplitterAddon"/>
-  <addons xmi:id="_IYS0IKimEeS11vbz3f9ezw" elementId="org.eclipse.ui.ide.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
+  <addons xmi:id="_QkKHsFAhEemZgde5eB6dtA" elementId="org.eclipse.ui.ide.addon.0" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
   <addons xmi:id="_dz0JgGOlEeSMMaPQU2nlzw" elementId="org.eclipse.ui.ide.application.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide.application" contributionURI="bundleclass://org.eclipse.ui.ide.application/org.eclipse.ui.internal.ide.application.addons.ModelCleanupAddon"/>
   <categories xmi:id="_Or20oC_oEemOH87v_7BsEg" elementId="org.eclipse.ui.category.edit" name="Edit"/>
   <categories xmi:id="_Or20oS_oEemOH87v_7BsEg" elementId="org.eclipse.mylyn.wikitext.ui.editor.category" name="WikiText Markup Editing Commands" description="commands for editing lightweight markup"/>
@@ -3072,4 +3075,5 @@
   <categories xmi:id="_Or4C6y_oEemOH87v_7BsEg" elementId="org.eclipse.jdt.ui.category.source" name="Source" description="Java Source Actions"/>
   <categories xmi:id="_Or4C7C_oEemOH87v_7BsEg" elementId="org.eclipse.pde.runtime.spy.commands.category" name="Spy"/>
   <categories xmi:id="_Or4C7S_oEemOH87v_7BsEg" elementId="org.springsource.ide.eclipse.quicksearch.commands.category" name="Quick Search Category"/>
+  <categories xmi:id="_Qiq58FAhEemZgde5eB6dtA" elementId="com.sqldalmaker.commands.category" name="DAL Category"/>
 </application:Application>

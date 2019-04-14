@@ -157,7 +157,7 @@ public class HomeFragment extends Fragment {
         RadioGroup mSortBy = getView().findViewById(R.id.searchByRadioGroup);
         String url = "";
         if (mSortBy.getCheckedRadioButtonId() == R.id.searchByFood || mSortBy.getCheckedRadioButtonId() == R.id.searchByCustom) {
-            url = "http://cs309-bs-1.misc.iastate.edu:8080/foods/all";
+            url = "http://cs309-bs-1.misc.iastate.edu:8080/foods/json/all";
         } else if (mSortBy.getCheckedRadioButtonId() == R.id.searchByRes) {
             url = "http://cs309-bs-1.misc.iastate.edu:8080/restaurants/all";
         } else {

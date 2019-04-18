@@ -1,6 +1,5 @@
 package com.example.business.data.controllers;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -54,27 +53,6 @@ public class TicketController{
 				response = generateResponse(204, HttpStatus.OK, "Ticket has been made");
 			}catch (IllegalArgumentException e) {
 				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Ticket might already exist, or your fields are incorrect, double check your request");
-			}catch (Exception e) {
-				response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
-			}
-			return response;
-		}
-		
-		@RequestMapping(method = RequestMethod.POST, path = "/create/{user_email}/{admin_email}/{text}", produces = MediaType.APPLICATION_JSON_VALUE)
-		@ResponseBody
-		public JSONObject createTicket(@PathVariable String user_email, @PathVariable String admin_email, String text) {
-			JSONObject response;
-			Ticket newTicket = new Ticket();
-			newTicket.setUser_id(user_email);
-			newTicket.setAdmin_id(admin_email);
-			newTicket.setText(text);
-			newTicket.setDate(new Timestamp(System.currentTimeMillis()));
-			newTicket.setCategory("");
-			try {
-				ticketRepo.save(newTicket);
-				response = generateResponse(204, HttpStatus.OK, "Food has been rated");
-			}catch (IllegalArgumentException e) {
-				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Rating might already exist, or your fields are incorrect, double check your request");
 			}catch (Exception e) {
 				response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
 			}

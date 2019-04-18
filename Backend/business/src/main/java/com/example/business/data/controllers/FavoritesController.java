@@ -40,9 +40,9 @@ public class FavoritesController {
 	}
 
 	/**
-	 *
+	 * Returns a favorite JSON object for the specified favorites_id
 	 * @param favorite_id
-	 * @return
+	 * @return JSONObject for favorite
 	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

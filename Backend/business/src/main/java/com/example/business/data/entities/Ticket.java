@@ -17,7 +17,7 @@ public class Ticket {
 	
 	private String user_id;
 	private String admin_id;
-	private Timestamp date;
+	private Timestamp date_assigned;
 	private String text;
 	private String category;
 	
@@ -30,7 +30,7 @@ public class Ticket {
 		this.ticket_id = ticket_id;
 		this.user_id = user_id;
 		this.admin_id = admin_id;
-		this.date = date;
+		this.date_assigned = date;
 		this.text = text;
 		this.category = category;
 	}
@@ -60,11 +60,11 @@ public class Ticket {
 	}
 
 	public Timestamp getDate() {
-		return date;
+		return date_assigned;
 	}
 
 	public void setDate(Timestamp date) {
-		this.date = date;
+		this.date_assigned = date;
 	}
 
 	public String getText() {

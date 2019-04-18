@@ -1,6 +1,6 @@
 package com.example.business.data.controllers;
 
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.business.data.entities.Favorites;
 import com.example.business.data.entities.Ticket;
 import com.example.business.data.repositories.TicketRepository;
 
@@ -31,31 +30,16 @@ public class TicketController{
 			return (List<Ticket>) ticketRepo.findAll();
 		}
 		
-		@RequestMapping(method = RequestMethod.GET, path = "/{user_email}/{admin_email}")
-		@ResponseBody
-		public Ticket getTicket(@PathVariable String user_email, @PathVariable String admin_email){
-			
-			return null;
-		}
-		
 		@RequestMapping(method = RequestMethod.GET, path = "all/user/{user_email}")
 		@ResponseBody
 		public List<Ticket> getAllForUser(@PathVariable String user_email){
 			return ticketRepo.getAllTicketsForUser(user_email);
 		}
 		
-		private List<Ticket> getAllTicketsInDB(){
-			Iterable<Ticket> tIters = ticketRepo.findAll();
-			List<Ticket> tList = new ArrayList<Ticket>();
-			tIters.forEach(tList::add);
-			return tList;
-		}
-		
-		@RequestMapping(method = RequestMethod.GET, path = "all/admin/{user_email}")
+		@RequestMapping(method = RequestMethod.GET, path = "all/admin/{admin_email}")
 		@ResponseBody
-		public List<Ticket> getAllForAdmin(@PathVariable String user_email){
-			return null;
-			//TODO
+		public List<Ticket> getAllForAdmin(@PathVariable String admin_email){
+			return ticketRepo.getAllTicketsForAdmin(admin_email);
 		}
 		
 		@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -76,15 +60,18 @@ public class TicketController{
 			return response;
 		}
 		
-		@RequestMapping(method = RequestMethod.POST, path = "/create/{user_email}/{admin_email}", produces = MediaType.APPLICATION_JSON_VALUE)
+		@RequestMapping(method = RequestMethod.POST, path = "/create/{user_email}/{admin_email}/{text}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
-		public JSONObject createTicket(@PathVariable String user_email, @PathVariable String admin_email) {
+		public JSONObject createTicket(@PathVariable String user_email, @PathVariable String admin_email, String text) {
 			JSONObject response;
+			Ticket newTicket = new Ticket();
+			newTicket.setUser_id(user_email);
+			newTicket.setAdmin_id(admin_email);
+			newTicket.setText(text);
+			newTicket.setDate(new Timestamp(System.currentTimeMillis()));
+			newTicket.setCategory("");
 			try {
-//				if(ticketRepo.getFoodRatingByUserAndFood() != null) {
-//					throw new IllegalArgumentException();
-//				}
-				//ticketRepo.save(newRating);
+				ticketRepo.save(newTicket);
 				response = generateResponse(204, HttpStatus.OK, "Food has been rated");
 			}catch (IllegalArgumentException e) {
 				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Rating might already exist, or your fields are incorrect, double check your request");
@@ -94,38 +81,15 @@ public class TicketController{
 			return response;
 		}
 		
-		//TODO might need to use text or something.
-		
-		@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}/{admin_email}", produces = MediaType.APPLICATION_JSON_VALUE)
+		@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{ticket_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 		@ResponseBody
-		public JSONObject editTicket(@PathVariable String user_email, @PathVariable String admin_email) {
-//			Ticket findOldVersion = ticketRepo.getFoodRatingByUserAndFood(user_email, food_id);
+		public JSONObject deleteTicket(@PathVariable int ticket_id) {
 			JSONObject response;
 			try {
-//				if(findOldVersion == null) {
-//					throw new IllegalArgumentException();
-//				}
-//				findOldVersion.setRating(rating);
-//				ticketRepo.save(findOldVersion);
-				response = generateResponse(204, HttpStatus.OK, "Ticket has been edited");
-			}catch (IllegalArgumentException e) {
-				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Ticket might already exist, or your fields are incorrect, double check your request");
-			}catch (Exception e) {
-				response = generateResponse(500, HttpStatus.INTERNAL_SERVER_ERROR, "Server might be down now. Try again");
-			}
-			return response;
-		}
-		
-		@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}/{admin_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
-		@ResponseBody
-		public JSONObject deleteFood(@PathVariable String user_email, @PathVariable int food_id) {
-//			Ticket oldVersion = ticketRepo.getFoodRatingByUserAndFood(user_email, food_id);
-			JSONObject response;
-			try {
-//				if(oldVersion == null) {
-//					throw new IllegalArgumentException();
-//				}
-//				ticketRepo.deleteById(oldVersion.getRating_id());
+				if(!ticketRepo.existsById(ticket_id)) {
+					throw new IllegalArgumentException();
+				}
+				ticketRepo.deleteById(ticket_id);
 				response = generateResponse(204, HttpStatus.OK, "Ticket has been deleted");
 			}catch (IllegalArgumentException e) {
 				response = generateResponse(400, HttpStatus.BAD_REQUEST, "Could not find that ticket in the database, or your fields are incorrect, double check your request");

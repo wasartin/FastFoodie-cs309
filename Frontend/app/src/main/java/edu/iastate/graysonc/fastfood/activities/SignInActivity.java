@@ -54,14 +54,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }*/
     }
 
+    /**
+     * Creates a sign in intent with google, processing sign in reqiests
+     */
     private void signIn() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     /**
-     * There's no "sign out" button on this screen, so this does nothing.
-     * I'll probably delete this later.
+     *Signs a user out, handles user accounts.
      */
     private void signOut() {
         googleSignInClient.signOut()
@@ -85,6 +87,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * Handles sign in account, assigns results to repository variables
+     * @param completedTask A package containing all the valid info about a user
+     */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             account = completedTask.getResult(ApiException.class);

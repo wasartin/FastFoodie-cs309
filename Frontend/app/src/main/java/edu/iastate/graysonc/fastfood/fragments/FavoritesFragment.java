@@ -33,7 +33,6 @@ public class FavoritesFragment extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private FavoritesViewModel mViewModel;
-
     private RecyclerView mRecyclerView;
     private FavoritesListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -70,6 +69,10 @@ public class FavoritesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_favorites, container, false);
     }
 
+    /**
+     * Remove a food item both from the food list and the recycler view
+     * @param position Position of item to remove
+     */
     public void removeItem(int position) {
         Food selectedItem = mViewModel.getFavorites().getValue().get(position);
         Log.d(TAG, "removeItem: " + selectedItem.getName());
@@ -77,12 +80,19 @@ public class FavoritesFragment extends Fragment {
         mAdapter.notifyItemRemoved(position);
     }
 
+    /**
+     * Opens all extra information about a food object
+     * @param position the position of a food item in our recycler view
+     */
     public void openFoodPage(int position) {
         Food selectedItem = mViewModel.getFavorites().getValue().get(position);
         Log.d(TAG, "openFoodPage: " + selectedItem.getName());
         mAdapter.notifyItemChanged(position);
     }
 
+    /**
+     * Creates a recycler view, assigns it a handler and gives it data
+     */
     public void buildRecyclerView() {
         mRecyclerView = getView().findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);

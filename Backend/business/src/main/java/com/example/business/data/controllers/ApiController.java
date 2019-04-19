@@ -21,7 +21,7 @@ import com.example.business.data.repositories.FoodRepository;
 
 /**
  * This class is designed for 
- * @author watis
+ * @author Will
  *
  */
 @RestController
@@ -35,9 +35,9 @@ public class ApiController {
 	FavoritesRepository favoritesRepository;
 	
 	/**
-	 *
+	 *returns a json object for the user id of a specific favorites
 	 * @param favorite_id
-	 * @return
+	 * @return a json object response
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, path = "/json/favorites/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,9 +69,9 @@ public class ApiController {
 	}
 	
 	/**
-	 *
+	 *get all of a users favorites
 	 * @param favorite_id
-	 * @return
+	 * @return a json object response
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, path = "/favorites/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -101,8 +101,8 @@ public class ApiController {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * helper to get all favorites
+	 * @return list of all favorites
 	 */
 	private List<Favorites> getFavorites(){
 		Iterable<Favorites> uIters = favoritesRepository.findAll();
@@ -113,9 +113,9 @@ public class ApiController {
 	
 	
 	/**
-	 *
+	 *gets a specific food's json object by its id
 	 * @param food_id
-	 * @return
+	 * @return a json object response
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, path = "food/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)

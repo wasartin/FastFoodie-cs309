@@ -18,7 +18,7 @@ import com.example.business.data.repositories.UserRepository;
 import com.example.business.data.services.UserService;
 
 /**
- * @author 
+ * @author Will and Jon
  *
  */
 @RestController
@@ -32,9 +32,9 @@ public class UserController {
 	UserService userService;
 	
 	/**
-	 * 
+	 * get a specific user
 	 * @param user_email
-	 * @return
+	 * @return specific user
 	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}")
 	@ResponseBody
@@ -43,8 +43,9 @@ public class UserController {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * get all users as optional 
+	 * @param user_email
+	 * @return optional<users>
 	 */
 	@GetMapping("/all")
 	public Iterable<User> getAllUsers() {
@@ -52,8 +53,9 @@ public class UserController {
 	}
 
 	/**
+	 * returns json object of specific user
 	 * @param user_email
-	 * @return json object of the user
+	 * @return a json object of the user
 	 */
 	@RequestMapping(method = RequestMethod.GET, path = "json/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -62,8 +64,8 @@ public class UserController {
 	}
 
 	/**
-	 * 
-	 * @return JSONObject that is the response
+	 * gets all users as json objects
+	 * @return JSONObject that has key1-> "Users": value1->JSONArray of users in System
 	 */
 	@RequestMapping(value = "json/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JSONObject getAllUsersJSONObject()  {
@@ -73,7 +75,7 @@ public class UserController {
 	/**
 	 * 
 	 * @param newUser
-	 * @return a response inside a jsonobject
+	 * @return a json object response
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -84,7 +86,7 @@ public class UserController {
 	/**
 	 * Deletes the user given their unique id
 	 * @param user_email
-	 * @return response in jsonobject
+	 * @return a json object response
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
@@ -94,7 +96,7 @@ public class UserController {
 	
 	/**
 	 * @param userToEdit
-	 * @return jsonobject response
+	 * @return a json object response
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

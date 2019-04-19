@@ -18,7 +18,7 @@ import com.example.business.data.repositories.FoodRatingRepository;
 
 /**
  * 
- * @author watis
+ * @author Will and Jon
  *
  */
 @RestController
@@ -39,10 +39,10 @@ public class FoodRatingController {
 		}
 		
 		/**
-		 * Finds food ratings by the user_id and food_id. A user can only have one rating for a food.
+		 * retrieves a specific food rating with that rating's user email and food id
 		 * @param user_email
 		 * @param food_id
-		 * @return a specific food rating
+		 * @return Specific food rating
 		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/{user_email}/{food_id}")
 		@ResponseBody
@@ -51,9 +51,9 @@ public class FoodRatingController {
 		}
 		
 		/**
-		 * Get all ratings made by a specific user
+		 * gets all food ratings for a specific user
 		 * @param user_email
-		 * @return food ratings list made by specific user
+		 * @return list of all user's food ratings
 		 */
 		@RequestMapping(method = RequestMethod.GET, path = "all/user/{user_email}")
 		@ResponseBody
@@ -62,9 +62,9 @@ public class FoodRatingController {
 		}
 		
 		/**
-		 * Finds all Food Ratings for a specific food
+		 * get all food ratings for a specific food
 		 * @param food_id
-		 * @return all ratings for a food
+		 * @return list of food ratings
 		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/all/food/{food_id}")
 		@ResponseBody
@@ -73,9 +73,9 @@ public class FoodRatingController {
 		}
 		
 		/**
-		 * A great method for a lazy front end.
+		 * gets the average food ratings for a food, a great method for a lazy front end
 		 * @param food_id
-		 * @return
+		 * @return food's rating
 		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/average/{food_id}")
 		@ResponseBody
@@ -94,9 +94,9 @@ public class FoodRatingController {
 		}
 		
 		/**
-		 * Create a food by a json object
+		 * create new food rating
 		 * @param newRating
-		 * @return jsonobject that holds the response information
+		 * @return a json object response
 		 */
 		@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
@@ -117,11 +117,11 @@ public class FoodRatingController {
 		}
 		
 		/**
-		 * Creates a food rating by just using parameters
+		 * creates a new food rating by email, food id, and rating
 		 * @param user_email
 		 * @param food_id
 		 * @param rating
-		 * @return jsonobject that holds the response object
+		 * @return a json object response
 		 */
 		@RequestMapping(method = RequestMethod.POST, path = "/create/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
@@ -149,11 +149,11 @@ public class FoodRatingController {
 		}
 		
 		/**
-		 * Edits a food rating by parameters
+		 * edits an existing food rating
 		 * @param user_email
 		 * @param food_id
 		 * @param rating
-		 * @return jsonobject that holds the response
+		 * @return a json object response
 		 */
 		@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
@@ -179,10 +179,10 @@ public class FoodRatingController {
 		}
 		
 		/**
-		 * Deletes a food rating by a users email and food id
+		 * deletes an existing food rating
 		 * @param user_email
 		 * @param food_id
-		 * @return response
+		 * @return a json object response
 		 */
 		@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 		@ResponseBody
@@ -204,11 +204,11 @@ public class FoodRatingController {
 		}
 		
 		/**
-		 * Helper method for generating the response object
+		 * helper to generate a json object response
 		 * @param status
 		 * @param input
 		 * @param message
-		 * @return jsonobject that is the response
+		 * @return a json object response
 		 */
 		@SuppressWarnings("unchecked")
 		private JSONObject generateResponse(int status, HttpStatus input, String message) {

@@ -20,7 +20,7 @@ import com.example.business.data.services.RestaurantService;
 
 /**
  * 
- * @author watis
+ * @author Jon
  *
  */
 @RestController
@@ -34,8 +34,8 @@ public class RestaurantController {
 	RestaurantService restService = new RestaurantService();
 	
 	/**
-	 * 
-	 * @return
+	 * returns a list of all restaurants
+	 * @return list of restaurants
 	 */
 	@RequestMapping(value ="/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Restaurant> getAllRestaurantsList(){
@@ -43,7 +43,7 @@ public class RestaurantController {
 	}
 	
 	/**
-	 * 
+	 * get all restaurants as jsonobjects
 	 * @return JSONObject that has key1-> "Restaurants": value1->JSONArray of restaurants in System
 	 */
 	@RequestMapping(value ="json/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

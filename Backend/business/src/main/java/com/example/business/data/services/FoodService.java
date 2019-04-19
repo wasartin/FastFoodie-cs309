@@ -129,4 +129,13 @@ public class FoodService {
 		}
 		return response;
 	}
+	
+	@SuppressWarnings("unchecked")
+	private JSONObject generateResponse(int status, HttpStatus input, String message) {
+		JSONObject response = new JSONObject();
+		response.put("status", status);
+		response.put("HttpStatus", input);
+		response.put("message", message);
+		return response;
+	}
 }

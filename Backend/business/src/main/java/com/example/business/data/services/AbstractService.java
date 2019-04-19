@@ -3,12 +3,12 @@ package com.example.business.data.services;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 
-public abstract class AbstractService {
+public abstract class AbstractService<T> {
 
 	private static final String MESSAGE_SUCCESS = "%s has been created";
 	private static final String MESSAGE_FAIL_THEIR_FAULT = "%s might already exist, or your fields are incorrect, double check your request";
 	private static final String MESSAGE_FAIL_OUR_FAULT = "Server might be down now. Try again";
-	
+
 	@SuppressWarnings("unchecked")
 	final JSONObject generateResponse(String keyword, HttpStatus state, HttpStatus input) {
 		String responseMessage = "";

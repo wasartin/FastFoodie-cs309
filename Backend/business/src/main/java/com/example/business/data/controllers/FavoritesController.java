@@ -34,7 +34,7 @@ public class FavoritesController {
 	 * @param fav_id
 	 * @return Optional<Favorites>
 	 */
-@RequestMapping(method = RequestMethod.GET, path = "/{fav_id}")
+	@RequestMapping(method = RequestMethod.GET, path = "/{fav_id}")
 	@ResponseBody
 	public Optional<Favorites> getfavorite(@PathVariable int fav_id){
 		return favoritesService.getfavorite(fav_id);

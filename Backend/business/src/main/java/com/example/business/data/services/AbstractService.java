@@ -1,13 +1,32 @@
 package com.example.business.data.services;
 
-import org.json.simple.JSONObject;
-import org.springframework.http.HttpStatus;
+import java.util.Optional;
 
-public abstract class AbstractService<T> {
+import org.json.simple.JSONObject;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+public abstract class AbstractService<E, K> {
 
 	private static final String MESSAGE_SUCCESS = "%s has been created";
 	private static final String MESSAGE_FAIL_THEIR_FAULT = "%s might already exist, or your fields are incorrect, double check your request";
 	private static final String MESSAGE_FAIL_OUR_FAULT = "Server might be down now. Try again";
+	
+	private CrudRepository<E, K> repo;
+	
+	public Optional<E> getEntityByID(K id) {
+		return repo.findById(id);
+	}
+	
+	public Iterable<E> getAllEntities(){
+		return repo.findAll();
+	}
+	
+	//TODO
+	public ResponseEntity<?> createEntity(){
+		return null;
+	}
 
 	@SuppressWarnings("unchecked")
 	final JSONObject generateResponse(String keyword, HttpStatus state, HttpStatus input) {

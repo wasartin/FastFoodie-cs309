@@ -49,26 +49,6 @@ public class FoodController {
 	}
 
 	/**
-	 *returns a json object for a specified food
-	 * @param food_id
-	 * @return json object for specific food
-	 */
-	@RequestMapping(method = RequestMethod.GET, path = "json/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public JSONObject getFoodJSONObject(@PathVariable int food_id) {
-		return foodService.jsonGetFood(food_id);
-	}
-	
-	/**
-	 * returns a json object with all foods in the database
-	 * @return JSONObject 
-	 */
-	@RequestMapping(value = "json/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JSONObject getAllFoodJSONObject()  {
-		return foodService.jsonGetAllFood();
-	}
-
-	/**
 	 * Currently just takes food Object. Might need to be a JSONObject I parse if more info is required.
 	 * @param newFood
 	 * @return a json object response

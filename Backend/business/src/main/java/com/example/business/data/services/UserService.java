@@ -16,10 +16,6 @@ import com.example.business.data.repositories.UserRepository;
 public class UserService {
 
 	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
-	@SuppressWarnings("unused")
-	private final String JSON_OBJECT_RESPONSE_KEY2 = "info";
-	@SuppressWarnings("unused")
-	private final String JSON_OBJECT_RESPONSE_KEY3 = "favoritesList";
 		
 	@Autowired
 	UserRepository userRepository;

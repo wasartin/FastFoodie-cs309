@@ -14,28 +14,18 @@ import com.example.business.data.repositories.FoodRepository;
 
 @Service
 public class FoodService {
-	
-	private final String JSON_OBJECT_RESPONSE_KEY1 = "data";
-	
+
 	@Autowired
 	FoodRepository foodRepo;
 
-	public Optional<Food> getFood(int food_id){
+	public Optional<Food> getFood(int food_id){ //Being replaced?
 		return foodRepo.findById(food_id);
 	}
 	
 	public Iterable<Food> getAllFoodList(){
 		return foodRepo.findAll();
 	}
-	
-	@SuppressWarnings("unchecked")
-	public JSONObject jsonGetFood(int food_id) {
-		Optional<Food> temp = foodRepo.findById(food_id);
-		JSONObject response = new JSONObject();
-		response.put(JSON_OBJECT_RESPONSE_KEY1, temp.get());
-		return response;
-	}
-	
+
 	public List<Food> getFoods(){
 		Iterable<Food> uIters = foodRepo.findAll();
 		List<Food> uList = new ArrayList<Food>();
@@ -63,22 +53,7 @@ public class FoodService {
 		foodAsJSONObj.put(LOCATED_AT_KEY, food.getLocated_at());
 		return foodAsJSONObj;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public JSONObject jsonGetAllFood()  {
-		JSONObject toReturn = new JSONObject();
-		String key1 = JSON_OBJECT_RESPONSE_KEY1;
-		JSONArray listOfFoods = new JSONArray();
-		List<Food> uList = getFoods();
-		for(Food food : uList) {
-			listOfFoods.add(parseFoodIntoJSONObject(food));
-		}
-		toReturn.put(key1, listOfFoods);
-		return toReturn;
-	}
-	
-
-	
+		
 	public JSONObject createFood(Food newFood) {
 		JSONObject response;
 		try {

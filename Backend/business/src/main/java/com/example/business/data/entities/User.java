@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="user")
 public class User {
+	
 	@Id //specifies that this is a primary key
 	@Column(name="user_email")
 	private String user_email;//These names should exactly match the names of the db columns

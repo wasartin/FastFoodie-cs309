@@ -19,6 +19,11 @@ import com.example.business.data.entities.Food;
 import com.example.business.data.repositories.FavoritesRepository;
 import com.example.business.data.repositories.FoodRepository;
 
+/**
+ * This class is designed for 
+ * @author watis
+ *
+ */
 @RestController
 @RequestMapping(value="/api")
 public class ApiController {
@@ -95,6 +100,10 @@ public class ApiController {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	private List<Favorites> getFavorites(){
 		Iterable<Favorites> uIters = favoritesRepository.findAll();
 		List<Favorites> uList = new ArrayList<Favorites>();

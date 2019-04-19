@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.business.data.entities.Food;
 import com.example.business.data.services.FoodService;
 
+/**
+ * Food controller. 
+ * @author Will and Jon
+ *
+ */
 @RestController
 @RequestMapping(value="/foods")
 public class FoodController {
@@ -23,13 +28,22 @@ public class FoodController {
 	@Autowired
 	FoodService foodService;
 	
-	@RequestMapping(method = RequestMethod.GET, path = "old/{food_id}")
+	/**
+	 * 
+	 * @param food_id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}")
 	@ResponseBody
 	public Optional<Food> getFood(@PathVariable int food_id){
 		return foodService.getFood(food_id);
 	}
 
-	@GetMapping("old/all")
+	/**
+	 * 
+	 * @return
+	 */
+	@GetMapping("/all")
 	public Iterable<Food> getAllFoodList() {
 		return foodService.getAllFoodList();
 	}
@@ -39,7 +53,7 @@ public class FoodController {
 	 * @param food_id
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, path = "json/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getFoodJSONObject(@PathVariable int food_id) {
 		return foodService.jsonGetFood(food_id);
@@ -49,7 +63,7 @@ public class FoodController {
 	 * 
 	 * @return JSONObject 
 	 */
-	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "json/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JSONObject getAllFoodJSONObject()  {
 		return foodService.jsonGetAllFood();
 	}

@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.business.data.entities.FoodRating;
 import com.example.business.data.repositories.FoodRatingRepository;
 
+/**
+ * 
+ * @author watis
+ *
+ */
 @RestController
 @RequestMapping(value="/foodRatings")
 public class FoodRatingController {
@@ -23,30 +28,55 @@ public class FoodRatingController {
 		@Autowired
 		FoodRatingRepository foodRatingRepo;
 		
+		/**
+		 * Uses Repo class to return all ratings for the foods in the DB
+		 * @return list of all Food Ratings
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/all")
 		@ResponseBody
 		public List<FoodRating> getAll(){
 			return (List<FoodRating>) foodRatingRepo.findAll();
 		}
 		
+		/**
+		 * Finds food ratings by the user_id and food_id. A user can only have one rating for a food.
+		 * @param user_email
+		 * @param food_id
+		 * @return a specific food rating
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/{user_email}/{food_id}")
 		@ResponseBody
 		public FoodRating getSpecific(@PathVariable String user_email, @PathVariable int food_id){
 			return foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id);
 		}
 		
+		/**
+		 * Get all ratings made by a specific user
+		 * @param user_email
+		 * @return food ratings list made by specific user
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "all/user/{user_email}")
 		@ResponseBody
 		public List<FoodRating> getAllForUser(@PathVariable String user_email){
 			return (List<FoodRating>) foodRatingRepo.getFoodRatingsForUser(user_email);
 		}
 		
+		/**
+		 * Finds all Food Ratings for a specific food
+		 * @param food_id
+		 * @return all ratings for a food
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/all/food/{food_id}")
 		@ResponseBody
 		public List<Integer> getFoodRatingList(@PathVariable int food_id){
 			return foodRatingRepo.findAllRatingsForFood(food_id);
 		}
 		
+		/**
+		 * A great method for a lazy front end.
+		 * @param food_id
+		 * @return
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/average/{food_id}")
 		@ResponseBody
 		public double getFoodRating(@PathVariable int food_id){
@@ -63,6 +93,11 @@ public class FoodRatingController {
 			    return sum / ratingList.size();
 		}
 		
+		/**
+		 * Create a food by a json object
+		 * @param newRating
+		 * @return jsonobject that holds the response information
+		 */
 		@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
 		public JSONObject createFoodRatingByJSON(@RequestBody FoodRating newRating) {
@@ -81,6 +116,13 @@ public class FoodRatingController {
 			return response;
 		}
 		
+		/**
+		 * Creates a food rating by just using parameters
+		 * @param user_email
+		 * @param food_id
+		 * @param rating
+		 * @return jsonobject that holds the response object
+		 */
 		@RequestMapping(method = RequestMethod.POST, path = "/create/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
 		public JSONObject createFoodRating(@PathVariable String user_email, @PathVariable int food_id, @PathVariable int rating) {
@@ -106,6 +148,13 @@ public class FoodRatingController {
 			return response;
 		}
 		
+		/**
+		 * Edits a food rating by parameters
+		 * @param user_email
+		 * @param food_id
+		 * @param rating
+		 * @return jsonobject that holds the response
+		 */
 		@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
 		public JSONObject editFoodRating(@PathVariable String user_email, @PathVariable int food_id, @PathVariable int rating) {
@@ -129,6 +178,12 @@ public class FoodRatingController {
 			return response;
 		}
 		
+		/**
+		 * Deletes a food rating by a users email and food id
+		 * @param user_email
+		 * @param food_id
+		 * @return response
+		 */
 		@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 		@ResponseBody
 		public JSONObject deleteFood(@PathVariable String user_email, @PathVariable int food_id) {
@@ -148,6 +203,13 @@ public class FoodRatingController {
 			return response;
 		}
 		
+		/**
+		 * Helper method for generating the response object
+		 * @param status
+		 * @param input
+		 * @param message
+		 * @return jsonobject that is the response
+		 */
 		@SuppressWarnings("unchecked")
 		private JSONObject generateResponse(int status, HttpStatus input, String message) {
 			JSONObject response = new JSONObject();

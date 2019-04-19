@@ -77,14 +77,7 @@ public class FoodService {
 		return toReturn;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public JSONObject generateResponse(int status, HttpStatus input, String message) {
-		JSONObject response = new JSONObject();
-		response.put("status", status);
-		response.put("HttpStatus", input);
-		response.put("message", message);
-		return response;
-	}
+
 	
 	public JSONObject createFood(Food newFood) {
 		JSONObject response;

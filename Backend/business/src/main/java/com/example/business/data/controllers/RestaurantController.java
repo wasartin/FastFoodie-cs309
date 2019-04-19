@@ -28,13 +28,17 @@ public class RestaurantController {
 	@Autowired
 	RestaurantService restService = new RestaurantService();
 	
+	/**
+	 * returns a list of all restaurants
+	 * @return list of restaurants
+	 */
 	@RequestMapping(value ="old/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Restaurant> getAllRestaurantsList(){
 		return restService.getAllRestaurantsList();
 	}
 	
 	/**
-	 * 
+	 * get all restaurants as jsonobjects
 	 * @return JSONObject that has key1-> "Restaurants": value1->JSONArray of restaurants in System
 	 */
 	@RequestMapping(value ="/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

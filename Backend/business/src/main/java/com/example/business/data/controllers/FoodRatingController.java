@@ -23,30 +23,55 @@ public class FoodRatingController {
 		@Autowired
 		FoodRatingRepository foodRatingRepo;
 		
+		/**
+		 * returns a list of all food ratings
+		 * @return List<foodratings>
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/all")
 		@ResponseBody
 		public List<FoodRating> getAll(){
 			return (List<FoodRating>) foodRatingRepo.findAll();
 		}
 		
+		/**
+		 * retrieves a specific food rating with that rating's user email and food id
+		 * @param user_email
+		 * @param food_id
+		 * @return Specific food rating
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/{user_email}/{food_id}")
 		@ResponseBody
 		public FoodRating getSpecific(@PathVariable String user_email, @PathVariable int food_id){
 			return foodRatingRepo.getFoodRatingByUserAndFood(user_email, food_id);
 		}
 		
+		/**
+		 * gets all food ratings for a specific user
+		 * @param user_email
+		 * @return list of all user's food ratings
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "all/user/{user_email}")
 		@ResponseBody
 		public List<FoodRating> getAllForUser(@PathVariable String user_email){
 			return (List<FoodRating>) foodRatingRepo.getFoodRatingsForUser(user_email);
 		}
 		
+		/**
+		 * get all food ratings for a specific food
+		 * @param food_id
+		 * @return list of food ratings
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/all/food/{food_id}")
 		@ResponseBody
 		public List<Integer> getFoodRatingList(@PathVariable int food_id){
 			return foodRatingRepo.findAllRatingsForFood(food_id);
 		}
 		
+		/**
+		 * gets the average food ratings for a food
+		 * @param food_id
+		 * @return food's rating
+		 */
 		@RequestMapping(method = RequestMethod.GET, path = "/average/{food_id}")
 		@ResponseBody
 		public double getFoodRating(@PathVariable int food_id){
@@ -63,6 +88,11 @@ public class FoodRatingController {
 			    return sum / ratingList.size();
 		}
 		
+		/**
+		 * create new food rating
+		 * @param newRating
+		 * @return a json object response
+		 */
 		@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
 		public JSONObject createFoodRatingByJSON(@RequestBody FoodRating newRating) {
@@ -81,6 +111,13 @@ public class FoodRatingController {
 			return response;
 		}
 		
+		/**
+		 * creates a new food rating by email, food id, and rating
+		 * @param user_email
+		 * @param food_id
+		 * @param rating
+		 * @return a json object response
+		 */
 		@RequestMapping(method = RequestMethod.POST, path = "/create/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
 		public JSONObject createFoodRating(@PathVariable String user_email, @PathVariable int food_id, @PathVariable int rating) {
@@ -106,6 +143,13 @@ public class FoodRatingController {
 			return response;
 		}
 		
+		/**
+		 * edits an existing food rating
+		 * @param user_email
+		 * @param food_id
+		 * @param rating
+		 * @return a json object response
+		 */
 		@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 		@ResponseBody
 		public JSONObject editFoodRating(@PathVariable String user_email, @PathVariable int food_id, @PathVariable int rating) {
@@ -129,6 +173,12 @@ public class FoodRatingController {
 			return response;
 		}
 		
+		/**
+		 * deletes an existing food rating
+		 * @param user_email
+		 * @param food_id
+		 * @return a json object response
+		 */
 		@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 		@ResponseBody
 		public JSONObject deleteFood(@PathVariable String user_email, @PathVariable int food_id) {
@@ -148,6 +198,13 @@ public class FoodRatingController {
 			return response;
 		}
 		
+		/**
+		 * helper to generate a json object response
+		 * @param status
+		 * @param input
+		 * @param message
+		 * @return a json object response
+		 */
 		@SuppressWarnings("unchecked")
 		private JSONObject generateResponse(int status, HttpStatus input, String message) {
 			JSONObject response = new JSONObject();

@@ -38,28 +38,31 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	//TODO Be sure to delete this
-	//	This is only here so that the old way of pulling users still works. 
-	//		Once the 'getUserJSONObject' method can be parsed my Front end, 
-	//		this will then be deleted.
+	/**
+	 * get a specific user
+	 * @param user_email
+	 * @return specific user
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "old/{user_email}")
 	@ResponseBody
 	public Optional<User> getUser(@PathVariable String user_email){
 		return userService.getUser(user_email);
 	}
 
-	//TODO change the mapping here, as well as method name. the json one should have '/json/' in the url
-	// 	Once 'getAllUsersJSONObject' method can be correctly parsed by 
-	//		front end, this will be deleted
+	/**
+	 * get all users as optional 
+	 * @param user_email
+	 * @return optional<users>
+	 */
 	@GetMapping("old/all")
 	public Iterable<User> getAllUsers() {
 		return userService.getAllUsers();
 	}
 
 	/**
-	 * TODO: The User's favorites list will be added here as well. It will be the second key in this response=
+	 * returns json object of specific user
 	 * @param user_email
-	 * @return
+	 * @return a json object of the user
 	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -68,7 +71,7 @@ public class UserController {
 	}
 
 	/**
-	 * 
+	 * gets all users as json objects
 	 * @return JSONObject that has key1-> "Users": value1->JSONArray of users in System
 	 */
 	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -79,7 +82,7 @@ public class UserController {
 	/**
 	 * Currently just takes user Object. Might need to be a JSONObject I parse if more info is required.
 	 * @param newUser
-	 * @return
+	 * @return a json object response
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -90,7 +93,7 @@ public class UserController {
 	/**
 	 * Deletes the user given their unique id
 	 * @param user_email
-	 * @return
+	 * @return a json object response
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
@@ -104,7 +107,7 @@ public class UserController {
 	 * PUT is for update
 	 * TODO: When a user wants to change emails, will need to switch over favorites list
 	 * @param userToEdit
-	 * @return
+	 * @return a json object response
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

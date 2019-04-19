@@ -22,22 +22,30 @@ public class FoodController {
 	
 	@Autowired
 	FoodService foodService;
-	
+	/**
+	 * returns an optional for a specified food
+	 * @param food_id
+	 * @return optional<food>
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "old/{food_id}")
 	@ResponseBody
 	public Optional<Food> getFood(@PathVariable int food_id){
 		return foodService.getFood(food_id);
 	}
-
+	
+	/**
+	 * returns iterable for all food objects
+	 * @return iterable<food>
+	 */
 	@GetMapping("old/all")
 	public Iterable<Food> getAllFoodList() {
 		return foodService.getAllFoodList();
 	}
 
 	/**
-	 *
+	 *returns a json object for a specified food
 	 * @param food_id
-	 * @return
+	 * @return json object for specific food
 	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -46,7 +54,7 @@ public class FoodController {
 	}
 	
 	/**
-	 * 
+	 * returns a json object with all foods in the database
 	 * @return JSONObject 
 	 */
 	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,7 +65,7 @@ public class FoodController {
 	/**
 	 * Currently just takes food Object. Might need to be a JSONObject I parse if more info is required.
 	 * @param newFood
-	 * @return
+	 * @return a json object response
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -68,7 +76,7 @@ public class FoodController {
 	/**
 	 * Deletes the food given their unique id
 	 * @param food_id
-	 * @return
+	 * @return a json object response
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
@@ -76,9 +84,9 @@ public class FoodController {
 		return foodService.deleteFood(food_id);
 	}
 	
-	/**
+	/**takes in a food object and edits the specified food to match the object taken in 
 	 * @param food To edit
-	 * @return
+	 * @return a json object response
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

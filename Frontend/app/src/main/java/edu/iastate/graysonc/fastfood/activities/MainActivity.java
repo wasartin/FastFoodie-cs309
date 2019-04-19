@@ -80,6 +80,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         return dispatchingAndroidInjector;
     }
 
+    /**
+     * Sets the fragment to a given fragment,
+     * Opens and closes a new one
+     * @param fragment New Fragment to open
+     */
     private void setFragment(Fragment fragment) {
         fragmentManager.beginTransaction().hide(currentFragment).show(fragment).commit();
         currentFragment = fragment;

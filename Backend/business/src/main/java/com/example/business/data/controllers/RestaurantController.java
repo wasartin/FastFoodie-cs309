@@ -1,5 +1,6 @@
 package com.example.business.data.controllers;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,6 +18,11 @@ import com.example.business.data.entities.Restaurant;
 import com.example.business.data.repositories.RestaurantRepository;
 import com.example.business.data.services.RestaurantService;
 
+/**
+ * 
+ * @author Jon
+ *
+ */
 @RestController
 @RequestMapping(value="restaurants")
 public class RestaurantController {
@@ -25,13 +31,22 @@ public class RestaurantController {
 	RestaurantRepository restaurantRepo;
 	
 	@Autowired
-	RestaurantService restService;
+	RestaurantService restService = new RestaurantService();
 	
 	/**
-	 * 
-	 * @return JSONObject that has key1-> "Restaurants": value1->JSONArray of restaurants in System
+	 * returns a list of all restaurants
+	 * @return list of restaurants
 	 */
 	@RequestMapping(value ="/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Restaurant> getAllRestaurantsList(){
+		return restService.getAllRestaurantsList();
+	}
+	
+	/**
+	 * get all restaurants as jsonobjects
+	 * @return JSONObject that has key1-> "Restaurants": value1->JSONArray of restaurants in System
+	 */
+	@RequestMapping(value ="json/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JSONObject getAllRestaurantsJSONObject()  {
 		return restService.getAllRestaurantsJSONObject();
 	}
@@ -41,7 +56,7 @@ public class RestaurantController {
 	 * @param restaurant_id id of desired restaurant
 	 * @return JSON Object of desired restaurant
 	 */
-	@RequestMapping(method = RequestMethod.GET, path = "/{restaurant_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, path = "json/{restaurant_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public JSONObject getRestaurantJSONObject(@PathVariable int restaurant_id) {
 		return restService.getRestaurantJSONObject(restaurant_id);
@@ -52,14 +67,12 @@ public class RestaurantController {
 	 * @param restaurant_id
 	 * @return restaurant object of stated id. (Not JSON Object)
 	 */
-	@RequestMapping(method = RequestMethod.GET, path = "old/{restaurant_id}")
+	@RequestMapping(method = RequestMethod.GET, path = "/{restaurant_id}")
 	@ResponseBody
-	public Optional<Restaurant> getRestaurant_OLD(@PathVariable int restaurant_id){
-		return restService.getRestaurant_OLD(restaurant_id);
+	public Optional<Restaurant> getRestaurant(@PathVariable int restaurant_id){
+		return restService.getRestaurant(restaurant_id);
 	}
 
-
-	
 	/**
 	 * adds a new restaurant to the database if said restaurant doesn't already exist
 	 * @param newRestaurant
@@ -67,7 +80,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
+	public Map<String, Object> createRestaurant(@RequestBody Restaurant newRestaurant){
 		return restService.createRestaurant(newRestaurant);
 	}
 	
@@ -78,7 +91,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
+	public Map<String,Object> deleteRestaurant(@PathVariable int restaurant_id) {
 		return restService.deleteRestaurant(restaurant_id);
 	}
 	
@@ -90,7 +103,7 @@ public class RestaurantController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	private Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
+	public Map<String,Object> editRestaurant(@RequestBody Restaurant updatedRestaurant, @PathVariable int restaurant_id) {
 		return restService.editRestaurant(updatedRestaurant, restaurant_id);
 	}
 }

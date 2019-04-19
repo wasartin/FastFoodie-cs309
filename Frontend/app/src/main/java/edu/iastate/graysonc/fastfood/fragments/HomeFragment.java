@@ -67,6 +67,9 @@ public class HomeFragment extends Fragment {
     private Animation fINAnim, fOUTAnim;
     private Spinner mSpinner1, mSpinner2;
 
+    /**
+     * An enumerator to represent all the possible macros we track
+     */
     enum macrosENUM {
         FAT("Fat"), CARBS("Carbs"), PROTEIN("Protein"), SUGAR("Sugar");
 
@@ -113,7 +116,6 @@ public class HomeFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                updateFaves();
                 buildList(query);
                 buildView();
                 return false;
@@ -144,15 +146,12 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
-
-    @Override
-    public void onDestroy() {
-        //Logs foods to remove
-        //TODO Remove this food from Favorites
-        super.onDestroy();
-        updateFaves();
-    }
-
+    /**
+     * Builds an array list of objects
+     * Object type is determined via macros and other selected menu items
+     * Access Repository
+     * @param query a search term
+     */
     private void buildList(String query) {
         RadioGroup mSortBy = getView().findViewById(R.id.searchByRadioGroup);
         String url = "";
@@ -198,7 +197,9 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * Creates a recycler view in as many lines as possible
+     * Creates a recycler view and assigns values to it
+     * handles on click handlers
+     * sets adaptors etc
      */
     private void buildView() {
         mainList = Objects.requireNonNull(getView()).findViewById(R.id.HomeRecyclerView);
@@ -248,12 +249,6 @@ public class HomeFragment extends Fragment {
         return removed;
     }
 
-    public void updateFaves() {
-        //TODO Add this food from Favorites
-        Log.v("AddToFavoritesDebug", checkList().toString());
-        Context context = getContext();
-        Toast.makeText(context, "Added " + checkList().toString(), Toast.LENGTH_LONG).show();
-    }
 
     /**
      * @param open Should we expand the menu?
@@ -301,6 +296,12 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * Returns macro information of a given food object
+     * @param card the object to handle food
+     * @param type Macro to return
+     * @return
+     */
     private int getMacro(recycler_card card, macrosENUM type) {
         Log.v("GetMacroLog", "Sorting by macro");
         switch (type) {

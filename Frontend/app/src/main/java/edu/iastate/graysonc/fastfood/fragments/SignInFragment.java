@@ -38,6 +38,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
+    /**
+     * Creates a view model for this method
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
@@ -45,6 +48,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
+
+
+    /**
+     * Creates an activity with all the needed handlers and variables
+     */
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -80,6 +88,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * Handles a user signing in, assigns appropriate values to the repository
+     * @param completedTask Package with all needed information
+     */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             account = completedTask.getResult(ApiException.class);
@@ -94,11 +106,19 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             // TODO: Display error message or ask user to re-attempt a login, maybe
         }
     }
+
+    /**
+     * Creates a new intent with google sign on
+     */
     private void signIn() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    /**
+     * Creates a new main activity with a set account, essentially restarting the app
+     * @param account a newly signed in user
+     */
     private void startMainActivity(GoogleSignInAccount account) {
         Intent startIntent = new Intent(getContext(), MainActivity.class);
         if (account != null) {

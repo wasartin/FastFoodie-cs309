@@ -37,8 +37,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     ViewModelProvider.Factory viewModelFactory;
     private HomeViewModel mViewModel;
 
-    private RecyclerView mRecyclerView;
-    private FoodListAdapter mAdapter;
+    private RecyclerView mRecyclerView1, mRecyclerView2;
+    private FoodListAdapter mAdapter1, mAdapter2;
     private RecyclerView.LayoutManager mLayoutManager;
 
     private View searchBar;
@@ -65,7 +65,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             mViewModel.getFoods().observe(this, f -> {
                 if (f != null) {
                     buildRecyclerView();
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter1.notifyDataSetChanged();
+                    mAdapter2.notifyDataSetChanged();
                 }
             });
         }
@@ -99,17 +100,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     public void buildRecyclerView() {
-        mRecyclerView = getView().findViewById(R.id.recyclerView1);
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView1 = getView().findViewById(R.id.recyclerView1);
+        mRecyclerView1.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(App.context);
-        mAdapter = new FoodListAdapter(mViewModel.getFoods().getValue());
+        mAdapter1 = new FoodListAdapter(mViewModel.getFoods().getValue());
+        ((SimpleItemAnimator) mRecyclerView1.getItemAnimator()).setSupportsChangeAnimations(false);
+        mRecyclerView1.setLayoutManager(mLayoutManager);
+        mRecyclerView1.setAdapter(mAdapter1);
 
-        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        mRecyclerView2 = getView().findViewById(R.id.recyclerView2);
+        mRecyclerView2.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(App.context);
+        mAdapter2 = new FoodListAdapter(mViewModel.getFoods().getValue());
+        ((SimpleItemAnimator) mRecyclerView2.getItemAnimator()).setSupportsChangeAnimations(false);
+        mRecyclerView2.setLayoutManager(mLayoutManager);
+        mRecyclerView2.setAdapter(mAdapter2);
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(new FoodListAdapter.OnItemClickListener() {
+        mAdapter1.setOnItemClickListener(new FoodListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Log.d(TAG, "onItemClick: " + mViewModel.getFoods().getValue().get(position).getName());
+            }
+        });
+
+        mAdapter2.setOnItemClickListener(new FoodListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Log.d(TAG, "onItemClick: " + mViewModel.getFoods().getValue().get(position).getName());

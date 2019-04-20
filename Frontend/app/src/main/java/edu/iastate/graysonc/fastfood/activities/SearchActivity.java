@@ -1,15 +1,18 @@
 package edu.iastate.graysonc.fastfood.activities;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.View;
-import android.widget.EditText;
 
 import edu.iastate.graysonc.fastfood.R;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
     private View cancelButton;
-    private EditText searchInput;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +22,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         cancelButton = findViewById(R.id.search_cancel);
         cancelButton.setOnClickListener(this);
 
-        searchInput = findViewById(R.id.search_input);
-        searchInput.requestFocus();
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = findViewById(R.id.search_input);
+        ComponentName componentName = new ComponentName(this, MainActivity.class);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
+        searchView.requestFocus();
+
     }
 
     @Override
@@ -31,5 +39,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 this.finish();
                 break;
         }
+    }
+
+    private void submitSearch() {
+        onSearchRequested();
     }
 }

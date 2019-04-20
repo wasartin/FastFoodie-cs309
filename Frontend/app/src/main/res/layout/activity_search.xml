@@ -22,16 +22,12 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_close_black_24dp" />
 
-        <AutoCompleteTextView
+        <android.support.v7.widget.SearchView
             android:id="@+id/search_input"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:completionHint="@string/search_hint"
-            android:imeOptions="actionSearch"
-            android:singleLine="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:iconifiedByDefault="false"
+            app:iconifiedByDefault="false" />
     </LinearLayout>
 
     <ScrollView

@@ -16,7 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.SearchActivity"></activity>
+
+        <provider android:name=".RecentSearchProvider"
+            android:authorities="edu.iastate.graysonc.fastfood.RecentSearchProvider" />
+
+
+        <activity android:name=".activities.SearchActivity">
+
+        </activity>
+
         <activity android:name=".activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,20 +32,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activities.MainActivity">
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value=".SearchableActivity" />
-        </activity>
-        <activity android:name=".activities.SearchableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
+
+
+        <activity android:name=".activities.SearchableActivity"></activity>
         <activity
             android:name=".PopUps.submitPopUp"
             android:theme="@style/AppTheme.CustomThemeTrans" />

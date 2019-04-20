@@ -1,32 +1,33 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
 
+import android.app.SearchManager;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
+import edu.iastate.graysonc.fastfood.RecentSearchProvider;
 import edu.iastate.graysonc.fastfood.activities.SearchActivity;
-import edu.iastate.graysonc.fastfood.recyclerClasses.FavoritesListAdapter;
 import edu.iastate.graysonc.fastfood.recyclerClasses.FoodListAdapter;
-import edu.iastate.graysonc.fastfood.view_models.FavoritesViewModel;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -48,6 +49,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Options menu
+        setHasOptionsMenu(true);
+
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -72,8 +76,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         searchBar = getView().findViewById(R.id.search_bar);
         searchBar.setOnClickListener(this);
-
-
     }
 
     @Override
@@ -82,10 +84,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (requestCode == 0) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
+                // Save query for future search suggestions
+                String query = data.getStringExtra(SearchManager.QUERY);
+                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getActivity(),
+                            RecentSearchProvider.AUTHORITY, RecentSearchProvider.MODE);
+                suggestions.saveRecentQuery(query, null);
 
-                // Do something with the contact here (bigger example below)
             }
         }
     }
@@ -94,7 +98,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.search_bar:
-                startActivityForResult(new Intent(getActivity(), SearchActivity.class), 0);
+                startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
         }
     }
@@ -131,4 +135,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
 }

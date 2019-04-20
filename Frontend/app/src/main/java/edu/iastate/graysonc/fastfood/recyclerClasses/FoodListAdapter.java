@@ -1,12 +1,10 @@
 package edu.iastate.graysonc.fastfood.recyclerClasses;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,63 +14,75 @@ import edu.iastate.graysonc.fastfood.database.entities.Food;
 
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodViewHolder> {
 
-    public class FoodViewHolder extends RecyclerView.ViewHolder {
-        private Food food;
-        private final TextView nameTextView;
-        private final TextView restaurantTextView;
-        private final CheckBox favoriteButton;
+    private List<Food> mFavoritesList;
+    private FoodListAdapter.OnItemClickListener mListener;
 
-        private FoodViewHolder(View itemView) {
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(FoodListAdapter.OnItemClickListener listener) {
+        mListener = listener;
+    }
+
+    public static class FoodViewHolder extends RecyclerView.ViewHolder {
+        public TextView mNameTextView;
+        public ImageView mRestaurantLogo;
+
+        public FoodViewHolder(View itemView, final FoodListAdapter.OnItemClickListener listener) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.name_text);
-            restaurantTextView = itemView.findViewById(R.id.restaurant_text);
-            favoriteButton = itemView.findViewById(R.id.favorite_button);
-        }
+            mNameTextView = itemView.findViewById(R.id.food_name);
+            mRestaurantLogo = itemView.findViewById(R.id.restaurant_logo);
 
-        public Food getFood() {
-            return food;
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            // Do shit
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
-    private final LayoutInflater mInflater;
-    private List<Food> mFoods; // Cached copy of foods
-
-    public FoodListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    public FoodListAdapter(List<Food> favoriteList) {
+        mFavoritesList = favoriteList;
+    }
 
     @Override
-    public FoodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.recycler_card, parent, false);
-        return new FoodViewHolder(itemView);
+    public FoodListAdapter.FoodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_food, parent, false);
+        FoodListAdapter.FoodViewHolder evh = new FoodListAdapter.FoodViewHolder(v, mListener);
+        return evh;
     }
 
     @Override
-    public void onBindViewHolder(FoodViewHolder holder, int position) {
-        if (mFoods != null) {
-            Food current = mFoods.get(position);
-            holder.food = current;
-            holder.nameTextView.setText(current.getName());
-            holder.restaurantTextView.setText("" + current.getLocation());
-            holder.favoriteButton.setChecked(true); // TODO: make this check to see if an item is actually a favorite
-        } else {
-            // Covers the case of data not being ready yet.
-            holder.nameTextView.setText("Loading...");
-            holder.restaurantTextView.setText("Loading...");
+    public void onBindViewHolder(FoodListAdapter.FoodViewHolder holder, int position) {
+        Food currentItem = mFavoritesList.get(position);
+        holder.mNameTextView.setText(currentItem.getName());
+        switch (currentItem.getLocation()) {
+            case 0:
+                holder.mRestaurantLogo.setImageResource(R.drawable.mcdonalds);
+                break;
+            case 1:
+                holder.mRestaurantLogo.setImageResource(R.drawable.chickfila);
+                break;
+            case 2:
+                holder.mRestaurantLogo.setImageResource(R.drawable.subway);
+                break;
+            default:
+                // Maybe display "Image not found" image
+                break;
         }
     }
 
-    public void setFoods(List<Food> foods) {
-        mFoods = foods;
-        notifyDataSetChanged();
-    }
-
-    // getItemCount() is called many times, and when it is first called,
-    // mFoods has not been updated (means initially, it's null, and we can't return null).
     @Override
     public int getItemCount() {
-        if (mFoods != null) {
-            return mFoods.size();
-        } else {
-            return 0;
-        }
+        return mFavoritesList.size();
     }
 }

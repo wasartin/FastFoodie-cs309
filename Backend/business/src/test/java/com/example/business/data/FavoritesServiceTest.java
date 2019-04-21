@@ -148,7 +148,6 @@ public class FavoritesServiceTest {
 		when(repo.findById(toDelete.getFavorites_id())).thenReturn(Optional.of(toDelete));
 
 		ResponseEntity<?> response = favService.deleteEntityById(toDelete.getFavorites_id());
-		System.out.println(response.toString());
 		verify(repo, times(1)).deleteById(toDelete.getFavorites_id());
 		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);

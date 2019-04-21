@@ -1,6 +1,7 @@
 package com.example.business.data.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,7 +17,7 @@ import com.example.business.data.entities.FoodRating;
 import com.example.business.data.services.FoodRatingsService;
 
 /**
- * 
+ * Rest API controller class for Food Ratings that receives HTTP requests from the client.
  * @author Will and Jon
  *
  */
@@ -26,6 +27,16 @@ public class FoodRatingController {
 
 	@Autowired
 	FoodRatingsService foodRatingService;
+	
+	/**
+	 * Uses Repo class to return a rating in the DB
+	 * @return aFood Rating
+	 */
+	@RequestMapping(method = RequestMethod.GET, path = "/{rating_id}")
+	@ResponseBody
+	public Optional<FoodRating> getSpecific(@PathVariable int rating_id){
+		return foodRatingService.getEntityByID(rating_id);
+	}
 	
 	/**
 	 * Uses Repo class to return all ratings for the foods in the DB
@@ -148,4 +159,5 @@ public class FoodRatingController {
 		FoodRating toDelete = foodRatingService.getRatingForUserAndFood(user_email, food_id);
 		return foodRatingService.deleteEntityById(toDelete.getRating_id());
 	}
+	
 }

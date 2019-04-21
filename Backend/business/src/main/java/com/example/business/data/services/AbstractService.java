@@ -11,8 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
- * 
- * @author watis
+ * The bulk of the backend business logic. All of the service classes do the some functions,
+ * this abstract class cuts down on the repetitive functions by using generics.
+ * @author Will
  *
  * @param <E> The DAO
  * @param <K> The type of id this DAO uses.
@@ -23,6 +24,9 @@ public abstract class AbstractService<E, K> {
 	@Autowired
 	private CrudRepository<E, K> repo;
 	
+	/**
+	 * Used by response entities to specific the header.
+	 */
 	private HttpHeaders headers = new HttpHeaders();
 
 	/**
@@ -33,7 +37,7 @@ public abstract class AbstractService<E, K> {
 	}
 	
 	/**
-	 * 
+	 * Gets a specific entity by id in the DB
 	 * @param id
 	 * @return
 	 */
@@ -42,7 +46,7 @@ public abstract class AbstractService<E, K> {
 	}
 	
 	/**
-	 * 
+	 * Finds all Entities of this kind in the repo
 	 * @return a list of all entities in DB
 	 */
 	public Iterable<E> getAllEntities(){
@@ -50,7 +54,7 @@ public abstract class AbstractService<E, K> {
 	}
 	
 	/**
-	 * 
+	 * Creates an Entity with the entity itself and the id of the entity.
 	 * @param newEntity
 	 * @param id
 	 * @return
@@ -72,7 +76,7 @@ public abstract class AbstractService<E, K> {
 	}
 	
 	/**
-	 * 
+	 * Delets an Entity in the DB by it's id
 	 * @param id
 	 * @return
 	 */

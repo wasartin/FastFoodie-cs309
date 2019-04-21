@@ -3,10 +3,12 @@ package com.example.business.data.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.business.data.entities.FoodRating;
 import com.example.business.data.repositories.FoodRatingRepository;
 
+@Service
 public class FoodRatingsService extends AbstractService<FoodRating, Integer>{
 	@Autowired
 	FoodRatingRepository repo;

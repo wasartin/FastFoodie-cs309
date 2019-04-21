@@ -111,7 +111,6 @@ public class ApiController {
 		return uList;
 	}
 	
-	
 	/**
 	 *gets a specific food's json object by its id
 	 * @param food_id

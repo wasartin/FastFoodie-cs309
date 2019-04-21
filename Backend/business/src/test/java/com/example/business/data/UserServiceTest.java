@@ -2,6 +2,7 @@ package com.example.business.data;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.never;
@@ -86,6 +87,8 @@ public class UserServiceTest {
 		when(repo.save(toAdd)).thenReturn(new User());
 
 		ResponseEntity<?> response = userService.createEntity(toAdd, toAdd.getUser_email());
+		
+		verify(repo, times(1)).save(toAdd);
 		assertThat(repo.save(toAdd), is(notNullValue()));
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
@@ -97,9 +100,10 @@ public class UserServiceTest {
 		User alreadyInDB = new User("TomDodge@gmail.com", "registered");
 		
 		when(repo.existsById("TomDodge@gmail.com")).thenReturn(true);
-		when(repo.save(alreadyInDB)).thenReturn(new User());
 
 		ResponseEntity<?> response = userService.createEntity(alreadyInDB, alreadyInDB.getUser_email());
+		
+		verify(repo, never()).save(alreadyInDB);
 		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
 		assertEquals(response.getBody(), alreadyInDB.getClass().getSimpleName());
@@ -112,7 +116,7 @@ public class UserServiceTest {
 		when(repo.existsById(toDelete.getUser_email())).thenReturn(true);
 		when(repo.findById(toDelete.getUser_email())).thenReturn(Optional.of(toDelete));
 
-		ResponseEntity<?> response = userService.deleteEntity(toDelete.getUser_email());
+		ResponseEntity<?> response = userService.deleteEntityById(toDelete.getUser_email());
 		verify(repo, times(1)).deleteById(toDelete.getUser_email());
 		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
@@ -124,7 +128,7 @@ public class UserServiceTest {
 	public void deleteUserTest_Fail() {
 		when(repo.existsById("thisGuy@Gmail.com")).thenReturn(true);
 
-		ResponseEntity<?> response = userService.deleteEntity("thisGuy@gmail.com");
+		ResponseEntity<?> response = userService.deleteEntityById("thisGuy@gmail.com");
 		verify(repo, never()).deleteById("thisGuy@gmail.com");
 
 		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
@@ -135,7 +139,7 @@ public class UserServiceTest {
 	public void deleteUserTest_Exception() {
 		when(repo.existsById("thisGuy@Gmail.com")).thenThrow(IllegalArgumentException.class);
 
-		ResponseEntity<?> response = userService.deleteEntity("thisGuy@gmail.com");
+		ResponseEntity<?> response = userService.deleteEntityById("thisGuy@gmail.com");
 		verify(repo, never()).deleteById("thisGuy@gmail.com");
 
 		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
@@ -161,13 +165,12 @@ public class UserServiceTest {
 	@Test
 	public void editUserTest_Fail() {
 		User userNotInDB = new User("TomDodge@gmail.com", "admin");
-		
-		when(repo.save(userNotInDB)).thenReturn(new User());
+	
 		when(repo.existsById(userNotInDB.getUser_email())).thenReturn(false);
 
 		ResponseEntity<?> response = userService.editEntity(userNotInDB, userNotInDB.getUser_email());
 
-		assertThat(repo.save(userNotInDB), is(notNullValue()));
+		verify(repo, never()).save(userNotInDB);
 		
 		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);

@@ -89,7 +89,7 @@ public class RestaurantServiceTest {
 		when(restRepo.existsById(1)).thenReturn(true);
 		when(restRepo.findById(1)).thenReturn(Optional.of(toDelete));
 
-		ResponseEntity<?> response = restService.deleteEntity(1);
+		ResponseEntity<?> response = restService.deleteEntityById(1);
 		
 		verify(restRepo, times(1)).deleteById(1);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);

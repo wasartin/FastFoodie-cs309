@@ -76,7 +76,7 @@ public abstract class AbstractService<E, K> {
 	 * @param id
 	 * @return
 	 */
-	public ResponseEntity<?> deleteEntity(K id){
+	public ResponseEntity<?> deleteEntityById(K id){
 		HttpStatus resultingStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		String className = "";
 		try {

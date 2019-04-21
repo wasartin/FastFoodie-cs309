@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.business.data.entities.User;
-import com.example.business.data.repositories.UserRepository;
 import com.example.business.data.services.UserService;
 
 /**
@@ -24,10 +23,6 @@ import com.example.business.data.services.UserService;
 @RestController
 @RequestMapping(value="/users")
 public class UserController {
-
-	@Autowired
-	UserRepository userRepository;
-	
 	@Autowired
 	UserService userService;
 	
@@ -71,7 +66,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
 	public ResponseEntity<?>  deleteUser(@PathVariable String user_email) {
-		return userService.deleteEntity(user_email);
+		return userService.deleteEntityById(user_email);
 	}
 	
 	/**

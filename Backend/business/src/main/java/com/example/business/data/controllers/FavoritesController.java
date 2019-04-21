@@ -1,11 +1,11 @@
 package com.example.business.data.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +19,7 @@ import com.example.business.data.services.FavoritesService;
 
 /**
  * 
- * @author Jon
+ * @author Jon & Will(For that sweet refactor)
  *
  */
 @RestController
@@ -37,7 +37,7 @@ public class FavoritesController {
 	@RequestMapping(method = RequestMethod.GET, path = "/{fav_id}")
 	@ResponseBody
 	public Optional<Favorites> getfavorite(@PathVariable int fav_id){
-		return favoritesService.getfavorite(fav_id);
+		return favoritesService.getEntityByID(fav_id);
 	}
 
 	/**
@@ -46,27 +46,7 @@ public class FavoritesController {
 	 */
 	@GetMapping("/all")
 	public Iterable<Favorites> getAllfavoritesList() {
-		return favoritesService.getAllfavorite();
-	}
-
-	/**
-	 * Returns a favorite JSON object for the specified favorites_id
-	 * @param favorite_id
-	 * @return JSONObject for favorite
-	 */
-	@RequestMapping(method = RequestMethod.GET, path = "json/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public JSONObject getfavoriteJSONObject(@PathVariable int favorites_id) {
-		return favoritesService.getfavoriteJSONObject(favorites_id);
-	}
-
-	/**
-	 * Returns all favorites in the format of a JSONObject with values ({a description}, {JSON array of favorites})
-	 * @return JSONObject 
-	 */
-	@RequestMapping(value = "json/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JSONObject getAllFavoritesJSONObject()  {
-		return favoritesService.getAllFavoritesJSONObject();
+		return favoritesService.getAllEntities();
 	}
 	
 	/**
@@ -75,8 +55,8 @@ public class FavoritesController {
 	 * @return
 	 */
 	@RequestMapping(value = "/user/{user_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JSONArray getAllFavorites(@PathVariable String user_id) {
-		return favoritesService.getAllFavorites(user_id);
+	public List<Favorites> getAllFavorites(@PathVariable String user_id) {
+		return favoritesService.getAllFavoritesForUser(user_id);
 	}
 	
 	/**
@@ -86,8 +66,8 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public JSONObject createFavorite(@RequestBody Favorites newfavorite) {
-		return favoritesService.createFavorite(newfavorite);
+	public ResponseEntity<?> createFavorite(@RequestBody Favorites newfavorite) {
+		return favoritesService.createEntity(newfavorite, newfavorite.getFavorites_id());
 	}
 	
 	/**
@@ -97,8 +77,11 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create/{user_id}/{fid}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public JSONObject createFavoriteForUser(@PathVariable String user_id, @PathVariable int fid) {
-		return favoritesService.createFavoriteForUser(user_id, fid);
+	public ResponseEntity<?> createFavoriteForUser(@PathVariable String user_id, @PathVariable int fid) {
+		Favorites toAdd = new Favorites();
+		toAdd.setFid(fid);
+		toAdd.setUser_id(user_id);
+		return favoritesService.createEntity(toAdd, toAdd.getFavorites_id());
 	}
 	
 	/**
@@ -108,8 +91,8 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	public JSONObject deleteFavorite(@PathVariable int favorites_id) {
-		return favoritesService.deleteFavorite(favorites_id);
+	public ResponseEntity<?>  deleteFavorite(@PathVariable int favorites_id) {
+		return favoritesService.deleteEntityById(favorites_id);
 	}
 	
 	/**
@@ -119,8 +102,9 @@ public class FavoritesController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_id}/{fid}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	public JSONObject deleteFavoriteByUser(@PathVariable String user_id, @PathVariable int fid) {
-		return favoritesService.deleteFavoriteByUser(user_id, fid);
+	public ResponseEntity<?> deleteFavoriteByUser(@PathVariable String user_id, @PathVariable int fid) {
+		Favorites toDelete = favoritesService.getFavoriteByUserAndFood(user_id, fid);
+		return favoritesService.deleteEntityById(toDelete.getFavorites_id());
 	}
 
 }

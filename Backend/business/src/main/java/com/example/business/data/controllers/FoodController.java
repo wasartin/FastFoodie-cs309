@@ -67,7 +67,7 @@ public class FoodController {
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
 	public ResponseEntity<?> deleteFood(@PathVariable int food_id) {
-		return foodService.deleteEntity(food_id);
+		return foodService.deleteEntityById(food_id);
 	}
 	
 	/**takes in a food object and edits the specified food to match the object taken in 

@@ -62,6 +62,8 @@ public class FoodServiceTest {
 		when(repo.save(toAdd)).thenReturn(new Food());
 		
 		ResponseEntity<?> response = foodService.createEntity(toAdd, toAdd.getFood_id());
+		
+		verify(repo, times(1)).save(toAdd);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
 		assertEquals(response.getBody(), toAdd.getClass().getSimpleName());
@@ -71,9 +73,9 @@ public class FoodServiceTest {
 	public void createFoodTest_Fail() {
 		Food toAdd = new Food(100, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
 		when(repo.existsById(toAdd.getFood_id())).thenReturn(true);
-		when(repo.save(toAdd)).thenReturn(null);
 		
 		ResponseEntity<?> response = foodService.createEntity(toAdd, toAdd.getFood_id());
+		verify(repo, never()).save(toAdd);
 		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
 		assertEquals(response.getBody(), toAdd.getClass().getSimpleName());
@@ -88,6 +90,8 @@ public class FoodServiceTest {
 		when(repo.save(toEdit)).thenReturn(new Food());
 		
 		ResponseEntity<?> response = foodService.editEntity(toEdit, 50);
+		
+		verify(repo, times(1)).save(toEdit);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
 		assertEquals(response.getBody(), toEdit.getClass().getSimpleName());
@@ -97,9 +101,10 @@ public class FoodServiceTest {
 	public void editFoodTest_Fail() {
 		Food toAdd = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
 		when(repo.existsById(toAdd.getFood_id())).thenReturn(false);
-		when(repo.save(toAdd)).thenReturn(new Food());
 		
 		ResponseEntity<?> response = foodService.editEntity(toAdd, 50);
+		
+		verify(repo, never()).save(toAdd);
 		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
 		assertEquals(response.getBody(), toAdd.getClass().getSimpleName());
@@ -111,7 +116,7 @@ public class FoodServiceTest {
 		when(repo.existsById(50)).thenReturn(true);
 		when(repo.findById(50)).thenReturn(Optional.of(toDelete));
 
-		ResponseEntity<?> response = foodService.deleteEntity(50);
+		ResponseEntity<?> response = foodService.deleteEntityById(50);
 		verify(repo, times(1)).deleteById(50);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
@@ -122,7 +127,7 @@ public class FoodServiceTest {
 	public void deleteFoodTest_Fail() {
 		when(repo.existsById(50)).thenReturn(false);
 
-		ResponseEntity<?> response = foodService.deleteEntity(50);
+		ResponseEntity<?> response = foodService.deleteEntityById(50);
 		verify(repo, never()).deleteById(50);
 		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);

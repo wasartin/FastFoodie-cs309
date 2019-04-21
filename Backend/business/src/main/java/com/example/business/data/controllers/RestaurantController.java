@@ -70,7 +70,7 @@ public class RestaurantController {
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{restaurant_id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> deleteRestaurant(@PathVariable int restaurant_id) {
-		return restService.deleteEntity(restaurant_id);
+		return restService.deleteEntityById(restaurant_id);
 	}
 	
 	/**

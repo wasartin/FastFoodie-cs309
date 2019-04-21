@@ -1,6 +1,5 @@
 package edu.iastate.graysonc.fastfood.recyclerClasses;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
 

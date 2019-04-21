@@ -1,21 +1,19 @@
 package edu.iastate.graysonc.fastfood.repositories;
 
-import android.arch.lifecycle.LiveData;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import androidx.lifecycle.LiveData;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.api.Webservice;
-import edu.iastate.graysonc.fastfood.database.dao.FavoriteDao;
 import edu.iastate.graysonc.fastfood.database.dao.FoodDao;
 import edu.iastate.graysonc.fastfood.database.dao.UserDao;
 import edu.iastate.graysonc.fastfood.database.entities.Favorite;

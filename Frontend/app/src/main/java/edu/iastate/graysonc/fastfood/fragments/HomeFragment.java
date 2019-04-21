@@ -2,17 +2,9 @@ package edu.iastate.graysonc.fastfood.fragments;
 
 
 import android.app.SearchManager;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +14,14 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
@@ -31,7 +31,7 @@ import edu.iastate.graysonc.fastfood.recyclerClasses.FoodListAdapter;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
 
 import static android.app.Activity.RESULT_OK;
-import static android.support.constraint.Constraints.TAG;
+import static com.android.volley.VolleyLog.TAG;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     @Inject

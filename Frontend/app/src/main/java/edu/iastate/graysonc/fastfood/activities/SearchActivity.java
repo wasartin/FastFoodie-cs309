@@ -3,11 +3,11 @@ package edu.iastate.graysonc.fastfood.activities;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import edu.iastate.graysonc.fastfood.R;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {

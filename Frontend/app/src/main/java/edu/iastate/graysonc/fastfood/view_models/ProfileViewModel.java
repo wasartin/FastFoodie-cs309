@@ -1,10 +1,9 @@
 package edu.iastate.graysonc.fastfood.view_models;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
-
 import javax.inject.Inject;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import edu.iastate.graysonc.fastfood.repositories.Repository;
 import edu.iastate.graysonc.fastfood.database.entities.User;
 

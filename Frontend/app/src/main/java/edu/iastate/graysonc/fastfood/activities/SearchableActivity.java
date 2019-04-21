@@ -1,7 +1,6 @@
 package edu.iastate.graysonc.fastfood.activities;
 
 import android.app.ListActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import edu.iastate.graysonc.fastfood.R;

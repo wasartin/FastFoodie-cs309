@@ -10,16 +10,20 @@ import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
 import edu.iastate.graysonc.fastfood.repositories.Repository;
 
-public class HomeViewModel extends ViewModel {
+public class SearchResultsViewModel extends ViewModel {
     private Repository repo;
     private LiveData<List<Food>> foods;
 
     @Inject
-    public HomeViewModel(Repository repo) {
+    public SearchResultsViewModel(Repository repo) {
         this.repo = repo;
     }
 
-    public void init() { // This just displays my favorites right now. I need to make this fetch foods based on other criteria.
+    /**
+     * Performs a query and initializes this ViewModel with the results
+     * @param query - The query to be executed
+     */
+    public void init(String query) {
         foods = repo.getFavoriteFoodsForUser(App.account.getEmail());
     }
 

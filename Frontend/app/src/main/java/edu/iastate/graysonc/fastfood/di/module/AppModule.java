@@ -1,7 +1,6 @@
 package edu.iastate.graysonc.fastfood.di.module;
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,11 +10,11 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
 
+import androidx.room.Room;
 import dagger.Module;
 import dagger.Provides;
 import edu.iastate.graysonc.fastfood.api.Webservice;
 import edu.iastate.graysonc.fastfood.database.MyDatabase;
-import edu.iastate.graysonc.fastfood.database.dao.FavoriteDao;
 import edu.iastate.graysonc.fastfood.database.dao.FoodDao;
 import edu.iastate.graysonc.fastfood.database.dao.UserDao;
 import edu.iastate.graysonc.fastfood.repositories.Repository;

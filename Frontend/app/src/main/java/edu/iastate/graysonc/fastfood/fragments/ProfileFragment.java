@@ -1,38 +1,31 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.DownloadImageTask;
@@ -41,18 +34,13 @@ import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.database.entities.User;
 import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
 
-import static android.support.constraint.Constraints.TAG;
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private ProfileViewModel viewModel;
 
-    private ConstraintLayout mMasterLayout;
+    private View mMasterLayout;
 
     private ImageView avatarImageView;
     private TextView nameTextView;

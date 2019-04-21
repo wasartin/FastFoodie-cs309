@@ -35,7 +35,7 @@ public class ApiController {
 	FavoritesRepository favoritesRepository;
 	
 	/**
-	 *returns a json object for the user id of a specific favorites
+	 * returns a json object for the user id of a specific favorites
 	 * @param favorite_id
 	 * @return a json object response
 	 */

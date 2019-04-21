@@ -64,58 +64,23 @@ public class FoodRatingServiceTest {
 	}
 	
 	@Test
-	public void getByUserAndFoodIdTest_Fail() {
-		
-	}
-	
-	@Test
 	public void getAllForUser() {
+		List<FoodRating> frList = new ArrayList<FoodRating>();
+		when(repo.getFoodRatingsForUser("Shawn")).thenReturn(frList);
 		
-	}
-	
-	@Test
-	public void getAllForUser_Fail() {
-		
+		frServ.getAllRatingsByUser("Shawn");
+		verify(repo, times(1)).getFoodRatingsForUser("Shawn");
+		assertThat(repo.getFoodRatingsForUser("Shawn"), is(notNullValue()));
 	}
 	
 	@Test
 	public void getAllForFood() {
+		List<Integer> frList = new ArrayList<Integer>();
+		when(repo.findAllRatingsForFood(10)).thenReturn(frList);
 		
-	}
-	
-	@Test
-	public void getAllForFood_Fail() {
-		
-	}
-	
-	@Test
-	public void createRating() {
-		
-	}
-	
-	@Test
-	public void createRating_Fail() {
-		
-	}
-	
-	@Test
-	public void editRating() {
-		
-	}
-	
-	@Test
-	public void editRating_Fail() {
-		
-	}
-	
-	@Test
-	public void deleteRating() {
-		
-	}
-	
-	@Test
-	public void deleteRating_Fail() {
-		
+		frServ.findAllRatingsForFood(10);
+		verify(repo, times(1)).findAllRatingsForFood(10);
+		assertThat(repo.findAllRatingsForFood(10), is(notNullValue()));
 	}
 	
 }

@@ -27,7 +27,7 @@ import com.example.business.data.repositories.UserRepository;
 import com.example.business.data.services.UserService;
 
 /**
- * @author watis
+ * @author Will
  *
  */
 public class UserServiceTest {

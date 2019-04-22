@@ -8,4 +8,5 @@ import com.example.business.data.entities.Food;
 @Repository
 public interface FoodRepository extends CrudRepository<Food, Integer>{
 	
+	
 }

@@ -1,9 +1,35 @@
 package com.example.business.data.repositories;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.example.business.data.entities.Favorites;
 
+/**
+ * This repository (dao) interacts with the database with the Favorites object.
+ * @author watis
+ *
+ */
 public interface FavoritesRepository extends CrudRepository<Favorites, Integer> {
 
+	/**
+	 * Due to the structure of favorites in the DB, this method iterates through and gets all the 
+	 * favorite id's for a user
+	 * @param user_email
+	 * @return list of favorites
+	 */
+	@Query(value ="SELECT * FROM favorites f WHERE f.user_id =?1", nativeQuery = true)
+	List<Favorites> favorites_For_User(String user_email);
+	
+	/**
+	 * Pulls user favorite on a specific food. 
+	 * @param user_email
+	 * @param food_id
+	 * @return favorite id
+	 */
+	@Query(value ="SELECT * FROM favorites f WHERE f.user_id =?1 AND f.fid = ?2", nativeQuery = true)
+	Favorites favorite_by_user_and_food(String user_email, int food_id);
+	
 }

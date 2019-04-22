@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,6 +15,7 @@ public class Restaurant {
 
 	//TODO this should be an int
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="restaurant_id")
 	private int restaurant_id;
 	@Column(name="restaurant_name")

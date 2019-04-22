@@ -2,20 +2,25 @@ package com.example.business.data.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 
 @Entity
 @Table(name="food")
 public class Food {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="food_id")
-	private int food_id; 
+	private Integer food_id; 
 	
 	@Column(name="food_name")
 	private String food_name; 
 	
+	@Digits(fraction = 0, integer = 10)
 	@Column(name="protein_total")
 	private int protein_total;
 	

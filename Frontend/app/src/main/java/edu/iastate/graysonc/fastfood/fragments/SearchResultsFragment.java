@@ -24,7 +24,7 @@ import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.activities.SearchActivity;
-import edu.iastate.graysonc.fastfood.recyclerClasses.FoodListAdapter;
+import edu.iastate.graysonc.fastfood.recycler_classes.FoodListAdapter;
 import edu.iastate.graysonc.fastfood.view_models.SearchResultsViewModel;
 
 import static com.android.volley.VolleyLog.TAG;

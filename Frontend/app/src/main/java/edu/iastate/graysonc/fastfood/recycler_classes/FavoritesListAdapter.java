@@ -1,4 +1,4 @@
-package edu.iastate.graysonc.fastfood.recyclerClasses;
+package edu.iastate.graysonc.fastfood.recycler_classes;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,9 +1,10 @@
-package edu.iastate.graysonc.fastfood.recyclerClasses;
+package edu.iastate.graysonc.fastfood.recycler_classes;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -26,13 +27,16 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodVi
     }
 
     public static class FoodViewHolder extends RecyclerView.ViewHolder {
-        public TextView mNameTextView;
+        public TextView mNameTextView, mPriceTextView;
         public ImageView mRestaurantLogo;
+        public RatingBar mRatingBar;
 
         public FoodViewHolder(View itemView, final FoodListAdapter.OnItemClickListener listener) {
             super(itemView);
             mNameTextView = itemView.findViewById(R.id.food_name);
+            mPriceTextView = itemView.findViewById(R.id.food_price);
             mRestaurantLogo = itemView.findViewById(R.id.restaurant_logo);
+            mRatingBar = itemView.findViewById(R.id.rating_bar);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +69,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodVi
     public void onBindViewHolder(FoodListAdapter.FoodViewHolder holder, int position) {
         Food currentItem = mFavoritesList.get(position);
         holder.mNameTextView.setText(currentItem.getName());
+        holder.mPriceTextView.setText(currentItem.getPrice());
+        holder.mRatingBar.setRating((float)currentItem.getRating());
         switch (currentItem.getLocation()) {
             case 0:
                 holder.mRestaurantLogo.setImageResource(R.drawable.mcdonalds);

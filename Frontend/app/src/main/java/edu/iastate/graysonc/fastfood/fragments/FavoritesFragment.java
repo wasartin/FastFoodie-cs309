@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
@@ -21,10 +22,11 @@ import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
-import edu.iastate.graysonc.fastfood.recyclerClasses.FavoritesListAdapter;
+import edu.iastate.graysonc.fastfood.recycler_classes.FavoritesListAdapter;
+import edu.iastate.graysonc.fastfood.recycler_classes.FoodListAdapter;
 import edu.iastate.graysonc.fastfood.view_models.FavoritesViewModel;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements FoodListAdapter.OnItemClickListener {
     private static final String TAG = "FavoritesFragment";
 
     @Inject
@@ -32,7 +34,7 @@ public class FavoritesFragment extends Fragment {
     private FavoritesViewModel mViewModel;
 
     private RecyclerView mRecyclerView;
-    private FavoritesListAdapter mAdapter;
+    private FoodListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public FavoritesFragment() {}
@@ -55,7 +57,7 @@ public class FavoritesFragment extends Fragment {
                     mAdapter.notifyDataSetChanged();
                 }
             });
-        }else{
+        } else {
             Fragment newFragment = new SignInFragment();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.add(R.id.MasterLayoutFave, newFragment).commit();
@@ -74,33 +76,24 @@ public class FavoritesFragment extends Fragment {
         mAdapter.notifyItemRemoved(position);
     }
 
-    public void openFoodPage(int position) {
-        Food selectedItem = mViewModel.getFavorites().getValue().get(position);
-        Log.d(TAG, "openFoodPage: " + selectedItem.getName());
-        mAdapter.notifyItemChanged(position);
-    }
-
     public void buildRecyclerView() {
         mRecyclerView = getView().findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(App.context);
-        mAdapter = new FavoritesListAdapter(mViewModel.getFavorites().getValue());
+        mAdapter = new FoodListAdapter(mViewModel.getFavorites().getValue());
 
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(new FavoritesListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                openFoodPage(position);
-            }
+        mAdapter.setOnItemClickListener(this);
+    }
 
-            @Override
-            public void onDeleteClick(int position) {
-                removeItem(position);
-            }
-        });
+    @Override
+    public void onItemClick(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("foodId", mViewModel.getFavorites().getValue().get(position).getId());
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_favoritesFragment_to_foodProfileFragment, bundle);
     }
 }

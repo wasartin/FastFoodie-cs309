@@ -65,7 +65,7 @@ public class FoodProfileFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        mViewModel.init(69);
+        mViewModel.init(getArguments().getInt("foodId"));
         mViewModel.getFood().observe(this, f -> {
             if (f != null) {
                 name.setText(f.getName());

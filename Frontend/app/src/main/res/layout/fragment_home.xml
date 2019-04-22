@@ -6,8 +6,10 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        style="@style/Widget.Design.CollapsingToolbar"
         android:layout_width="match_parent"
-        android:layout_height="125dp">
+        android:layout_height="125dp"
+        android:background="#FFFFFF">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -16,42 +18,64 @@
             app:toolbarId="@id/toolbar">
 
             <FrameLayout
-                android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
-                android:elevation="1dp"
+                android:background="@color/colorAccent"
+                android:elevation="5dp"
                 android:padding="10dp"
                 android:visibility="visible"
                 app:layout_collapseMode="pin">
 
-                <LinearLayout
+                <SearchView
+                    android:id="@+id/search_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@android:drawable/editbox_background"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_search_black_24dp" />
-
-                    <TextView
-                        android:id="@+id/search_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:text="@string/search_hint"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
-                        android:textSize="18sp" />
-                </LinearLayout>
-
+                    android:focusable="auto"
+                    android:focusableInTouchMode="true"
+                    android:iconifiedByDefault="false"
+                    android:queryHint="@string/search_hint" />
             </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="75dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/button4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="0dp"
+                    android:text="Calories"
+                    app:layout_collapseMode="none" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button" />
+            </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
+                style="@style/Widget.Design.CollapsingToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="75dp" />
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -68,10 +92,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
+                android:paddingStart="32dp"
                 android:paddingTop="16dp"
                 android:text="What can we help you find?"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textStyle="bold" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -83,12 +108,13 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
+                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
                         android:orientation="vertical"
                         android:padding="10dp">
 
@@ -111,7 +137,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
+                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
                         android:orientation="vertical"
                         android:padding="10dp">
 
@@ -134,7 +160,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
+                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
                         android:orientation="vertical"
                         android:padding="10dp">
 
@@ -157,13 +183,14 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
+                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
                         android:orientation="vertical"
                         android:padding="10dp">
 
                         <ImageView
                             android:layout_width="120dp"
                             android:layout_height="80dp"
+                            android:clickable="false"
                             android:src="@drawable/salad"
                             app:srcCompat="@drawable/salad" />
 
@@ -180,7 +207,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="?attr/selectableItemBackground"
+                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
                         android:orientation="vertical"
                         android:padding="10dp">
 
@@ -206,28 +233,34 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
+                android:paddingStart="32dp"
                 android:paddingTop="32dp"
                 android:text="Top rated breakfast"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
+                android:paddingStart="32dp"
                 android:paddingTop="32dp"
                 android:text="High protein"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

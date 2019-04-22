@@ -2,15 +2,17 @@ package edu.iastate.graysonc.fastfood.fragments;
 
 
 import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import javax.inject.Inject;
 
@@ -26,15 +28,14 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
-import edu.iastate.graysonc.fastfood.RecentSearchProvider;
+import edu.iastate.graysonc.fastfood.activities.MainActivity;
 import edu.iastate.graysonc.fastfood.activities.SearchActivity;
-import edu.iastate.graysonc.fastfood.recyclerClasses.FoodListAdapter;
+import edu.iastate.graysonc.fastfood.recycler_classes.FoodListAdapter;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
 
-import static android.app.Activity.RESULT_OK;
 import static com.android.volley.VolleyLog.TAG;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClickListener {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private HomeViewModel mViewModel;
@@ -43,7 +44,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private FoodListAdapter mAdapter1, mAdapter2;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private View searchBar;
+    private SearchView searchView;
+
 
     public HomeFragment() {}
 
@@ -73,17 +75,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
             });
         }
-        searchBar = getView().findViewById(R.id.search_bar);
-        searchBar.setOnClickListener(this);
-    }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.search_bar:
-                startActivity(new Intent(getActivity(), SearchActivity.class));
-                break;
-        }
+        searchView = getView().findViewById(R.id.search_bar);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        ComponentName componentName = new ComponentName(getActivity(), MainActivity.class);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
     }
 
     public void buildRecyclerView() {
@@ -102,22 +98,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         ((SimpleItemAnimator) mRecyclerView2.getItemAnimator()).setSupportsChangeAnimations(false);
         mRecyclerView2.setLayoutManager(mLayoutManager);
         mRecyclerView2.setAdapter(mAdapter2);
-
-
-        mAdapter1.setOnItemClickListener(new FoodListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Log.d(TAG, "onItemClick: " + mViewModel.getFoods().getValue().get(position).getName());
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_homeFragment_to_foodProfileFragment);
-            }
-        });
-
-        mAdapter2.setOnItemClickListener(new FoodListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Log.d(TAG, "onItemClick: " + mViewModel.getFoods().getValue().get(position).getName());
-            }
-        });
+        mAdapter1.setOnItemClickListener(this);
+        mAdapter2.setOnItemClickListener(this);
     }
 
     @Override
@@ -125,4 +107,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onCreateOptionsMenu(menu, menuInflater);
     }
 
+    @Override
+    public void onItemClick(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("foodId", mViewModel.getFoods().getValue().get(position).getId());
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_homeFragment_to_foodProfileFragment, bundle);
+    }
 }

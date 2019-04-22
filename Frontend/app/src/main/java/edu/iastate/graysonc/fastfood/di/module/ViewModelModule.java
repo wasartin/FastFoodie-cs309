@@ -8,6 +8,7 @@ import dagger.multibindings.IntoMap;
 import edu.iastate.graysonc.fastfood.di.key.ViewModelKey;
 import edu.iastate.graysonc.fastfood.view_models.FactoryViewModel;
 import edu.iastate.graysonc.fastfood.view_models.FavoritesViewModel;
+import edu.iastate.graysonc.fastfood.view_models.FoodProfileViewModel;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
 import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
 import edu.iastate.graysonc.fastfood.view_models.SearchResultsViewModel;
@@ -25,7 +26,6 @@ public abstract class ViewModelModule {
     @ViewModelKey(SearchResultsViewModel.class)
     abstract ViewModel bindSearchResultsViewModel(SearchResultsViewModel repoViewModel);
 
-
     @Binds
     @IntoMap
     @ViewModelKey(FavoritesViewModel.class)
@@ -35,6 +35,11 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ProfileViewModel.class)
     abstract ViewModel bindProfileViewModel(ProfileViewModel repoViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FoodProfileViewModel.class)
+    abstract ViewModel bindFoodProfileViewModel(FoodProfileViewModel repoViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(FactoryViewModel factory);

@@ -15,10 +15,10 @@ import retrofit2.http.Path;
 
 public interface Webservice {
 
-    @GET("users/old/{user_email}")
+    @GET("users/{user_email}")
     Call<User> getUser(@Path("user_email") String userEmail);
 
-    @GET("users/old/all")
+    @GET("users/all")
     Call<List<User>> getAllUsers();
 
     @POST("users/create")
@@ -30,16 +30,16 @@ public interface Webservice {
     @PUT("users/edit/{user_email}")
     Call<User> editUser(@Path("user_email") String userEmail);
 
-    @GET("foods/old/{food_id}")
+    @GET("foods/{food_id}")
     Call<Food> getFood(@Path("food_id") int foodId);
 
-    @GET("foods/old/all")
+    @GET("foods/all")
     Call<List<Food>> getAllFoods();
 
     @GET("api/favorites/{user_email}")
     Call<List<Food>> getFavoriteFoodsForUser(@Path("user_email") String userEmail);
 
-    @GET("favorites/old/all") // Might be deleted soon
+    @GET("favorites/all") // Might be deleted soon
     Call<List<Favorite>> getAllFavorites();
 
     @POST("favorites/create/{user_email}/{food_id}")

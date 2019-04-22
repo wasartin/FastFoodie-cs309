@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
@@ -49,8 +50,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // Options menu
-        setHasOptionsMenu(true);
 
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -76,22 +75,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         searchBar = getView().findViewById(R.id.search_bar);
         searchBar.setOnClickListener(this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == 0) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                // Save query for future search suggestions
-                String query = data.getStringExtra(SearchManager.QUERY);
-                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getActivity(),
-                            RecentSearchProvider.AUTHORITY, RecentSearchProvider.MODE);
-                suggestions.saveRecentQuery(query, null);
-
-            }
-        }
     }
 
     @Override
@@ -125,6 +108,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(int position) {
                 Log.d(TAG, "onItemClick: " + mViewModel.getFoods().getValue().get(position).getName());
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_homeFragment_to_foodProfileFragment);
             }
         });
 

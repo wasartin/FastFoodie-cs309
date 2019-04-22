@@ -18,6 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
@@ -28,9 +31,12 @@ import edu.iastate.graysonc.fastfood.fragments.HomeFragment;
 import edu.iastate.graysonc.fastfood.fragments.ProfileFragment;
 import edu.iastate.graysonc.fastfood.fragments.SearchResultsFragment;
 
-public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector, BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String TAG = "MainActivity";
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
+
+    private NavController navController;
+
     private FragmentManager fragmentManager;
     private Fragment homeFragment;
     private Fragment favoritesFragment;
@@ -51,22 +57,14 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
 
         // Instantiate all fragments
-        homeFragment = new HomeFragment();
-        favoritesFragment = new FavoritesFragment();
-        profileFragment = new ProfileFragment();
-        searchResultsFragment = new SearchResultsFragment();
-        fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.main_frame, profileFragment, "profile").hide(profileFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.main_frame, favoritesFragment, "favorites").hide(favoritesFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.main_frame, homeFragment, "home").commit();
-        currentFragment = homeFragment;
+        //homeFragment = new HomeFragment();
+        //favoritesFragment = new FavoritesFragment();
+        //profileFragment = new ProfileFragment();
+        //searchResultsFragment = new SearchResultsFragment();
 
-        // Start in home fragment
-        if (savedInstanceState == null) {
-            setFragment(homeFragment);
-        }
-
-        ((BottomNavigationView)findViewById(R.id.main_navigation)).setOnNavigationItemSelectedListener(this);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.main_navigation);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
@@ -102,22 +100,5 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_options, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.navigation_home:
-                setFragment(homeFragment);
-                break;
-            case R.id.navigation_favorites:
-                setFragment(favoritesFragment);
-                break;
-            case R.id.navigation_profile:
-                setFragment(profileFragment);
-                break;
-        }
-        menuItem.setChecked(true);
-        return false;
     }
 }

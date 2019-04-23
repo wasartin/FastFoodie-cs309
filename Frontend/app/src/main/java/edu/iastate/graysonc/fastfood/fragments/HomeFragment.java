@@ -4,17 +4,11 @@ package edu.iastate.graysonc.fastfood.fragments;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-
-import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,15 +19,15 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
+
+import javax.inject.Inject;
+
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.activities.MainActivity;
-import edu.iastate.graysonc.fastfood.activities.SearchActivity;
 import edu.iastate.graysonc.fastfood.recycler_classes.FoodListAdapter;
 import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
-
-import static com.android.volley.VolleyLog.TAG;
 
 public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClickListener {
     @Inject
@@ -80,6 +74,8 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         ComponentName componentName = new ComponentName(getActivity(), MainActivity.class);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
+
+
     }
 
     public void buildRecyclerView() {
@@ -100,11 +96,6 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
         mRecyclerView2.setAdapter(mAdapter2);
         mAdapter1.setOnItemClickListener(this);
         mAdapter2.setOnItemClickListener(this);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        super.onCreateOptionsMenu(menu, menuInflater);
     }
 
     @Override

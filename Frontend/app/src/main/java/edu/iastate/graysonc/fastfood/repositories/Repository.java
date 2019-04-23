@@ -42,28 +42,6 @@ public class Repository {
         this.executor = executor;
     }
 
-
-
-    /**
-     * Fetches all users from the server and puts them in the Database
-     * This is temporary until we have a way to get just foods in a specific user's favorites.
-     */
-    private void fetchAllUsers() {
-        executor.execute(() -> {
-            webservice.getAllUsers().enqueue(new Callback<List<User>>() {
-                @Override
-                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                    Log.d(TAG, "ALL USERS FETCHED FROM NETWORK");
-                    executor.execute(() -> {
-                        userDao.insert(response.body());
-                    });
-                }
-                @Override
-                public void onFailure(Call<List<User>> call, Throwable t) { t.printStackTrace(); }
-            });
-        });
-    }
-
     public LiveData<User> getUser(String userEmail) {
         refreshUser(userEmail); // Refresh if possible
         return userDao.load(userEmail); // Returns a LiveData object directly from the database.
@@ -103,7 +81,7 @@ public class Repository {
      * Fetches all foods from the server and puts them in the Database
      * This is temporary until we have a way to get just foods in a specific user's favorites.
      */
-    private void fetchAllFoods() {
+    private void refreshAllFoods() {
         executor.execute(() -> {
             webservice.getAllFoods().enqueue(new Callback<List<Food>>() {
                 @Override
@@ -134,12 +112,25 @@ public class Repository {
                     @Override
                     public void onResponse(Call<Food> call, Response<Food> response) {
                         Log.d(TAG, "DATA REFRESHED FROM NETWORK");
-                        Toast.makeText(App.context, "Data refreshed from network", Toast.LENGTH_LONG).show();
                         executor.execute(() -> {
                             Food food = response.body();
                             if (food == null) {
                                 Log.e(TAG,"Grayson your code doesn't work <3 - refreshFood");
                             } else {
+                                webservice.getFavoriteFoodsForUser(App.account.getEmail()).enqueue(new Callback<List<Food>>() {
+                                    @Override
+                                    public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
+                                        List<Food> favorites = response.body();
+                                        if (favorites.contains(food)) { // Set food as favorite
+                                            food.setIsFavorite(1);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<List<Food>> call, Throwable t) {
+
+                                    }
+                                });
                                 food.setLastRefresh(new Date());
                                 foodDao.insert(food);
                             }
@@ -165,7 +156,6 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                     Log.d(TAG, "FAVORITE ADDED");
-                    //Toast.makeText(App.context, "Added to favorites", Toast.LENGTH_LONG).show();
                     refreshFavoriteFoodsForUser(userEmail);
                 }
                 @Override
@@ -181,7 +171,6 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                     Log.d(TAG, "FAVORITE REMOVED");
-                    //Toast.makeText(App.context, "Removed from favorites", Toast.LENGTH_LONG).show();
                     refreshFavoriteFoodsForUser(userEmail);
                 }
                 @Override
@@ -196,7 +185,6 @@ public class Repository {
                 @Override
                 public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
                     Log.d(TAG, "FAVORITES REFRESHED FROM NETWORK");
-                    Toast.makeText(App.context, "Data refreshed from network", Toast.LENGTH_LONG).show();
                     executor.execute(() -> {
                         List<Food> favorites = response.body();
                         if (favorites == null) {

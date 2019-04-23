@@ -25,17 +25,12 @@
 
         </activity>
 
-        <activity android:name=".activities.SignInActivity">
+        <activity android:name=".activities.MainActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".activities.MainActivity"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
             <meta-data
@@ -44,8 +39,6 @@
         </activity>
 
 
-
-        <activity android:name=".activities.SearchableActivity"></activity>
         <activity
             android:name=".PopUps.submitPopUp"
             android:theme="@style/AppTheme.CustomThemeTrans" />

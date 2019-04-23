@@ -26,12 +26,4 @@ public class HomeViewModel extends ViewModel {
     public LiveData<List<Food>> getFoods() {
         return foods;
     }
-
-    public void addFavorite(String userEmail, int foodId) {
-        repo.createFavorite(userEmail, foodId);
-    }
-
-    public void removeFavorite(String userEmail, int foodId) {
-        repo.deleteFavorite(userEmail, foodId);
-    }
 }

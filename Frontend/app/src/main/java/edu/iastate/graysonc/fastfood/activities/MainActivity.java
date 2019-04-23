@@ -8,41 +8,34 @@ import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.RecentSearchProvider;
-import edu.iastate.graysonc.fastfood.fragments.FavoritesFragment;
-import edu.iastate.graysonc.fastfood.fragments.HomeFragment;
-import edu.iastate.graysonc.fastfood.fragments.ProfileFragment;
-import edu.iastate.graysonc.fastfood.fragments.SearchResultsFragment;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String TAG = "MainActivity";
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
     private NavController navController;
-
-    private FragmentManager fragmentManager;
-    private Fragment homeFragment;
-    private Fragment favoritesFragment;
-    private Fragment profileFragment;
-    private Fragment searchResultsFragment;
-    private Fragment currentFragment;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -53,14 +46,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
-
-
-
-        // Instantiate all fragments
-        //homeFragment = new HomeFragment();
-        //favoritesFragment = new FavoritesFragment();
-        //profileFragment = new ProfileFragment();
-        //searchResultsFragment = new SearchResultsFragment();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.main_navigation);
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -76,13 +61,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             suggestions.saveRecentQuery(query, null);
             Log.d(TAG, "onCreate: Recieved query: " + query);
 
-            // Create and show SearchResultsFragment
-            Bundle bundle = new Bundle();
-            bundle.putString("QUERY", query);
-            searchResultsFragment.setArguments(bundle);
-            setFragment(searchResultsFragment);
+            // TODO: Display results fragment
         }
-
     }
 
     @Override
@@ -90,15 +70,16 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         return dispatchingAndroidInjector;
     }
 
-    private void setFragment(Fragment fragment) {
-        fragmentManager.beginTransaction().hide(currentFragment).show(fragment).commit();
-        currentFragment = fragment;
-    }
-
+    /**
+     * Useless right now. Delete if still not needed in the future.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_options, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 }

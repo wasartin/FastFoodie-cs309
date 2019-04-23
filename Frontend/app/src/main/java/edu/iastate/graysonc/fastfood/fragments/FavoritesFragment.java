@@ -18,6 +18,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
@@ -49,32 +53,32 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
 
         // Configure ViewModel
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesViewModel.class);
-        if (App.account != null) {
-            mViewModel.init(App.account.getEmail());
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(App.context);
+        if (account != null) {
+            mViewModel.init(account.getEmail());
             mViewModel.getFavorites().observe(this, f -> {
                 if (f != null) {
                     buildRecyclerView();
                     mAdapter.notifyDataSetChanged();
                 }
             });
-        } else {
-            Fragment newFragment = new SignInFragment();
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.add(R.id.MasterLayoutFave, newFragment).commit();
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (GoogleSignIn.getLastSignedInAccount(App.context) == null) {
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_favoritesFragment_to_signInFragment);
+        }
         return inflater.inflate(R.layout.fragment_favorites, container, false);
     }
 
-    public void removeItem(int position) {
+    /*public void removeItem(int position) {
         Food selectedItem = mViewModel.getFavorites().getValue().get(position);
         Log.d(TAG, "removeItem: " + selectedItem.getName());
         mViewModel.removeFavorite(App.account.getEmail(), selectedItem.getId());
         mAdapter.notifyItemRemoved(position);
-    }
+    }*/
 
     public void buildRecyclerView() {
         mRecyclerView = getView().findViewById(R.id.recyclerView);

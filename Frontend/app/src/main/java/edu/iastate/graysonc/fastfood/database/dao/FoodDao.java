@@ -8,6 +8,8 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
+
 import edu.iastate.graysonc.fastfood.database.entities.Food;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
@@ -22,6 +24,9 @@ public interface FoodDao {
 
     @Delete
     void delete(Food food);
+
+    @Update
+    void update(Food food);
 
     @Query("DELETE FROM food WHERE id = :id")
     void delete(int id);

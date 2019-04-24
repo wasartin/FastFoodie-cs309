@@ -12,6 +12,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import androidx.lifecycle.LiveData;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.api.Webservice;
 import edu.iastate.graysonc.fastfood.database.dao.FoodDao;
@@ -61,11 +65,22 @@ public class Repository {
                         executor.execute(() -> {
                             User user = response.body();
                             if (user == null) {
-                                Log.e(TAG,"Grayson your code doesn't work <3 - refreshUser");
+                                user = new User(userEmail, "General", new Date());
+                                webservice.createUser(user).enqueue(new Callback<User>() {
+                                    @Override
+                                    public void onResponse(Call<User> call, Response<User> response) {
+                                        Log.d(TAG, "onResponse: User created successfully");
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<User> call, Throwable t) {
+                                        Log.e(TAG, "onFailure: Error creating user");
+                                    }
+                                });
                             } else {
                                 user.setLastRefresh(new Date());
-                                userDao.insert(user);
                             }
+                            userDao.insert(user);
                         });
                     }
                     @Override
@@ -98,7 +113,7 @@ public class Repository {
     }
 
     public LiveData<Food> getFood(int foodId) {
-        refreshFood(foodId); // Refresh if possible
+        //refreshFood(foodId); // Refresh if possible
         return foodDao.load(foodId); // Returns a LiveData object directly from the database.
     }
 
@@ -117,22 +132,25 @@ public class Repository {
                             if (food == null) {
                                 Log.e(TAG,"Grayson your code doesn't work <3 - refreshFood");
                             } else {
-                                webservice.getFavoriteFoodsForUser(App.account.getEmail()).enqueue(new Callback<List<Food>>() {
-                                    @Override
-                                    public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
-                                        List<Food> favorites = response.body();
-                                        if (favorites.contains(food)) { // Set food as favorite
-                                            food.setIsFavorite(1);
+                                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(App.context);
+                                if (account != null) {
+                                    webservice.getFavoriteFoodsForUser(account.getEmail()).enqueue(new Callback<List<Food>>() {
+                                        @Override
+                                        public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
+                                            List<Food> favorites = response.body();
+                                            if (favorites.contains(food)) { // Set food as favorite
+                                                food.setIsFavorite(1);
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(Call<List<Food>> call, Throwable t) {
+                                        @Override
+                                        public void onFailure(Call<List<Food>> call, Throwable t) {
 
-                                    }
-                                });
+                                        }
+                                    });
+                                }
                                 food.setLastRefresh(new Date());
-                                foodDao.insert(food);
+                                foodDao.update(food);
                             }
                         });
                     }
@@ -192,9 +210,9 @@ public class Repository {
                         } else {
                             for (Food f : favorites) {
                                 f.setIsFavorite(1);
-                                foodDao.delete(f.getId());
+                                foodDao.update(f);
                             }
-                            foodDao.insert(favorites);
+                            //foodDao.insert(favorites);
                         }
                     });
                 }

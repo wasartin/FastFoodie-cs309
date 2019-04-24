@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,12 +39,12 @@ public class ApiController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/favorites/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<Food> getUsersFavoriteFoods(String user_email){
-		List<Favorites> usersFavs = favServ.getAllFavoritesForUser(user_email);
+	public List<Food> getUsersFavoriteFoods(@PathVariable String user_id){
+		List<Favorites> usersFavs = favServ.getAllFavoritesForUser(user_id);
 		List<Food> result = new ArrayList<Food>();
-		for(Favorites k : usersFavs) {
-			result.add(foodServ.getEntityByID(k.getFid()).get());
+		for(Favorites fav : usersFavs) {
+			result.add(foodServ.getEntityByID(fav.getFid()).get());
 		}
-		return null;
+		return result;
 	}
 }

@@ -1,0 +1,44 @@
+#stages of pipeline, should match with stage tag inside each job
+stages:
+    - mavenbuild
+    - maventest
+    - autodeploy
+    
+#tags: Spring matches the tag on our back end runner
+#Backend/business is the path to our backend spring project
+maven-build:
+    stage: mavenbuild
+    tags:
+        - Spring
+    script:
+        - cd Backend/business
+        - mvn package -B
+
+# artifacts are created when jobs execute successfully
+#good practice in case auto deploy fails
+maven-test:
+    stage: maventest
+    tags:
+        - Spring
+    script:
+        - cd Backend/business
+        - mvn test
+    artifacts:
+        paths:
+            -Backend/business/target/*.jar
+            
+# build, deploy, and execute jar as a service
+# need to have /target directory
+autoDeploy
+    stage: autodeploy
+    tags:
+        - Spring
+    script:
+        - cd Backend/business
+        - mvn package
+        - sudo mv target/*.jar /target/web-demo.jar
+        - sudo systemctl stop systemd-web-demo
+        - sudo systemctl start systemd-web-demo
+
+
+    

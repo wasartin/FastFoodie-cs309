@@ -61,19 +61,19 @@ public class FavoritesServiceTest {
 	@Test
 	public void getFavoritesByUserIdAndFidTest() {
 		Favorites newFav = new Favorites(1, "jongreaz@gmail.com", 98);
-		when(repo.favorite_by_user_and_food(newFav.getUser_id(), newFav.getFid())).thenReturn(newFav);
+		when(repo.getFavoriteByUserAndFood(newFav.getUser_id(), newFav.getFid())).thenReturn(newFav);
 		
 		favService.getFavoriteByUserAndFood(newFav.getUser_id(), newFav.getFid());
-		verify(repo, times(1)).favorite_by_user_and_food(newFav.getUser_id(), newFav.getFid());
+		verify(repo, times(1)).getFavoriteByUserAndFood(newFav.getUser_id(), newFav.getFid());
 	}
 	
 	@Test
 	public void getFavoritesByUserIdAndFidTest_Fail() {
 		Favorites newFav = new Favorites(1, "jongreaz@gmail.com", 3000);
-		when(repo.favorite_by_user_and_food(newFav.getUser_id(), newFav.getFid())).thenReturn(null);
+		when(repo.getFavoriteByUserAndFood(newFav.getUser_id(), newFav.getFid())).thenReturn(null);
 		
 		favService.getFavoriteByUserAndFood(newFav.getUser_id(), newFav.getFid());
-		verify(repo, times(1)).favorite_by_user_and_food(newFav.getUser_id(), newFav.getFid());
+		verify(repo, times(1)).getFavoriteByUserAndFood(newFav.getUser_id(), newFav.getFid());
 	}
 	
 	@Test
@@ -106,11 +106,11 @@ public class FavoritesServiceTest {
 		list.add(favTwo);
 		list.add(favThree);
 
-		when(repo.favorites_For_User(favOne.getUser_id())).thenReturn(list);
+		when(repo.getAllFavoritesForUser(favOne.getUser_id())).thenReturn(list);
 
 		List<Favorites> favList = (List<Favorites>) favService.getAllFavoritesForUser(favOne.getUser_id());
 		assertEquals(3, favList.size());
-		verify(repo, times(1)).favorites_For_User(favOne.getUser_id());
+		verify(repo, times(1)).getAllFavoritesForUser(favOne.getUser_id());
 	}
 
 	@Test

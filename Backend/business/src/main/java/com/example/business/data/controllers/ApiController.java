@@ -44,6 +44,6 @@ public class ApiController {
 		for(Favorites k : usersFavs) {
 			result.add(foodServ.getEntityByID(k.getFid()).get());
 		}
-		return null;
+		return result;
 	}
 }

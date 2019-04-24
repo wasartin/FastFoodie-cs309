@@ -25,7 +25,7 @@ maven-test:
         - mvn test
     artifacts:
         paths:
-            -Backend/business/target/*.jar
+            - Backend/business/target/*.jar
             
 # build, deploy, and execute jar as a service
 # need to have /target directory

@@ -39,7 +39,7 @@ public abstract class AbstractService<E, K> {
 	/**
 	 * Gets a specific entity by id in the DB
 	 * @param id
-	 * @return
+	 * @return a specific entity by it's id
 	 */
 	public Optional<E> getEntityByID(K id) {
 		return repo.findById(id);
@@ -57,7 +57,7 @@ public abstract class AbstractService<E, K> {
 	 * Creates an Entity with the entity itself and the id of the entity.
 	 * @param newEntity
 	 * @param id
-	 * @return
+	 * @return a response entity that informs the client of their transaction results.
 	 */
 	public ResponseEntity<?> createEntity(E newEntity, K id){
 		String className = newEntity.getClass().getSimpleName();
@@ -78,7 +78,7 @@ public abstract class AbstractService<E, K> {
 	/**
 	 * Delets an Entity in the DB by it's id
 	 * @param id
-	 * @return
+	 * @return a response entity that informs the client of their transaction results.
 	 */
 	public ResponseEntity<?> deleteEntityById(K id){
 		HttpStatus resultingStatus = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -101,7 +101,7 @@ public abstract class AbstractService<E, K> {
 	 * Editing an entity can only be done if the entity's id already exists in the DB. 
 	 * @param entityToEdit
 	 * @param id
-	 * @return
+	 * @return a response entity that informs the client of their transaction results.
 	 */
 	public ResponseEntity<?> editEntity(E entityToEdit, K id){
 		HttpStatus resultingStatus;

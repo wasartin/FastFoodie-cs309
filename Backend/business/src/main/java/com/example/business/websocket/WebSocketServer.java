@@ -23,6 +23,11 @@ import com.example.business.data.entities.FoodRating;
 import com.example.business.data.repositories.FoodRatingRepository;
 import com.example.business.data.repositories.FoodRepository;
 
+/**
+ * A websocket server that handles live updates to food ratings.
+ * @author watis
+ *
+ */
 @ServerEndpoint("/websocket/{user_email}")
 @Component
 public class WebSocketServer {
@@ -38,12 +43,24 @@ public class WebSocketServer {
 	
 	private final Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
 	
+	/**
+	 * Opens a session for a specific user.
+	 * @param session
+	 * @param user_email
+	 * @throws IOException
+	 */
 	@OnOpen
 	public void onOpen(Session session, @PathParam("user_email") String user_email) throws IOException {
 		sessionUserEmailMap.put(session, user_email);
 		usernameSessionMap.put(user_email, session);
 	}
 	
+	/**
+	 * Sets the action for what to do when their is a message
+	 * @param session
+	 * @param message
+	 * @throws IOException
+	 */
 	@OnMessage
 	public void onMessage(Session session, String message) throws IOException{
 		String user_email = sessionUserEmailMap.get(session);
@@ -52,6 +69,12 @@ public class WebSocketServer {
 		update(message);
 	}
 	
+	/**
+	 * Updates the database from the user's input.
+	 * @param user_email
+	 * @param message
+	 * @return a string of the result of the Database call
+	 */
 	private String updateDataBase(String user_email, String message) {
 		String result = "@";
 		//"299, 5"
@@ -84,6 +107,11 @@ public class WebSocketServer {
 		return "@ The database has been updated";
 	}
 	
+	/**
+	 * Gets a new rating for the live update
+	 * @param food_id
+	 * @return food rating
+	 */
 	private double getRating(int food_id) {
 		List<Integer> ratingList = foodRatingRepo.findAllRatingsForFood(food_id);
 		double sum = 0;
@@ -97,6 +125,11 @@ public class WebSocketServer {
 		return sum / ratingList.size();
 	}
 	
+	/**
+	 * Sets actions for what to do when a session is closed.
+	 * @param session
+	 * @throws IOException
+	 */
 	@OnClose
 	public void onClose(Session session) throws IOException{
 		String user_email = sessionUserEmailMap.get(session);
@@ -104,11 +137,21 @@ public class WebSocketServer {
     	usernameSessionMap.remove(user_email);
 	}
 	
+	/**
+	 * Logs any erorr that occurs
+	 * @param session
+	 * @param throwable
+	 */
 	@OnError
 	public void onError(Session session, Throwable throwable){
 		logger.info("Entered into Error");
 	}
 	
+	/**
+	 * Send message to user with resulting database information
+	 * @param user_email
+	 * @param result
+	 */
 	private void sendMessage(String user_email, String result) {	
 		String message = result;
     	try {
@@ -119,6 +162,11 @@ public class WebSocketServer {
         }
     }
 
+	/**
+	 * Updates the other users in the session if anything has changed
+	 * @param message
+	 * @throws IOException
+	 */
 	private static void update(String message) throws IOException{
 		sessionUserEmailMap.forEach((session, username) -> {
     		synchronized (session) {

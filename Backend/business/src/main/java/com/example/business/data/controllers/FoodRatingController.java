@@ -17,7 +17,7 @@ import com.example.business.data.entities.FoodRating;
 import com.example.business.data.services.FoodRatingsService;
 
 /**
- * Rest API controller class for Food Ratings that receives HTTP requests from the client.
+ *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the FoodRating repository.
  * @author Will and Jon
  *
  */
@@ -106,7 +106,7 @@ public class FoodRatingController {
 	/**
 	 * create new food rating
 	 * @param newRating
-	 * @return a json object response
+	 * @return a response entity which spring turns into a json object. It contains information concerning the transaction.
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -119,7 +119,7 @@ public class FoodRatingController {
 	 * @param user_email
 	 * @param food_id
 	 * @param rating
-	 * @return a json object response
+	 * @return a response entity which spring turns into a json object. It contains information concerning the transaction.
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -137,7 +137,7 @@ public class FoodRatingController {
 	 * @param user_email
 	 * @param food_id
 	 * @param rating
-	 * @return a json object response
+	 * @return a response entity which spring turns into a json object. It contains information concerning the transaction.
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{user_email}/{food_id}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -151,7 +151,7 @@ public class FoodRatingController {
 	 * deletes an existing food rating
 	 * @param user_email
 	 * @param food_id
-	 * @return a json object response
+	 * @return a response entity which spring turns into a json object. It contains information concerning the transaction.
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_email}/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody

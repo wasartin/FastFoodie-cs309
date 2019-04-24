@@ -17,7 +17,7 @@ import com.example.business.data.entities.Ticket;
 import com.example.business.data.services.TicketService;
 
 /**
- * For keeping track of tickets. 
+ * A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the ticket repository.
  * @author Will
  *
  */

@@ -1,0 +1,45 @@
+User
+	@GET("users/{user_email}")
+		- Returns JSON object with information for the specified user
+
+	@GET("users/all")
+		- Returns a JSON array of all users in the database
+
+	@POST("users/create")
+		- Adds the posted user object to the database
+
+	@DELETE("users/delete/{user_email}")
+		- Removes the specified user from the database
+
+	@PUT("users/edit/{user_email}")
+		- Replaces the specified user in the database
+
+Food
+	@GET("foods/{food_id}")
+		- Returns JSON object for specified food
+
+	@GET("foods/all")
+		- Returns JSON array of all food objects in the database
+
+	@GET("api/favorites/{user_email}")
+		- Returns JSON array of all food objects that are in the specified user's favorites list
+
+Favorite
+	@GET("favorites/all")
+		- Returns JSON array of all tuples in the favorites table
+
+	@POST("favorites/create/{user_email}/{food_id}")
+		- Adds an entry to the favorites relation with the specified user id and food id
+
+	@DELETE("favorites/delete/{user_email}/{food_id}")
+		- Removes the specified tuple from the favorite table
+
+Food Ratings
+	@GET("foodRatings/average/{food_id}")
+		- Gets the average food rating (as a double) for the specified food
+
+	@POST("foodRatings/create/{user_email}/{food_id}/{rating}")
+		- Submits the specified user's rating for the specified food
+
+	@PUT("foodRatings/edit/{user_email}/{food_id}/{rating}")
+		- Changes/updates the user's rating for the specified food

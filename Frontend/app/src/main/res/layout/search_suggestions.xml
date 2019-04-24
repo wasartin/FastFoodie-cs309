@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="15dp" >
+
+    <!-- Icons come first in the layout, since their placement doesn't depend on
+         the placement of the text views. -->
+    <ImageView
+        android:id="@id/icon1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:scaleType="centerInside"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/common_google_signin_btn_icon_light_focused" />
+
+    <ImageView
+        android:id="@id/edit_query"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:srcCompat="@drawable/chickfila" />
+
+    <ImageView android:id="@id/icon2"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="centerInside"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toStartOf="@id/edit_query"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+
+    <!-- The subtitle comes before the title, since the height of the title depends on whether the
+         subtitle is visible or gone. -->
+    <TextView
+        android:id="@id/text2"
+        style="@style/TextAppearance.AppCompat.Widget.DropDownItem"
+        android:layout_width="match_parent"
+        android:layout_height="29dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/icon2"
+        android:layout_toEndOf="@id/icon1"
+        android:gravity="top"
+        android:paddingBottom="4dp"
+        android:singleLine="true"
+        android:textAppearance="?attr/textAppearanceSearchResultSubtitle"
+        android:visibility="gone" />
+
+    <!-- The title is placed above the subtitle, if there is one. If there is no
+         subtitle, it fills the parent. -->
+    <TextView
+        android:id="@+id/text1"
+        style="@style/TextAppearance.AppCompat.Widget.DropDownItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/text2"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/icon2"
+        android:layout_toEndOf="@id/icon1"
+        android:singleLine="true"
+        android:textAppearance="?attr/textAppearanceSearchResultTitle" />
+
+</RelativeLayout>

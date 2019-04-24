@@ -29,7 +29,7 @@ maven-test:
             
 # build, deploy, and execute jar as a service
 # need to have /target directory
-autoDeploy
+autoDeploy:
     stage: autodeploy
     tags:
         - Spring

@@ -24,6 +24,10 @@ public class FavoritesViewModel extends ViewModel {
         this.repo = repo;
     }
 
+    /**
+     * Initializes the ViewModel with the specified User's favorite Foods
+     * @param userEmail The User's email address
+     */
     public void init(String userEmail) {
         if (this.favoriteFoods != null) {
             return;
@@ -31,6 +35,10 @@ public class FavoritesViewModel extends ViewModel {
         favoriteFoods =  repo.getFavoriteFoodsForUser(userEmail);
     }
 
+    /**
+     *
+     * @return The User's favorite Foods
+     */
     public LiveData<List<Food>> getFavorites() {
         return favoriteFoods;
     }
@@ -39,6 +47,11 @@ public class FavoritesViewModel extends ViewModel {
         // TODO
     }
 
+    /**
+     * Removes the specified Food from the specified User's favorites
+     * @param userEmail The User's email address
+     * @param foodId The Food's id
+     */
     public void removeFavorite(String userEmail, int foodId) {
         repo.deleteFavorite(userEmail, foodId);
     }

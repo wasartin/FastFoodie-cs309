@@ -17,6 +17,10 @@ public class ProfileViewModel extends ViewModel {
         this.repo = repo;
     }
 
+    /**
+     * Initializes the ViewModel with the specified User object
+     * @param email The User's email address
+     */
     public void init(String email) {
         if (this.user != null) {
             return;
@@ -24,6 +28,10 @@ public class ProfileViewModel extends ViewModel {
         user = repo.getUser(email);
     }
 
+    /**
+     * Gets the object corresponding to the current User
+     * @return The User object
+     */
     public LiveData<User> getUser() {
         return this.user;
     }

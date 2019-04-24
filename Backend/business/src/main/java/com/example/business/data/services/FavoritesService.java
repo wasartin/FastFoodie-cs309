@@ -14,11 +14,11 @@ public class FavoritesService extends AbstractService<Favorites, Integer>{
 	FavoritesRepository favoritesRepository;
 	
 	public List<Favorites> getAllFavoritesForUser(String user_id) {
-		return favoritesRepository.favorites_For_User(user_id);
+		return favoritesRepository.getAllFavoritesForUser(user_id);
 	}
 	
 	public Favorites getFavoriteByUserAndFood(String user_email, int food_id) {
-		return favoritesRepository.favorite_by_user_and_food(user_email, food_id);
+		return favoritesRepository.getFavoriteByUserAndFood(user_email, food_id);
 	}
 
 }

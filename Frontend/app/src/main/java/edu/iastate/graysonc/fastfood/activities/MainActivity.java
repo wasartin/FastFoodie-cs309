@@ -15,12 +15,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import javax.inject.Inject;
@@ -50,9 +44,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         BottomNavigationView bottomNavigationView = findViewById(R.id.main_navigation);
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+    }
 
-        // Get the intent, verify the action and get the query
-        Intent intent = getIntent();
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // Save the query for future suggestions
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -60,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                     RecentSearchProvider.AUTHORITY, RecentSearchProvider.MODE);
             suggestions.saveRecentQuery(query, null);
             Log.d(TAG, "onCreate: Recieved query: " + query);
-
-            // TODO: Display results fragment
         }
     }
 

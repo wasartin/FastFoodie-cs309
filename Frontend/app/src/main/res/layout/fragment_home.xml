@@ -39,43 +39,23 @@
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:elevation="4dp"
                 android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginTop="75dp"
-                    android:orientation="horizontal">
+                    android:gravity="center|center_vertical|end"
+                    android:orientation="horizontal"
+                    android:paddingLeft="8dp">
 
-                    <Button
-                        android:id="@+id/button"
+                    <ImageView
+                        android:id="@+id/filter_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/food_calorie_total" />
-
-                    <Button
-                        android:id="@+id/button3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/food_protein_total" />
-
-                    <Button
-                        android:id="@+id/button4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/food_price" />
-
-                    <Button
-                        android:id="@+id/button2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/food_carb_total" />
-
-                    <Button
-                        android:id="@+id/button5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/food_fat_total" />
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_tune_black_24dp" />
                 </LinearLayout>
             </HorizontalScrollView>
 
@@ -98,179 +78,162 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="32dp"
-                android:paddingTop="16dp"
-                android:text="What can we help you find?"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textStyle="bold" />
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"
-                android:scrollbarAlwaysDrawHorizontalTrack="false"
-                android:scrollbarAlwaysDrawVerticalTrack="false"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <ImageView
-                            android:layout_width="120dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/breakfast"
-                            app:srcCompat="@drawable/breakfast" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/background_light"
-                            android:padding="10dp"
-                            android:text="Breakfast"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <ImageView
-                            android:layout_width="120dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/beef"
-                            app:srcCompat="@drawable/beef" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/background_light"
-                            android:padding="10dp"
-                            android:text="Beef"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <ImageView
-                            android:layout_width="120dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/chicken"
-                            app:srcCompat="@drawable/chicken" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/background_light"
-                            android:padding="10dp"
-                            android:text="Chicken"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <ImageView
-                            android:layout_width="120dp"
-                            android:layout_height="80dp"
-                            android:clickable="false"
-                            android:src="@drawable/salad"
-                            app:srcCompat="@drawable/salad" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/background_light"
-                            android:padding="10dp"
-                            android:text="Salad"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <ImageView
-                            android:layout_width="120dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/vegetarian"
-                            app:srcCompat="@drawable/vegetarian" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/background_light"
-                            android:padding="10dp"
-                            android:text="Vegetarian"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </HorizontalScrollView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="32dp"
-                android:paddingTop="32dp"
-                android:text="Top rated breakfast"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textStyle="bold" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="32dp"
-                android:paddingTop="32dp"
-                android:text="High protein"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textStyle="bold" />
+            </androidx.recyclerview.widget.RecyclerView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView2"
+            <LinearLayout
+                android:id="@+id/categories_view_group"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="32dp"
+                    android:paddingTop="16dp"
+                    android:text="What can we help you find?"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textStyle="bold" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:scrollbarAlwaysDrawHorizontalTrack="false"
+                    android:scrollbarAlwaysDrawVerticalTrack="false"
+                    android:scrollbars="none"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="120dp"
+                                android:layout_height="80dp"
+                                android:src="@drawable/breakfast"
+                                app:srcCompat="@drawable/breakfast" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/background_light"
+                                android:padding="10dp"
+                                android:text="Breakfast"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="120dp"
+                                android:layout_height="80dp"
+                                android:src="@drawable/beef"
+                                app:srcCompat="@drawable/beef" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/background_light"
+                                android:padding="10dp"
+                                android:text="Beef"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="120dp"
+                                android:layout_height="80dp"
+                                android:src="@drawable/chicken"
+                                app:srcCompat="@drawable/chicken" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/background_light"
+                                android:padding="10dp"
+                                android:text="Chicken"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="120dp"
+                                android:layout_height="80dp"
+                                android:clickable="false"
+                                android:src="@drawable/salad"
+                                app:srcCompat="@drawable/salad" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/background_light"
+                                android:padding="10dp"
+                                android:text="Salad"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="120dp"
+                                android:layout_height="80dp"
+                                android:src="@drawable/vegetarian"
+                                app:srcCompat="@drawable/vegetarian" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/background_light"
+                                android:padding="10dp"
+                                android:text="Vegetarian"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

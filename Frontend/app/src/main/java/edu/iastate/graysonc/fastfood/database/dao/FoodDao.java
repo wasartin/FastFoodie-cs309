@@ -1,5 +1,7 @@
 package edu.iastate.graysonc.fastfood.database.dao;
 
+import android.database.Cursor;
+
 import java.util.Date;
 import java.util.List;
 
@@ -42,4 +44,7 @@ public interface FoodDao {
 
     @Query("SELECT * FROM food WHERE id = :foodID AND lastRefresh > :lastRefreshMax LIMIT 1")
     Food hasFood(int foodID, Date lastRefreshMax);
+
+    @Query("SELECT * FROM food WHERE name LIKE :query")
+    LiveData<List<Food>> findMatches(String query);
 }

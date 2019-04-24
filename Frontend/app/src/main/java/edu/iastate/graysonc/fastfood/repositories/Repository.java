@@ -1,5 +1,7 @@
 package edu.iastate.graysonc.fastfood.repositories;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,6 +14,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.RoomDatabase;
+import androidx.room.RoomSQLiteQuery;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -44,6 +48,11 @@ public class Repository {
         this.userDao = userDao;
         this.foodDao = foodDao;
         this.executor = executor;
+    }
+
+    public LiveData<List<Food>> getFoodMatches(String query) {
+
+        return foodDao.findMatches("%" + query + "%");
     }
 
     public LiveData<User> getUser(String userEmail) {
@@ -164,7 +173,6 @@ public class Repository {
     }
 
     public LiveData<List<Food>> getFavoriteFoodsForUser(String userEmail) {
-        refreshFavoriteFoodsForUser(userEmail);
         return foodDao.loadFavorites();
     }
 

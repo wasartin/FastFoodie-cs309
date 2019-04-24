@@ -1,5 +1,6 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -70,7 +71,7 @@ public class SearchResultsFragment extends Fragment implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        String query = getArguments().getString("QUERY");
+        String query = getArguments().getString(SearchManager.QUERY);
         searchText.setText(query);
         mViewModel.init(query);
         mViewModel.getFoods().observe(this, f -> {
@@ -86,9 +87,6 @@ public class SearchResultsFragment extends Fragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.back_button: // TODO
                 Log.d(TAG, "onClick: Back button selected");
-                break;
-            case R.id.search_bar:
-                startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
         }
     }

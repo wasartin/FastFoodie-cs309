@@ -3,6 +3,6 @@
     android:label="@string/app_name"
     android:hint="@string/search_hint"
     android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
-    android:searchSuggestAuthority="edu.iastate.graysonc.fastfood.RecentSearchProvider"
-    android:searchSuggestSelection=" ?" >
+
+    android:searchSuggestAuthority="edu.iastate.graysonc.fastfood.RecentSearchProvider">
 </searchable>

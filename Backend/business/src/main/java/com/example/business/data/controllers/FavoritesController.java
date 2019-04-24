@@ -18,7 +18,7 @@ import com.example.business.data.entities.Favorites;
 import com.example.business.data.services.FavoritesService;
 
 /**
- * 
+ *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the Favorites repository.
  * @author Jon & Will(For that sweet refactor)
  *
  */
@@ -32,7 +32,7 @@ public class FavoritesController {
 	/**
 	 * Returns an optional of favorites for the specified fav_id
 	 * @param fav_id
-	 * @return Optional<Favorites>
+	 * @return Optional<Favorites> which is just one favorites object.
 	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/{fav_id}")
 	@ResponseBody
@@ -42,7 +42,7 @@ public class FavoritesController {
 
 	/**
 	 * returns an iterable for all favorites
-	 * @return Iterable<Favorites> 
+	 * @return Iterable<Favorites> of all favorites in the database
 	 */
 	@GetMapping("/all")
 	public Iterable<Favorites> getAllfavoritesList() {
@@ -52,7 +52,7 @@ public class FavoritesController {
 	/**
 	 * getting favorites from a specific user
 	 * @param user_id
-	 * @return
+	 * @return a list of the favorites for a specific user.
 	 */
 	@RequestMapping(value = "/user/{user_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Favorites> getAllFavorites(@PathVariable String user_id) {
@@ -62,7 +62,7 @@ public class FavoritesController {
 	/**
 	 * Takes in a Favorites Object and creates a new favorite
 	 * @param newUser
-	 * @return a response detailing how the addition went 
+	 * @return a response entity which spring turns into a json object. It contains information concerning the transaction.
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -73,7 +73,7 @@ public class FavoritesController {
 	/**
 	 * creates a new favorite for a specific user
 	 * @param user_id -the id of the user whose favorite is being added, fid -the favorite id
-	 * @return a JSON object response
+	 * @return a response entity which spring turns into a json object. It contains information concerning the transaction.
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create/{user_id}/{fid}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -87,7 +87,7 @@ public class FavoritesController {
 	/**
 	 * Deletes the favorite given their unique id
 	 * @param favorite_id
-	 * @return a json object response
+	 * @return a response entity which spring turns into a json object. It contains information concerning the transaction.
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{favorites_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
@@ -98,7 +98,7 @@ public class FavoritesController {
 	/**
 	 * Deletes the favorite given their user and food 
 	 * @param favorite_id
-	 * @return a json object response 
+	 * @return a response entity which spring turns into a json object. It contains information concerning the transaction.
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{user_id}/{fid}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody

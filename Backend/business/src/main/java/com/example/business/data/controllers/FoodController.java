@@ -17,7 +17,7 @@ import com.example.business.data.entities.Food;
 import com.example.business.data.services.FoodService;
 
 /**
- * Food controller. 
+ *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the Food repository.
  * @author Will and Jon
  *
  */

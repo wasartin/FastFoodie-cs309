@@ -62,6 +62,12 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
+    /**
+     * Creates our fragment
+     * Assigns on click handlers
+     * Assigns button ids
+     * Assigns other variables to different values
+     */
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -165,6 +171,9 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
     }
 
     @Override
+    /**
+     * Handles different button groups and what to process in a click
+     */
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.ticketRadioButton:

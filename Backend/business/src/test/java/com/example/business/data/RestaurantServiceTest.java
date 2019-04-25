@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -20,8 +19,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
-import com.example.business.data.controllers.RestaurantController;
 import com.example.business.data.entities.Restaurant;
 import com.example.business.data.repositories.RestaurantRepository;
 import com.example.business.data.services.RestaurantService;
@@ -39,13 +39,12 @@ public class RestaurantServiceTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
-
 	@Test
 	public void getRestaurantByIdTest() {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		when(restRepo.findById(1)).thenReturn(Optional.of(new Restaurant(1, "McDonalds", now)));
 		
-		Optional<Restaurant> restO = restService.getRestaurant(1);
+		Optional<Restaurant> restO = restService.getEntityByID(1);
 		Restaurant rest = restO.get();
 		assertEquals(1, rest.getRestaurant_id());
 		assertEquals("McDonalds", rest.getRestaurant_name());
@@ -66,7 +65,7 @@ public class RestaurantServiceTest {
 
 		when(restRepo.findAll()).thenReturn(list);
 
-		List<Restaurant> restList = (List<Restaurant>) restService.getAllRestaurantsList();
+		List<Restaurant> restList = (List<Restaurant>) restService.getAllEntities();
 
 		assertEquals(3, restList.size());
 		verify(restRepo, times(1)).findAll();
@@ -78,19 +77,23 @@ public class RestaurantServiceTest {
 		Restaurant found = new Restaurant(1, "McDonalds", now);
 		when(restRepo.save(found)).thenReturn(new Restaurant());
 		
-		Map<String,Object> response = restService.createRestaurant(found);
-		assertThat(restRepo.save(found), is(notNullValue()));
-		assertEquals(response.get("message"), HttpStatus.OK);
-		assertEquals(response.get("status"), 200);	
+		ResponseEntity<?> response = restService.createEntity(found, found.getRestaurant_id());
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
+		assertEquals(response.getBody(), found.getClass().getSimpleName());
 	}
 
 	@Test 
 	public void deleteRestaurantTest() {
+		Restaurant toDelete = new Restaurant(1, "McDonalds", new Timestamp(System.currentTimeMillis()));
 		when(restRepo.existsById(1)).thenReturn(true);
+		when(restRepo.findById(1)).thenReturn(Optional.of(toDelete));
 
-		Map<String, Object> response = restService.deleteRestaurant(1);
+		ResponseEntity<?> response = restService.deleteEntityById(1);
+		
 		verify(restRepo, times(1)).deleteById(1);
-		assertEquals(response.get("status"), 200);
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
 	}
 	
 	@Test
@@ -101,12 +104,11 @@ public class RestaurantServiceTest {
 		when(restRepo.save(rest)).thenReturn(new Restaurant());
 		when(restRepo.existsById(1)).thenReturn(true);
 		
-		Map<String, Object> response = restService.editRestaurant(rest, 1);
+		ResponseEntity<?> response = restService.editEntity(rest, 1);
 
 		assertThat(restRepo.save(rest), is(notNullValue()));
-		System.out.println(response.toString());
-		
-		assertEquals(response.get("status"), 200);
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
 	}
 	
 }

@@ -2,9 +2,9 @@ package com.example.business.data.controllers;
 
 import java.util.Optional;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,73 +16,67 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.business.data.entities.Food;
 import com.example.business.data.services.FoodService;
 
+/**
+ *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the Food repository.
+ * @author Will and Jon
+ *
+ */
 @RestController
 @RequestMapping(value="/foods")
 public class FoodController {
 	
 	@Autowired
 	FoodService foodService;
-	
-	@RequestMapping(method = RequestMethod.GET, path = "old/{food_id}")
+
+	/**
+	 * returns an optional for a specified food
+	 * @param food_id
+	 * @return optional<food>
+	 */
+	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}")
 	@ResponseBody
 	public Optional<Food> getFood(@PathVariable int food_id){
-		return foodService.getFood(food_id);
-	}
-
-	@GetMapping("old/all")
-	public Iterable<Food> getAllFoodList() {
-		return foodService.getAllFoodList();
-	}
-
-	/**
-	 *
-	 * @param food_id
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.GET, path = "/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public JSONObject getFoodJSONObject(@PathVariable int food_id) {
-		return foodService.jsonGetFood(food_id);
+		return foodService.getEntityByID(food_id);
 	}
 	
 	/**
-	 * 
-	 * @return JSONObject 
+	 * returns iterable for all food objects
+	 * @return iterable<food>
 	 */
-	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JSONObject getAllFoodJSONObject()  {
-		return foodService.jsonGetAllFood();
+	@GetMapping("/all")
+	public Iterable<Food> getAllFoodList() {
+		return foodService.getAllEntities();
 	}
 
 	/**
 	 * Currently just takes food Object. Might need to be a JSONObject I parse if more info is required.
 	 * @param newFood
-	 * @return
+	 * @return a response Entity 
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public JSONObject createFood(@RequestBody Food newFood) {
-		return foodService.createFood(newFood);
+	public ResponseEntity<?> createFood(@RequestBody Food newFood) {
+		return foodService.createEntity(newFood, newFood.getFood_id());
 	}
 	
 	/**
 	 * Deletes the food given their unique id
 	 * @param food_id
-	 * @return
+	 * @return a response Entity 
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/delete/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE) 
 	@ResponseBody
-	public JSONObject deleteFood(@PathVariable int food_id) {
-		return foodService.deleteFood(food_id);
+	public ResponseEntity<?> deleteFood(@PathVariable int food_id) {
+		return foodService.deleteEntityById(food_id);
 	}
 	
-	/**
+	/**takes in a food object and edits the specified food to match the object taken in 
 	 * @param food To edit
-	 * @return
+	 * @return a response Entity 
 	 */
 	@RequestMapping(method = RequestMethod.PUT, path = "/edit/{food_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public JSONObject editFood(@RequestBody Food newFood, @PathVariable int food_id) {
-		return foodService.editFood(newFood, food_id);
+	public ResponseEntity<?> editFood(@RequestBody Food newFood, @PathVariable int food_id) {
+		return foodService.editEntity(newFood, food_id);
 	}
 }

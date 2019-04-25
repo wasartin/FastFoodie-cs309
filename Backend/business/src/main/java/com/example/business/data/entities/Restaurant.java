@@ -4,19 +4,37 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * An entity (or dao) that maps to the table 'resturant' in the Database. This represents the model of the object.
+ * @author watis
+ *
+ */
 @Entity
 @Table(name="restaurant")
 public class Restaurant {
 
-	//TODO this should be an int
+	/**
+	 * Unique id to find this restaurant.
+	 */
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="restaurant_id")
 	private int restaurant_id;
+	
+	/**
+	 * The name of the restaurant
+	 */
 	@Column(name="restaurant_name")
 	private String restaurant_name;
+	
+	/**
+	 * The last time anything with this restaurant was updated
+	 */
 	@Column(name="last_updated")
 	private Timestamp last_updated;
 	

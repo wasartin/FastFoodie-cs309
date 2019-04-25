@@ -7,17 +7,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * An entity (or dao) that maps to the table 'favorites' in the Database. This represents the model of the object.
+ * @author watis
+ *
+ */
 @Entity
 @Table(name="favorites")
 public class Favorites {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	/**
+	 * An id to uniquely identify the favorite
+	 */
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="favorites_id")
 	private int favorites_id;
 	
+	/**
+	 * The user that likes a certain food.
+	 */
 	@Column(name="user_id")
 	private String user_id; 
 	
+	/**
+	 * The food the user liked.
+	 */
 	@Column(name="fid")
 	private int fid;
 	

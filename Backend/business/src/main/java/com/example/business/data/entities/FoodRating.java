@@ -2,23 +2,43 @@ package com.example.business.data.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * An entity (or dao) that maps to the table 'foodRating' in the Database. This represents the model of the object.
+ * @author watis
+ *
+ */
 @Entity
 @Table(name="foodRating")
 public class FoodRating {
 	
+	/**
+	 * Unique id to find rating
+	 */
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="rating_id")
 	private int rating_id;
 	
+	/**
+	 * User that rated this food
+	 */
 	@Column(name="user_email")
 	private String user_email; 
 	
+	/**
+	 * Food id of the food being rated
+	 */
 	@Column(name="food_id")
 	private int food_id; 
 	
+	/**
+	 * The rating given.
+	 */
 	@Column(name="rating")
 	private int rating;
 

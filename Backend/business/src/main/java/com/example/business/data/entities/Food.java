@@ -2,41 +2,81 @@ package com.example.business.data.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 
+/**
+ * An entity (or dao) that maps to the table 'food' in the Database. This represents the model of the object.
+ * @author watis
+ *
+ */
 @Entity
 @Table(name="food")
 public class Food {
 	
+	/**
+	 * Each food is uniquely identified by it's id.
+	 */
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="food_id")
-	private int food_id; 
+	private Integer food_id; 
 	
+	/**
+	 * For displaying an easy to understand name to the user.
+	 */
 	@Column(name="food_name")
 	private String food_name; 
 	
+	/**
+	 * Grams of protein
+	 */
+	@Digits(fraction = 0, integer = 10)
 	@Column(name="protein_total")
 	private int protein_total;
 	
+	/**
+	 * Grams of carbs
+	 */
 	@Column(name="carb_total")
 	private int carb_total;
 	
+	/**
+	 * Grams of fat
+	 */
 	@Column(name="fat_total")
 	private int fat_total;
 	
+	/**
+	 * Total number of calories
+	 */
 	@Column(name="calorie_total")
 	private int calorie_total;
 	
+	/**
+	 * Price in dollars
+	 */
 	@Column(name="price")
 	private String price;
 	
+	/**
+	 * A restaurant specific category.
+	 */
 	@Column(name="category")
 	private String category;
 	
+	/**
+	 * The id of the restaurant it is located at.
+	 */
 	@Column (name="located_at")
 	private int located_at;
 	
+	/**
+	 * Average rating of food.
+	 */
 	@Column(name = "rating")
 	private double rating;
 	

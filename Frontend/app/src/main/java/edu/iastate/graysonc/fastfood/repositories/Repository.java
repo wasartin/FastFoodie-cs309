@@ -66,6 +66,11 @@ public class Repository {
         });
     }
 
+    /**
+     * Gets the User object for the specified user
+     * @param userEmail The email address of the user to fetch
+     * @return The LiveData<User> object with the specified email address
+     */
     public LiveData<User> getUser(String userEmail) {
         refreshUser(userEmail); // Refresh if possible
         return userDao.load(userEmail); // Returns a LiveData object directly from the database.
@@ -102,8 +107,7 @@ public class Repository {
     }
 
     /**
-     * Fetches all foods from the server and puts them in the Database
-     * This is temporary until we have a way to get just foods in a specific user's favorites.
+     * Adds all food objects from the server to the local database
      */
     private void fetchAllFoods() {
         executor.execute(() -> {
@@ -121,6 +125,11 @@ public class Repository {
         });
     }
 
+    /**
+     * Refreshed the specified food object in the loacl database and returns it as a LiveData<Food> object
+     * @param foodId The id of the food object to retrieve
+     * @return The requested food object
+     */
     public LiveData<Food> getFood(int foodId) {
         refreshFood(foodId); // Refresh if possible
         return foodDao.load(foodId); // Returns a LiveData object directly from the database.
@@ -156,11 +165,21 @@ public class Repository {
         });
     }
 
+    /**
+     * Retrieves a list of Food objects that the specified user has "favorited"
+     * @param userEmail The email address of the User whose favorite Food objects are being requested
+     * @return The list of favorite Food objects
+     */
     public LiveData<List<Food>> getFavoriteFoodsForUser(String userEmail) {
         refreshFavoriteFoodsForUser(userEmail);
         return foodDao.loadFavorites();
     }
 
+    /**
+     * Adds the specified Food to the specified User's favorites list
+     * @param userEmail The User's email address
+     * @param foodId The Food's id
+     */
     public void createFavorite(String userEmail, int foodId) {
         executor.execute(() -> {
             webservice.createFavorite(userEmail, foodId).enqueue(new Callback<Favorite>() {
@@ -176,6 +195,11 @@ public class Repository {
         });
     }
 
+    /**
+     * Removes the specified Food object from the specified User's favorites list
+     * @param userEmail The User's email address
+     * @param foodId The Food's id
+     */
     public void deleteFavorite(String userEmail, int foodId) {
         executor.execute(() -> {
             //foodDao.delete(foodId);

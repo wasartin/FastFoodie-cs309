@@ -1,9 +1,13 @@
 package edu.iastate.graysonc.fastfood.repositories;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -12,13 +16,6 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import androidx.lifecycle.LiveData;
-import androidx.room.RoomDatabase;
-import androidx.room.RoomSQLiteQuery;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.api.Webservice;
@@ -51,7 +48,6 @@ public class Repository {
     }
 
     public LiveData<List<Food>> getFoodMatches(String query) {
-
         return foodDao.findMatches("%" + query + "%");
     }
 
@@ -101,28 +97,8 @@ public class Repository {
         });
     }
 
-    /**
-     * Fetches all foods from the server and puts them in the Database
-     * This is temporary until we have a way to get just foods in a specific user's favorites.
-     */
-    private void refreshAllFoods() {
-        executor.execute(() -> {
-            webservice.getAllFoods().enqueue(new Callback<List<Food>>() {
-                @Override
-                public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
-                    Log.d(TAG, "ALL FOODS FETCHED FROM NETWORK");
-                    executor.execute(() -> {
-                        foodDao.insert(response.body());
-                    });
-                }
-                @Override
-                public void onFailure(Call<List<Food>> call, Throwable t) { t.printStackTrace(); }
-            });
-        });
-    }
-
     public LiveData<Food> getFood(int foodId) {
-        //refreshFood(foodId); // Refresh if possible
+        refreshFood(foodId); // Refresh if possible
         return foodDao.load(foodId); // Returns a LiveData object directly from the database.
     }
 
@@ -147,8 +123,11 @@ public class Repository {
                                         @Override
                                         public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
                                             List<Food> favorites = response.body();
-                                            if (favorites.contains(food)) { // Set food as favorite
-                                                food.setIsFavorite(1);
+                                            for (Food fav : favorites) {
+                                                if (fav.getId() == food.getId()) {
+                                                    food.setIsFavorite(1);
+                                                    break;
+                                                }
                                             }
                                         }
 
@@ -173,7 +152,36 @@ public class Repository {
     }
 
     public LiveData<List<Food>> getFavoriteFoodsForUser(String userEmail) {
+        refreshFavoritesForUser(userEmail);
         return foodDao.loadFavorites();
+    }
+
+    private void refreshFavoritesForUser(String userEmail) {
+        executor.execute(() -> {
+            webservice.getFavoriteFoodsForUser(userEmail).enqueue(new Callback<List<Food>>() {
+                @Override
+                public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
+                    Log.d(TAG, "FAVORITES REFRESHED FROM NETWORK");
+                    Toast.makeText(App.context, "Data refreshed from network", Toast.LENGTH_LONG).show();
+                    executor.execute(() -> {
+                        List<Food> favorites = response.body();
+                        if (favorites == null) {
+                            Log.e(TAG,"Grayson your code doesn't work <3 - refreshFood");
+                        } else {
+                            for (Food f : favorites) {
+                                f.setIsFavorite(1);
+                                foodDao.delete(f.getId());
+                            }
+                            foodDao.insert(favorites);
+                        }
+                    });
+                }
+                @Override
+                public void onFailure(Call<List<Food>> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        });
     }
 
     public void createFavorite(String userEmail, int foodId) {
@@ -182,7 +190,7 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                     Log.d(TAG, "FAVORITE ADDED");
-                    refreshFavoriteFoodsForUser(userEmail);
+                    //refreshFavoriteFoodsForUser(userEmail);
                 }
                 @Override
                 public void onFailure(Call<Favorite> call, Throwable t) { t.printStackTrace(); }
@@ -197,37 +205,10 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                     Log.d(TAG, "FAVORITE REMOVED");
-                    refreshFavoriteFoodsForUser(userEmail);
+                    //refreshFavoriteFoodsForUser(userEmail);
                 }
                 @Override
                 public void onFailure(Call<Favorite> call, Throwable t) { t.printStackTrace(); }
-            });
-        });
-    }
-
-    private void refreshFavoriteFoodsForUser(String userEmail) {
-        executor.execute(() -> {
-            webservice.getFavoriteFoodsForUser(userEmail).enqueue(new Callback<List<Food>>() {
-                @Override
-                public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
-                    Log.d(TAG, "FAVORITES REFRESHED FROM NETWORK");
-                    executor.execute(() -> {
-                        List<Food> favorites = response.body();
-                        if (favorites == null) {
-                            Log.e(TAG,"Grayson your code doesn't work <3 - refreshFood");
-                        } else {
-                            for (Food f : favorites) {
-                                f.setIsFavorite(1);
-                                foodDao.update(f);
-                            }
-                            //foodDao.insert(favorites);
-                        }
-                    });
-                }
-                @Override
-                public void onFailure(Call<List<Food>> call, Throwable t) {
-                        t.printStackTrace();
-                }
             });
         });
     }

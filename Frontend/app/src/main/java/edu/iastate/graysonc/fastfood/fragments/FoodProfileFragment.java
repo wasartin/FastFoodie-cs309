@@ -20,11 +20,12 @@ import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.view_models.FactoryViewModel;
 import edu.iastate.graysonc.fastfood.view_models.FoodProfileViewModel;
+import edu.iastate.graysonc.fastfood.view_models.FoodViewModel;
 
 public class FoodProfileFragment extends Fragment implements View.OnClickListener {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
-    private FoodProfileViewModel mViewModel;
+    private FoodViewModel mViewModel;
 
     private TextView name, price, calories, protein, carbs, fat;
     private RatingBar ratingBar;
@@ -58,15 +59,14 @@ public class FoodProfileFragment extends Fragment implements View.OnClickListene
         backButton.setOnClickListener(this);
 
         // Configure ViewModel
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(FoodProfileViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity(), mViewModelFactory).get(FoodViewModel.class);
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mViewModel.init(getArguments().getInt("foodId"));
-        mViewModel.getFood().observe(this, f -> {
+        mViewModel.getSelectedFood().observe(this, f -> {
             if (f != null) {
                 name.setText(f.getName());
                 price.setText(f.getPrice());

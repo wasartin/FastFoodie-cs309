@@ -1,9 +1,14 @@
 package com.example.business.data.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.business.data.entities.Food;
+import com.example.business.data.entities.Ticket;
 
 /**
  * The food repository is the layer that interfaces with the database. It uses the favorites dao and performs general
@@ -12,7 +17,22 @@ import com.example.business.data.entities.Food;
  *
  */
 @Repository
-public interface FoodRepository extends CrudRepository<Food, Integer>{
+public interface FoodRepository extends PagingAndSortingRepository<Food, Integer>{
+
+	/**
+	 * Finds foods that contain the keyword
+	 * @param keyword
+	 * @return a list of foods that contain the keyword
+	 */
+	@Query(value =
+			"SELECT *"
+			+"FROM food"
+			+"WHERE food_name LIKE '%?1%'", nativeQuery = true)
+	Page<Food> getFoodListWithKeyword(String keyword);
 	
+	//FILTERING
+	//{GT/LT/EQ}, {NUMBER}, {FOOD int} (protein, calorie, etc), can have one arg, or 1+
 	
+	//SORTING
+	//{[ONE ARG]} OR {[ARG_ONE} : {ARG_TWO}]
 }

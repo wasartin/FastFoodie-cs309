@@ -1,8 +1,11 @@
 package com.example.business.data.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +41,14 @@ public class FoodController {
 	public Optional<Food> getFood(@PathVariable int food_id){
 		return foodService.getEntityByID(food_id);
 	}
+	
+	//return pages for just all food for now.
+	@RequestMapping(value="/?all", method=RequestMethod.GET)
+	Page<Food> listAllFood(Pageable pageable){
+		Page<Food> foods = foodService.listAllByPage(pageable);
+		return foods;
+		
+	} 
 	
 	/**
 	 * returns iterable for all food objects
@@ -79,4 +90,15 @@ public class FoodController {
 	public ResponseEntity<?> editFood(@RequestBody Food newFood, @PathVariable int food_id) {
 		return foodService.editEntity(newFood, food_id);
 	}
+	
+	/**
+	 * Get all the foods that contain this keyword
+	 */
+	@RequestMapping(method = RequestMethod.GET, path = "/{keyword}")
+	@ResponseBody
+	public List<Food> getFood(@PathVariable String keyword){
+
+		return null;
+	}
+	
 }

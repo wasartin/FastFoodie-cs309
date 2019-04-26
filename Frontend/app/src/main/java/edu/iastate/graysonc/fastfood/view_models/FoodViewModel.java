@@ -3,7 +3,6 @@ package edu.iastate.graysonc.fastfood.view_models;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class FoodViewModel extends ViewModel {
     public LiveData<List<Food>> getFavoriteFoods() {
         if (favoriteFoods == null) {
             favoriteFoods = new MutableLiveData<List<Food>>();
-            loadFavoriteFoods(mUserEmail);
+            loadFavoriteFoods();
         }
         return favoriteFoods;
     }
@@ -55,8 +54,8 @@ public class FoodViewModel extends ViewModel {
         searchResults = repo.getFoodMatches(query);
     }
 
-    public void loadFavoriteFoods(String userEmail) {
-        favoriteFoods = repo.getFavoriteFoodsForUser(userEmail);
+    public void loadFavoriteFoods() {
+        favoriteFoods = repo.getFavoriteFoodsForUser(mUserEmail);
     }
 
     public MutableLiveData<Food> getSelectedFood() {

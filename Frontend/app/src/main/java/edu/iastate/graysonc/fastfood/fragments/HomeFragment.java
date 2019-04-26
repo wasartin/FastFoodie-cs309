@@ -47,6 +47,8 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
     private View categoriesViewGroup;
     private SearchView searchView;
 
+    private FilterFragment filterFragment;
+
 
     public HomeFragment() {}
 
@@ -92,6 +94,20 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
                 return false;
             }
         });
+        getView().findViewById(R.id.filter_button).setOnClickListener(this);
+
+        filterFragment = new FilterFragment();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mViewModel.getSearchResults().observe(this, f -> {
+            if (f != null) {
+                buildRecyclerView(f);
+                mAdapter1.notifyDataSetChanged();
+            }
+        });
     }
 
     public void buildRecyclerView(List<Food> f) {
@@ -108,14 +124,14 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
     @Override
     public void onItemClick(int position) {
         mViewModel.setSelectedFood(mViewModel.getSearchResults().getValue().get(position));
-        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_homeFragment_to_foodProfileFragment);
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_homeFragment_to_foodDetailFragment);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.filter_button:
-
+                filterFragment.show(getActivity().getSupportFragmentManager(), "filter_fragment");
                 break;
         }
     }

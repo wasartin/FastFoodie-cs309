@@ -20,7 +20,7 @@ import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.view_models.FoodViewModel;
 
-public class FoodProfileFragment extends Fragment implements View.OnClickListener {
+public class FoodDetailFragment extends Fragment implements View.OnClickListener {
     @Inject
     ViewModelProvider.Factory mViewModelFactory;
     private FoodViewModel mViewModel;
@@ -29,13 +29,13 @@ public class FoodProfileFragment extends Fragment implements View.OnClickListene
     private RatingBar ratingBar;
     private View backButton;
 
-    public FoodProfileFragment() {}
+    public FoodDetailFragment() {}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_food_profile, container, false);
+        return inflater.inflate(R.layout.fragment_food_detail, container, false);
     }
 
     @Override

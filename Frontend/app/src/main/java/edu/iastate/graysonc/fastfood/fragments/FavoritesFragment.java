@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -41,6 +42,8 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
     private FoodListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private SwipeRefreshLayout refreshLayout;
+
     public FavoritesFragment() {}
 
     @SuppressLint("ClickableViewAccessibility")
@@ -61,11 +64,20 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
                     for (Food tmp : f) {
                         Log.d(TAG, "onActivityCreated: Current favorites: " + tmp.getName());
                     }
+                    refreshLayout.setRefreshing(false);
                     buildRecyclerView(f);
                     mAdapter.notifyDataSetChanged();
                 }
             });
         }
+
+        refreshLayout = getView().findViewById(R.id.refresh_layout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mViewModel.loadFavoriteFoods();
+            }
+        });
     }
 
     @Override
@@ -100,6 +112,6 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
     @Override
     public void onItemClick(int position) {
         mViewModel.setSelectedFood(mViewModel.getFavoriteFoods().getValue().get(position));
-        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_favoritesFragment_to_foodProfileFragment);
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_favoritesFragment_to_foodDetailFragment);
     }
 }

@@ -20,7 +20,7 @@ import com.example.business.data.repositories.FoodRepository;
 @Transactional//new, may really mess things up
 public class FoodService extends AbstractService<Food, Integer>{
 	
-	final FoodRepository foodRepository;
+	FoodRepository foodRepository;
 	
 	@Autowired
 	FoodService(FoodRepository foodRepository){

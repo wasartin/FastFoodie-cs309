@@ -18,8 +18,6 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.R;
-import edu.iastate.graysonc.fastfood.view_models.FactoryViewModel;
-import edu.iastate.graysonc.fastfood.view_models.FoodProfileViewModel;
 import edu.iastate.graysonc.fastfood.view_models.FoodViewModel;
 
 public class FoodProfileFragment extends Fragment implements View.OnClickListener {

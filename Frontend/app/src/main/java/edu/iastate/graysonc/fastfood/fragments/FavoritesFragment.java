@@ -28,7 +28,6 @@ import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
 import edu.iastate.graysonc.fastfood.recycler_classes.FoodListAdapter;
-import edu.iastate.graysonc.fastfood.view_models.FavoritesViewModel;
 import edu.iastate.graysonc.fastfood.view_models.FoodViewModel;
 
 public class FavoritesFragment extends Fragment implements FoodListAdapter.OnItemClickListener {

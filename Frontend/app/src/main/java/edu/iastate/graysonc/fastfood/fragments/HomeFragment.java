@@ -32,7 +32,6 @@ import edu.iastate.graysonc.fastfood.activities.MainActivity;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
 import edu.iastate.graysonc.fastfood.recycler_classes.FoodListAdapter;
 import edu.iastate.graysonc.fastfood.view_models.FoodViewModel;
-import edu.iastate.graysonc.fastfood.view_models.HomeViewModel;
 
 import static androidx.constraintlayout.motion.widget.MotionScene.TAG;
 

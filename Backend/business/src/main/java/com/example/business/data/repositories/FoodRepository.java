@@ -3,12 +3,12 @@ package com.example.business.data.repositories;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.business.data.entities.Food;
-import com.example.business.data.entities.Ticket;
 
 /**
  * The food repository is the layer that interfaces with the database. It uses the favorites dao and performs general
@@ -28,7 +28,7 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 			"SELECT *"
 			+"FROM food"
 			+"WHERE food_name LIKE '%?1%'", nativeQuery = true)
-	Page<Food> getFoodListWithKeyword(String keyword);
+	Page<Food> getFoodListWithKeyword(String keyword, Pageable pageable);//wondering if all args must be page
 	
 	//FILTERING
 	//{GT/LT/EQ}, {NUMBER}, {FOOD int} (protein, calorie, etc), can have one arg, or 1+

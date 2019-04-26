@@ -213,6 +213,36 @@ public class Repository {
         });
     }
 
+    public void submitRating(String userEmail, int foodId, int rating) {
+        executor.execute(() -> {
+            webservice.submitRating(userEmail, foodId, rating).enqueue(new Callback<Double>() {
+                @Override
+                public void onResponse(Call<Double> call, Response<Double> response) {
+                    Log.d(TAG, "onResponse: Rating submitted successfully");
+                }
+                @Override
+                public void onFailure(Call<Double> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        });
+    }
+
+    public void deleteRating(String userEmail, int foodId) {
+        executor.execute(() -> {
+            webservice.deleteRating(userEmail, foodId).enqueue(new Callback<Double>() {
+                @Override
+                public void onResponse(Call<Double> call, Response<Double> response) {
+                    Log.d(TAG, "onResponse: Rating submitted successfully");
+                }
+                @Override
+                public void onFailure(Call<Double> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        });
+    }
+
     private Date getMaxRefreshTime(Date currentDate){
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentDate);

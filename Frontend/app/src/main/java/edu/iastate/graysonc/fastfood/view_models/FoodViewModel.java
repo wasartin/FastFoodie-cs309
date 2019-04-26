@@ -65,4 +65,12 @@ public class FoodViewModel extends ViewModel {
     public void setSelectedFood(Food food) {
         selectedFood.setValue(food);
     }
+
+    public void addToFavorites(String userEmail, int foodId) {
+        repo.createFavorite(userEmail, foodId);
+    }
+
+    public void removeFromFavorites(String userEmail, int foodId) {
+        repo.deleteFavorite(userEmail, foodId);
+    }
 }

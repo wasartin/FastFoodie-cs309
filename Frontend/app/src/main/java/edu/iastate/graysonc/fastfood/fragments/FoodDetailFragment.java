@@ -29,6 +29,8 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
     private RatingBar ratingBar;
     private View backButton;
 
+    private RatingDialogFragment ratingDialogFragment;
+
     public FoodDetailFragment() {}
 
     @Override
@@ -53,11 +55,14 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
         carbs = getView().findViewById(R.id.carbohydrate_text);
         fat = getView().findViewById(R.id.fat_text);
         ratingBar = getView().findViewById(R.id.rating_bar);
+        ratingBar.setOnClickListener(this);
         backButton = getView().findViewById(R.id.back_button);
         backButton.setOnClickListener(this);
 
         // Configure ViewModel
         mViewModel = ViewModelProviders.of(getActivity(), mViewModelFactory).get(FoodViewModel.class);
+
+        ratingDialogFragment = new RatingDialogFragment();
 
     }
 
@@ -82,6 +87,9 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.back_button:
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack();
+                break;
+            case R.id.rating_bar:
+                ratingDialogFragment.show(getActivity().getSupportFragmentManager(), "rating_fragment");
                 break;
         }
     }

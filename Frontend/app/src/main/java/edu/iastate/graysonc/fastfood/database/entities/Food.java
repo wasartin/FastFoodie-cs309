@@ -1,20 +1,19 @@
 package edu.iastate.graysonc.fastfood.database.entities;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity
 public class Food {
     @PrimaryKey
     @NonNull
     @SerializedName("food_id")
-    @Expose
     private int id;
 
     @SerializedName("food_name")
@@ -44,6 +43,9 @@ public class Food {
 
     @SerializedName("located_at")
     private int location;
+
+    @SerializedName("food_rating")
+    private double rating;
 
     private int isFavorite;
 
@@ -143,5 +145,13 @@ public class Food {
 
     public void setIsFavorite(int favorite) {
         isFavorite = favorite;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

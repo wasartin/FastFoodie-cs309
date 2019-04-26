@@ -1,35 +1,33 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import javax.inject.Inject;
 
@@ -38,27 +36,18 @@ import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.DownloadImageTask;
 import edu.iastate.graysonc.fastfood.PopUps.submitPopUp;
 import edu.iastate.graysonc.fastfood.R;
-import edu.iastate.graysonc.fastfood.database.entities.User;
 import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
 
-import static android.support.constraint.Constraints.TAG;
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private ProfileViewModel viewModel;
 
-    private ConstraintLayout mMasterLayout;
-
     private ImageView avatarImageView;
     private TextView nameTextView;
     private TextView mUserInfoDisp;
     private ImageButton mMenuExpand;
-    private ScrollView mHorizontalScroller;
     private Animation fINAnim;
     private Animation fOUTAnim;
     private RadioGroup mProfileGroupRadioGroup;
@@ -91,9 +80,7 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
         nameTextView = getView().findViewById(R.id.name_text_view);
         mUserInfoDisp = getView().findViewById(R.id.user_info_display);
         mMenuExpand = getView().findViewById(R.id.MenuButton);
-        mHorizontalScroller = getView().findViewById(R.id.HorizontalScroller);
         mProfileGroupRadioGroup = getView().findViewById(R.id.ProfileGroupRadioGroup);
-       mMasterLayout = getView().findViewById(R.id.MasterLayout);
 
         fINAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
         fINAnim.setDuration(600);
@@ -102,63 +89,57 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         // Configure ViewModel
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
-        if (App.account != null) {
-            viewModel.init(App.account.getEmail());
-            initUI(App.account);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(App.context);
+        if (account != null) {
+            viewModel.init(GoogleSignIn.getLastSignedInAccount(App.context));
             viewModel.getUser().observe(this, user -> {
                 if (user != null) {
-                    updateUI(user);
+                    updateUI();
                 }
             });
-        }else{
-            mHorizontalScroller.setVisibility(View.GONE);
-            Fragment newFragment = new SignInFragment();
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.add(R.id.MasterLayout, newFragment).commit();
         }
+
         // Create Click Listeners
         mProfileGroupRadioGroup.setOnCheckedChangeListener(this);
         mMenuExpand.setOnClickListener(v -> toggleMenuVisible());
-
-
-        mHorizontalScroller.setOnTouchListener((v, event) -> {
-            //If rotation = sideways
-            return getResources().getConfiguration().orientation == 1;
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (GoogleSignIn.getLastSignedInAccount(App.context) == null) {
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_profileFragment_to_signInFragment);
+        }
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     /**
      * Is called automatically whenever data in ProfileViewModel is changed.
-     *
-     * @param user
      */
-    private void updateUI(User user) {
-        mUserInfoDisp.setText("Email: " + user.getEmail() + "\n");
-        mUserInfoDisp.append("User type: " + user.getType());
-    }
-
-    /**
-     * Adds user's name and profile picture to GUI
-     */
-    public void initUI(GoogleSignInAccount account) {
-        nameTextView.setText(account.getDisplayName());
-        Uri avatarUri = account.getPhotoUrl();
+    private void updateUI() {
+        nameTextView.setText(viewModel.getGoogleSignInAccount().getDisplayName());
+        Uri avatarUri = viewModel.getGoogleSignInAccount().getPhotoUrl();
         if (avatarUri != null) {
             DownloadImageTask imageDownloader = new DownloadImageTask(avatarImageView); // Downloads the user's avatar asynchronously
             imageDownloader.execute(avatarUri.toString());
         }
+        mUserInfoDisp.setText("Email: " + viewModel.getUser().getValue().getEmail() + "\n");
+        mUserInfoDisp.append("User type: " + viewModel.getUser().getValue().getType());
     }
 
     /**
      * Uses Google Api To Sign Out
      */
     public void signOut() {
-
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        GoogleSignIn.getClient(App.context, gso).signOut()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_profileFragment_to_signInFragment);
+                    }
+                });
     }
 
     /**
@@ -201,8 +182,6 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
                 break;
             case R.id.singOutRadioButton:
                 signOut();
-                toggleMenuVisible();
-                createWarning("Sign user out");
                 break;
             case R.id.editDataRadioButton:
                 toggleMenuVisible();

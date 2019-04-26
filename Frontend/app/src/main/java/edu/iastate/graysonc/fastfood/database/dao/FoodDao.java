@@ -1,17 +1,21 @@
 package edu.iastate.graysonc.fastfood.database.dao;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
+import android.database.Cursor;
 
 import java.util.Date;
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
+
 import edu.iastate.graysonc.fastfood.database.entities.Food;
 
-import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface FoodDao {
@@ -23,6 +27,9 @@ public interface FoodDao {
 
     @Delete
     void delete(Food food);
+
+    @Update
+    void update(Food food);
 
     @Query("DELETE FROM food WHERE id = :id")
     void delete(int id);
@@ -38,4 +45,7 @@ public interface FoodDao {
 
     @Query("SELECT * FROM food WHERE id = :foodID AND lastRefresh > :lastRefreshMax LIMIT 1")
     Food hasFood(int foodID, Date lastRefreshMax);
+
+    @Query("SELECT * FROM food WHERE name LIKE :query")
+    LiveData<List<Food>> findMatches(String query);
 }

@@ -1,15 +1,21 @@
 package edu.iastate.graysonc.fastfood.activities;
 
+import android.app.SearchManager;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import android.provider.SearchRecentSuggestions;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import javax.inject.Inject;
 
@@ -17,62 +23,40 @@ import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import edu.iastate.graysonc.fastfood.R;
-import edu.iastate.graysonc.fastfood.fragments.FavoritesFragment;
-import edu.iastate.graysonc.fastfood.fragments.HomeFragment;
-import edu.iastate.graysonc.fastfood.fragments.ProfileFragment;
+import edu.iastate.graysonc.fastfood.RecentSearchProvider;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String TAG = "MainActivity";
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
-    private FragmentManager fragmentManager;
-    private Fragment homeFragment;
-    private Fragment favoritesFragment;
-    private Fragment profileFragment;
-    private Fragment currentFragment;
+
+    private NavController navController;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        AndroidInjection.inject(this);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.main_navigation);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+    }
 
-        // Instantiate all fragments
-        homeFragment = new HomeFragment();
-        favoritesFragment = new FavoritesFragment();
-        profileFragment = new ProfileFragment();
-        fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.main_frame, profileFragment, "profile").hide(profileFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.main_frame, favoritesFragment, "favorites").hide(favoritesFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.main_frame, homeFragment, "home").commit();
-        currentFragment = homeFragment;
-
-        // Start in home fragment
-        if (savedInstanceState == null) {
-            setFragment(homeFragment);
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            // Save the query for future suggestions
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                    RecentSearchProvider.AUTHORITY, RecentSearchProvider.MODE);
+            suggestions.saveRecentQuery(query, null);
+            Log.d(TAG, "onCreate: Recieved query: " + query);
         }
-
-        ((BottomNavigationView)findViewById(R.id.main_navigation)).setOnNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.navigation_home:
-                    menuItem.setChecked(true);
-                    setFragment(homeFragment);
-                    break;
-                case R.id.navigation_favorites:
-                    menuItem.setChecked(true);
-                    setFragment(favoritesFragment);
-                    break;
-                case R.id.navigation_profile:
-                    menuItem.setChecked(true);
-                    setFragment(profileFragment);
-                    break;
-            }
-            return false;
-        });
     }
 
     @Override
@@ -81,12 +65,15 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     /**
-     * Sets the fragment to a given fragment,
-     * Opens and closes a new one
-     * @param fragment New Fragment to open
+     * Useless right now. Delete if still not needed in the future.
+     * @param menu
+     * @return
      */
-    private void setFragment(Fragment fragment) {
-        fragmentManager.beginTransaction().hide(currentFragment).show(fragment).commit();
-        currentFragment = fragment;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_options, menu);
+        return super.onCreateOptionsMenu(menu);
     }
+
 }

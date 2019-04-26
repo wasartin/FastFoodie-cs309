@@ -1,27 +1,43 @@
 package edu.iastate.graysonc.fastfood.database.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 public class Ticket {
+    @SerializedName("ticket_id")
+    private int ticketId;
+
+    @SerializedName("user_id")
+    private String userId;
+
+    @SerializedName("admin_id")
+    private String adminId;
+
+    @SerializedName("text")
     private String issue;
-    private String userID;
-    private Date date;
+
+    @SerializedName("category")
     private String category;
 
+    @SerializedName("date")
+    private Date date;
+
     public Ticket(String email, String issue, String category){
-        userID = email;
+        userId = email;
         this.issue = issue;
         this.category = category;
-        date = new Date();
+        ticketId = 0;
+        adminId = null;
+        date = null;
     }
-
 
     public String getIssue() {
         return issue;
     }
 
     public String getUserID() {
-        return userID;
+        return userId;
     }
 
     public Date getDate() {

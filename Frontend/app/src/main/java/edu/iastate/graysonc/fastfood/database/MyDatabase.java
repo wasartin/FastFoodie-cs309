@@ -1,18 +1,15 @@
 package edu.iastate.graysonc.fastfood.database;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
-
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import edu.iastate.graysonc.fastfood.database.converter.DateConverter;
-import edu.iastate.graysonc.fastfood.database.dao.FavoriteDao;
 import edu.iastate.graysonc.fastfood.database.dao.FoodDao;
-import edu.iastate.graysonc.fastfood.database.entities.Favorite;
+import edu.iastate.graysonc.fastfood.database.dao.UserDao;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
 import edu.iastate.graysonc.fastfood.database.entities.User;
-import edu.iastate.graysonc.fastfood.database.dao.UserDao;
 
-@Database(entities = {User.class, Food.class}, version = 10)
+@Database(entities = {User.class, Food.class}, version = 12, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class MyDatabase extends RoomDatabase {
     // --- SINGLETON ---

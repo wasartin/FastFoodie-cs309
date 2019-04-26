@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.iastate.graysonc.fastfood.database.entities.Favorite;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
+import edu.iastate.graysonc.fastfood.database.entities.Ticket;
 import edu.iastate.graysonc.fastfood.database.entities.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,10 +16,10 @@ import retrofit2.http.Path;
 
 public interface Webservice {
 
-    @GET("users/old/{user_email}")
+    @GET("users/{user_email}")
     Call<User> getUser(@Path("user_email") String userEmail);
 
-    @GET("users/old/all")
+    @GET("users/all")
     Call<List<User>> getAllUsers();
 
     @POST("users/create")
@@ -30,16 +31,16 @@ public interface Webservice {
     @PUT("users/edit/{user_email}")
     Call<User> editUser(@Path("user_email") String userEmail);
 
-    @GET("foods/old/{food_id}")
+    @GET("foods/{food_id}")
     Call<Food> getFood(@Path("food_id") int foodId);
 
-    @GET("foods/old/all")
+    @GET("foods/all")
     Call<List<Food>> getAllFoods();
 
     @GET("api/favorites/{user_email}")
     Call<List<Food>> getFavoriteFoodsForUser(@Path("user_email") String userEmail);
 
-    @GET("favorites/old/all") // Might be deleted soon
+    @GET("favorites/all") // Might be deleted soon
     Call<List<Favorite>> getAllFavorites();
 
     @POST("favorites/create/{user_email}/{food_id}")
@@ -47,4 +48,19 @@ public interface Webservice {
 
     @DELETE("favorites/delete/{user_email}/{food_id}")
     Call<Favorite> deleteFavorite(@Path("user_email") String userEmail, @Path("food_id") int foodId);
+
+    @GET("foodRatings/average/{food_id}")
+    Call<Double> getAverageRating(@Path("food_id") int foodId);
+
+    @POST("foodRatings/create/{user_email}/{food_id}/{rating}")
+    Call<Double> submitRating(@Path("user_email") String userEmail, @Path("food_id") int foodId, @Path("rating") int rating);
+
+    @PUT("foodRatings/edit/{user_email}/{food_id}/{rating}")
+    Call<Double> editRating(@Path("user_email") String userEmail, @Path("food_id") int foodId, @Path("rating") int rating);
+
+    @DELETE("foodRatings/delete/{user_email}/{food_id}")
+    Call<Double> deleteRating(@Path("user_email") String userEmail, @Path("food_id") int foodId);
+
+    @POST("tickets/create")
+    Call<Ticket> submitTicket(Ticket ticket);
 }

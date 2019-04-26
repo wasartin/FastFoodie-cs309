@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">Fast Food</string>
-
+    <string name="app_label">Fast Foodie</string>
+    <string name="search_hint">Try \'cheeseburger\'</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="favorites_title">My Favorites</string>
 
     <!--Strings related to SearchScreen-->
 
@@ -35,7 +38,7 @@
     <string name="category">Category :</string>
     <string name="what_can_we_help_you_with">What can we help you with?</string>
     <string name="submit">Submit</string>
-    
+
     <!-- Strings for food info -->
     <string name="food_protein_total">Protein </string>
     <string name="food_carb_total">Carbohydrate </string>
@@ -45,5 +48,6 @@
     <string name="food_category">Category </string>
     <string name="food_location">Location </string>
     <string name="continue_as_guest">Continue as guest</string>
+
 
 </resources>

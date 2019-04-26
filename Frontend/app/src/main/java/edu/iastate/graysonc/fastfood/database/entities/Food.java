@@ -14,7 +14,6 @@ public class Food {
     @PrimaryKey
     @NonNull
     @SerializedName("food_id")
-    @Expose
     private int id;
 
     @SerializedName("food_name")

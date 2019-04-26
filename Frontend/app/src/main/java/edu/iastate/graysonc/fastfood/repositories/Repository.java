@@ -23,6 +23,7 @@ import edu.iastate.graysonc.fastfood.database.dao.FoodDao;
 import edu.iastate.graysonc.fastfood.database.dao.UserDao;
 import edu.iastate.graysonc.fastfood.database.entities.Favorite;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
+import edu.iastate.graysonc.fastfood.database.entities.Ticket;
 import edu.iastate.graysonc.fastfood.database.entities.User;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -237,6 +238,23 @@ public class Repository {
                 }
                 @Override
                 public void onFailure(Call<Double> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        });
+    }
+
+    public void submitTicket(Ticket ticket) {
+        executor.execute(() -> {
+            webservice.submitTicket(ticket).enqueue(new Callback<Ticket>() {
+                @Override
+                public void onResponse(Call<Ticket> call, Response<Ticket> response) {
+                    Log.d(TAG, "onResponse: Ticket submitted successfully");
+                }
+
+                @Override
+                public void onFailure(Call<Ticket> call, Throwable t) {
+                    Log.d(TAG, "onFailure: Error submitting ticket");
                     t.printStackTrace();
                 }
             });

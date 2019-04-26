@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.iastate.graysonc.fastfood.database.entities.Favorite;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
+import edu.iastate.graysonc.fastfood.database.entities.Ticket;
 import edu.iastate.graysonc.fastfood.database.entities.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -60,6 +61,6 @@ public interface Webservice {
     @DELETE("foodRatings/delete/{user_email}/{food_id}")
     Call<Double> deleteRating(@Path("user_email") String userEmail, @Path("food_id") int foodId);
 
-
-
+    @POST("tickets/create")
+    Call<Ticket> submitTicket(Ticket ticket);
 }

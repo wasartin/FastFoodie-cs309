@@ -56,14 +56,17 @@ public class FoodController {
 	//Better, but still annoying.
 	@GetMapping(params = { "page", "size" })
 	public List<Food> findPaginated(@RequestParam("page") int page, 
-	  @RequestParam("size") int size, UriComponentsBuilder uriBuilder,
-	  HttpServletResponse response) throws Exception {
+									@RequestParam("size") int size, 
+									UriComponentsBuilder uriBuilder,
+									HttpServletResponse response) throws Exception {
 	    Page<Food> resultPage = foodService.findPaginated(page, size);
 	    if (page > resultPage.getTotalPages()) {
 	        throw new Exception();
 	    }
 	    return resultPage.getContent();
 	}
+	
+	//what next?
 	
 	/**
 	 * returns iterable for all food objects

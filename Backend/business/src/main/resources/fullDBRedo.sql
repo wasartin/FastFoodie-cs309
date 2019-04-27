@@ -23,6 +23,7 @@ CREATE TABLE food(
 	category varchar(80),
 	located_at INT NOT NULL,
 	rating DOUBLE DEFAULT 0,
+	rating_count INT DEFAULT 0,
 	PRIMARY KEY(food_id),
 	FOREIGN KEY(located_at) REFERENCES restaurant(restaurant_id)
 );

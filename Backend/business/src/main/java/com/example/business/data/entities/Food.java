@@ -80,12 +80,15 @@ public class Food {
 	@Column(name = "rating")
 	private double rating;
 	
+	@Column(name = "rating_count")
+	private int rating_count;
+	
 	public Food() {
 		super();
 	}
 
 	public Food(int food_id, String food_name, int protein_total, int carb_total, int fat_total, int calorie_total,
-			String price, String category, int located_at, double rating) {
+			String price, String category, int located_at, double rating, int rating_count) {
 		super();
 		this.food_id = food_id;
 		this.food_name = food_name;
@@ -97,6 +100,7 @@ public class Food {
 		this.category = category;
 		this.located_at = located_at;
 		this.rating = rating;
+		this.rating_count = rating_count;
 	}
 	
 	public int getLocated_at() {
@@ -177,6 +181,14 @@ public class Food {
 
 	public void setRating(double rating) {
 		this.rating = rating;
+	}
+	
+	public int getRating_count() {
+		return this.rating_count;
+	}
+	
+	public void setRating_count(int rating_count) {
+		this.rating_count = rating_count;
 	}
 
 }

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,13 +78,10 @@ public class FavoritesController {
 	@RequestMapping(method = RequestMethod.POST, path = "/create/{user_id}/{fid}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> createFavoriteForUser(@PathVariable String user_id, @PathVariable int fid) {
-		if(favoritesService.getFavoriteByUserAndFood(user_id, fid) != null){
-			Favorites toAdd = new Favorites();
-			toAdd.setUser_id(user_id);
-			toAdd.setFid(fid);
-			return favoritesService.saveNewEntity(toAdd);
-		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		Favorites toAdd = new Favorites();
+		toAdd.setFid(fid);
+		toAdd.setUser_id(user_id);
+		return favoritesService.createEntity(toAdd, toAdd.getFavorites_id());
 	}
 	
 	/**

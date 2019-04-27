@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS ticket;
+DROP TABLE IF EXISTS food_rating;
+DROP TABLE IF EXISTS favorites;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS food;
+DROP TABLE IF EXISTS restaurant;
 
 CREATE TABLE restaurant(
 	restaurant_id INT NOT NULL,

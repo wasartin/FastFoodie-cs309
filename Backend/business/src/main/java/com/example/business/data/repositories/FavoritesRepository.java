@@ -34,3 +34,4 @@ public interface FavoritesRepository extends CrudRepository<Favorites, Integer> 
 	Favorites getFavoriteByUserAndFood(String user_email, int food_id);
 	
 }
+

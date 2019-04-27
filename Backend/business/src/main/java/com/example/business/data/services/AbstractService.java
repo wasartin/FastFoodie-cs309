@@ -66,7 +66,8 @@ public abstract class AbstractService<E, K> {
 			if(repo.existsById(id)) {
 				throw new IllegalArgumentException();
 			}
-			return saveNewEntity(newEntity);
+			resultingStatus = HttpStatus.OK;
+			repo.save(newEntity);
 		}catch (IllegalArgumentException e) {
 			resultingStatus = HttpStatus.BAD_REQUEST;
 		}catch (Exception e) {

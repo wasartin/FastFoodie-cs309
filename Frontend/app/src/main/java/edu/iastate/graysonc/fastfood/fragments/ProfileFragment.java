@@ -190,10 +190,8 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ArrayList<String> ticketData = data.getStringArrayListExtra("data");
-         viewModel.submitTicket(new Ticket(viewModel.getGoogleSignInAccount().getEmail(),
-                ticketData.get(0), ticketData.get(1)));
-
-    }
+            ArrayList<String> ticketData = data.getStringArrayListExtra("data");
+            viewModel.submitTicket(new Ticket(viewModel.getGoogleSignInAccount().getEmail(), ticketData.get(0), ticketData.get(1)));
+        }
 
 }

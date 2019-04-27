@@ -32,7 +32,7 @@ public class submitPopUp extends Activity {
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        getWindow().setLayout((int) (dm.widthPixels *.95),(int)(dm.heightPixels *.85));
+        getWindow().setLayout((int) (dm.widthPixels *.95),(int)(dm.heightPixels *.65));
 
         mSubmit.setOnClickListener(View -> {
             Intent data = new Intent();

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -14,10 +15,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
+import edu.iastate.graysonc.fastfood.database.entities.Food;
 import edu.iastate.graysonc.fastfood.view_models.FoodViewModel;
 
 public class FoodDetailFragment extends Fragment implements View.OnClickListener {
@@ -28,6 +34,7 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
     private TextView name, price, calories, protein, carbs, fat;
     private RatingBar ratingBar;
     private View backButton;
+    private ImageView favoriteButton;
 
     private RatingDialogFragment ratingDialogFragment;
 
@@ -58,6 +65,13 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
         ratingBar.setOnClickListener(this);
         backButton = getView().findViewById(R.id.back_button);
         backButton.setOnClickListener(this);
+        favoriteButton = getView().findViewById(R.id.favorite_icon);
+        if (GoogleSignIn.getLastSignedInAccount(App.context) == null) {
+            favoriteButton.setVisibility(View.GONE);
+        } else {
+            favoriteButton.setOnClickListener(this);
+        }
+
 
         // Configure ViewModel
         mViewModel = ViewModelProviders.of(getActivity(), mViewModelFactory).get(FoodViewModel.class);
@@ -78,6 +92,9 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
                 carbs.setText("" + f.getCarbTotal());
                 fat.setText("" + f.getFatTotal());
                 ratingBar.setRating((float)f.getRating());
+                if (f.getIsFavorite() == 1) {
+                    favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                }
             }
         });
     }
@@ -90,6 +107,17 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.rating_bar:
                 ratingDialogFragment.show(getActivity().getSupportFragmentManager(), "rating_fragment");
+                break;
+            case R.id.favorite_icon:
+                Food f = mViewModel.getSelectedFood().getValue();
+                String email = GoogleSignIn.getLastSignedInAccount(App.context).getEmail();
+                if (f.getIsFavorite() == 0) {
+                    mViewModel.addToFavorites(email, f.getId());
+                    favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                } else if (f.getIsFavorite() == 1) {
+                    mViewModel.removeFromFavorites(email, f.getId());
+                    favoriteButton.setImageResource(R.drawable.ic_favorite_empty);
+                }
                 break;
         }
     }

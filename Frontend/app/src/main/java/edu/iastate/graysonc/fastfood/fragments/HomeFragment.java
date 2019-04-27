@@ -48,6 +48,7 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
     private SearchView searchView;
 
     private FilterFragment filterFragment;
+    private SortDialogFragment sortDialogFragment;
 
 
     public HomeFragment() {}
@@ -95,8 +96,10 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
             }
         });
         getView().findViewById(R.id.filter_button).setOnClickListener(this);
+        getView().findViewById(R.id.sort_button).setOnClickListener(this);
 
         filterFragment = new FilterFragment();
+        sortDialogFragment = new SortDialogFragment();
     }
 
     @Override
@@ -132,6 +135,9 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
         switch (v.getId()) {
             case R.id.filter_button:
                 filterFragment.show(getActivity().getSupportFragmentManager(), "filter_fragment");
+                break;
+            case R.id.sort_button:
+                sortDialogFragment.show(getActivity().getSupportFragmentManager(), "sort_fragment");
                 break;
         }
     }

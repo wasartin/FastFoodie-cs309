@@ -81,6 +81,21 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mViewModel.getFavoriteFoods().observe(this, f -> {
+            if (f != null) {
+                for (Food tmp : f) {
+                    Log.d(TAG, "onActivityCreated: Current favorites: " + tmp.getName());
+                }
+                refreshLayout.setRefreshing(false);
+                buildRecyclerView(f);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (GoogleSignIn.getLastSignedInAccount(App.context) == null) {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_favoritesFragment_to_signInFragment);
@@ -111,7 +126,15 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
 
     @Override
     public void onItemClick(int position) {
-        mViewModel.setSelectedFood(mViewModel.getFavoriteFoods().getValue().get(position));
+        if (mViewModel.getFavoriteFoods().getValue() == null) {
+            mViewModel.getFavoriteFoods().observe(this, f -> {
+                if (position < f.size()) {
+                    mViewModel.setSelectedFood(f.get(position));
+                }
+            });
+        } else {
+            mViewModel.setSelectedFood(mViewModel.getFavoriteFoods().getValue().get(position));
+        }
         Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_favoritesFragment_to_foodDetailFragment);
     }
 }

@@ -28,6 +28,7 @@ public class FoodViewModel extends ViewModel {
 
     public void initFavoriteFoods(String userEmail) {
         mUserEmail = userEmail;
+        loadFavoriteFoods();
     }
 
     public void doSearch(String query) {
@@ -45,7 +46,7 @@ public class FoodViewModel extends ViewModel {
     public LiveData<List<Food>> getFavoriteFoods() {
         if (favoriteFoods == null) {
             favoriteFoods = new MutableLiveData<List<Food>>();
-            loadFavoriteFoods();
+            //loadFavoriteFoods();
         }
         return favoriteFoods;
     }

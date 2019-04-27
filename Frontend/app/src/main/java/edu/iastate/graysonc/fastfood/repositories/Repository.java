@@ -46,6 +46,9 @@ public class Repository {
         this.userDao = userDao;
         this.foodDao = foodDao;
         this.executor = executor;
+        executor.execute(() -> {
+            foodDao.deleteAll();
+        });// FOR DEBUGGING
     }
 
     public LiveData<List<Food>> getFoodMatches(String query) {
@@ -191,7 +194,9 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                     Log.d(TAG, "FAVORITE ADDED");
-                    //refreshFavoriteFoodsForUser(userEmail);
+                    executor.execute(() -> {
+                        foodDao.delete(foodId);
+                    });
                 }
                 @Override
                 public void onFailure(Call<Favorite> call, Throwable t) { t.printStackTrace(); }
@@ -205,8 +210,10 @@ public class Repository {
             webservice.deleteFavorite(userEmail, foodId).enqueue(new Callback<Favorite>() {
                 @Override
                 public void onResponse(Call<Favorite> call, Response<Favorite> response) {
-                    Log.d(TAG, "FAVORITE REMOVED");
-                    //refreshFavoriteFoodsForUser(userEmail);
+                    Log.d(TAG, "FAVORITE REMOVED - " + foodId);
+                    executor.execute(() -> {
+                        foodDao.delete(foodId);
+                    });
                 }
                 @Override
                 public void onFailure(Call<Favorite> call, Throwable t) { t.printStackTrace(); }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="sort_options">
+        <item>Price</item>
+        <item>Calories</item>
+        <item>Protein</item>
+        <item>Fat</item>
+        <item>Carbohydrates</item>
+        <item>Protein/Price</item>
+        <item>Calories/Price</item>
+    </array>
+</resources>

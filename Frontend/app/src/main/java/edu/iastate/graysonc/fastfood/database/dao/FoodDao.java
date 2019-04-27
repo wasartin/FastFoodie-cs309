@@ -34,6 +34,9 @@ public interface FoodDao {
     @Query("DELETE FROM food WHERE id = :id")
     void delete(int id);
 
+    @Query("DELETE FROM food")
+    void deleteAll();
+
     @Query("SELECT * FROM food WHERE id = :id")
     LiveData<Food> load(int id);
 

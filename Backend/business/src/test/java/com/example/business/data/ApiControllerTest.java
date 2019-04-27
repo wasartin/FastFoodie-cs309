@@ -59,7 +59,7 @@ public class ApiControllerTest {
 		
 		User user = new User("BigBird@SesameStreet.edu", "admin");
 		List<Favorites> usersFavorites = new ArrayList<Favorites>(); //getAllFavoritesForUser 
-		Food foodById = new Food(64, "Royal with Cheese", 31, 42, 28, 540, "$5.00", "Beef", 0, 0);
+		Food foodById = new Food(64, "Royal with Cheese", 31, 42, 28, 540, "$5.00", "Beef", 0, 0, 0);
 		found.add(foodById);
 		
 		when(favServ.getAllFavoritesForUser(user.getUser_email())).thenReturn(favList);

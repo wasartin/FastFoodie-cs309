@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS ticket;
+DROP TABLE IF EXISTS food_rating;
+DROP TABLE IF EXISTS favorites;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS food;
+DROP TABLE IF EXISTS restaurant;
 
 CREATE TABLE restaurant(
 	restaurant_id INT NOT NULL,
@@ -23,6 +29,7 @@ CREATE TABLE food(
 	category varchar(80),
 	located_at INT NOT NULL,
 	rating DOUBLE DEFAULT 0,
+	rating_count INT DEFAULT 0,
 	PRIMARY KEY(food_id),
 	FOREIGN KEY(located_at) REFERENCES restaurant(restaurant_id)
 );

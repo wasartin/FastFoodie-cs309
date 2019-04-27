@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
     private View categoriesViewGroup;
     private SearchView searchView;
 
-    private FilterFragment filterFragment;
+    private FilterDialogFragment filterFragment;
     private SortDialogFragment sortDialogFragment;
 
 
@@ -98,7 +98,7 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
         getView().findViewById(R.id.filter_button).setOnClickListener(this);
         getView().findViewById(R.id.sort_button).setOnClickListener(this);
 
-        filterFragment = new FilterFragment();
+        filterFragment = new FilterDialogFragment();
         sortDialogFragment = new SortDialogFragment();
     }
 

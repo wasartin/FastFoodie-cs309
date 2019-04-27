@@ -74,4 +74,8 @@ public class FoodViewModel extends ViewModel {
     public void removeFromFavorites(String userEmail, int foodId) {
         repo.deleteFavorite(userEmail, foodId);
     }
+
+    public void submitRating(int foodId, int rating) {
+        repo.submitRating(mUserEmail, foodId, rating);
+    }
 }

@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import edu.iastate.graysonc.fastfood.App;
+import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.api.Webservice;
 import edu.iastate.graysonc.fastfood.database.dao.FoodDao;
 import edu.iastate.graysonc.fastfood.database.dao.UserDao;
@@ -194,6 +195,7 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                     Log.d(TAG, "FAVORITE ADDED");
+                    Toast.makeText(App.context, R.string.favorite_created_toast, Toast.LENGTH_SHORT);
                     executor.execute(() -> {
                         foodDao.delete(foodId);
                     });
@@ -211,6 +213,7 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                     Log.d(TAG, "FAVORITE REMOVED - " + foodId);
+                    Toast.makeText(App.context, R.string.favorite_deleted_toast, Toast.LENGTH_SHORT);
                     executor.execute(() -> {
                         foodDao.delete(foodId);
                     });
@@ -227,6 +230,7 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Double> call, Response<Double> response) {
                     Log.d(TAG, "onResponse: Rating submitted successfully");
+                    Toast.makeText(App.context, R.string.rating_submitted_toast, Toast.LENGTH_SHORT);
                 }
                 @Override
                 public void onFailure(Call<Double> call, Throwable t) {

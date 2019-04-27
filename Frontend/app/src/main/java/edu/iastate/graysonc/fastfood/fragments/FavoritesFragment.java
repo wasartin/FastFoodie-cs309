@@ -127,9 +127,10 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
     @Override
     public void onItemClick(int position) {
         if (mViewModel.getFavoriteFoods().getValue() == null) {
-            mViewModel.getFavoriteFoods().observe(this, f -> {
+            mViewModel.getFavoriteFoods().observeForever(f -> {
                 if (position < f.size()) {
                     mViewModel.setSelectedFood(f.get(position));
+                    mViewModel.getFavoriteFoods().removeObservers(this);
                 }
             });
         } else {

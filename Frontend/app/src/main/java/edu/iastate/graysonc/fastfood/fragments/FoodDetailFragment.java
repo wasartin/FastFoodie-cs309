@@ -1,12 +1,15 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +36,7 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
 
     private TextView name, price, calories, protein, carbs, fat;
     private RatingBar ratingBar;
+    private Button submitRatingButton;
     private View backButton;
     private ImageView favoriteButton;
 
@@ -61,8 +65,11 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
         protein = getView().findViewById(R.id.protein_text);
         carbs = getView().findViewById(R.id.carbohydrate_text);
         fat = getView().findViewById(R.id.fat_text);
+
+        submitRatingButton = getView().findViewById(R.id.submit_rating_button);
+        submitRatingButton.setOnClickListener(this);
         ratingBar = getView().findViewById(R.id.rating_bar);
-        ratingBar.setOnClickListener(this);
+
         backButton = getView().findViewById(R.id.back_button);
         backButton.setOnClickListener(this);
         favoriteButton = getView().findViewById(R.id.favorite_icon);
@@ -88,10 +95,17 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
                 name.setText(f.getName());
                 price.setText(f.getPrice());
                 calories.setText("" + f.getCalorieTotal());
-                protein.setText("" + f.getProteinTotal());
+                protein.setText(f.getProteinTotal() + "g");
                 carbs.setText("" + f.getCarbTotal());
-                fat.setText("" + f.getFatTotal());
+                fat.setText(f.getFatTotal() + "g");
                 ratingBar.setRating((float)f.getRating());
+                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        submitRatingButton.setVisibility(View.VISIBLE);
+                        ratingBar.setStepSize(1);
+                    }
+                });
                 if (f.getIsFavorite() == 1) {
                     favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
                 }
@@ -105,8 +119,10 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
             case R.id.back_button:
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack();
                 break;
-            case R.id.rating_bar:
-                ratingDialogFragment.show(getActivity().getSupportFragmentManager(), "rating_fragment");
+            case R.id.submit_rating_button:
+                mViewModel.submitRating(mViewModel.getSelectedFood().getValue().getId(), (int)ratingBar.getRating()); // TODO: Uncomment this when able to test
+                ratingBar.setRating((float)mViewModel.getSelectedFood().getValue().getRating());
+                submitRatingButton.setVisibility(View.GONE);
                 break;
             case R.id.favorite_icon:
                 Food f = mViewModel.getSelectedFood().getValue();

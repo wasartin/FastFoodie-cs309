@@ -1,6 +1,7 @@
 package edu.iastate.graysonc.fastfood.PopUps;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.ArrayAdapter;
@@ -19,7 +20,6 @@ public class submitPopUp extends Activity {
    private Button mSubmit;
    private EditText mQueryInput;
    private Spinner mSpinner;
-   private Ticket ticket;
 
 
     @Override
@@ -35,8 +35,12 @@ public class submitPopUp extends Activity {
         getWindow().setLayout((int) (dm.widthPixels *.95),(int)(dm.heightPixels *.85));
 
         mSubmit.setOnClickListener(View -> {
-            //TODO I can't figure out how to inject stuff here rip, so I can't get the users Id
-            ticket = new Ticket("",mQueryInput.getText().toString().replaceAll("\n"," "),mSpinner.getSelectedItem().toString());
+            Intent data = new Intent();
+            ArrayList<String> dataStr = new ArrayList<>();
+            dataStr.add(mSpinner.getSelectedItem().toString());
+            dataStr.add(mQueryInput.getText().toString());
+            data.putStringArrayListExtra("data",dataStr);
+            setResult(100,data);
             Toast.makeText(this,"Thank you for your input, we'll be back to you soon!", Toast.LENGTH_LONG).show();
             this.finish();
         });
@@ -45,6 +49,8 @@ public class submitPopUp extends Activity {
         List<String> categories = new ArrayList<>();
         categories.add("Contact us");
         categories.add("Error");
+        categories.add("Account support");
+        categories.add("Other");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(dataAdapter);

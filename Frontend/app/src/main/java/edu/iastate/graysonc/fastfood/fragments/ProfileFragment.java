@@ -29,6 +29,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
@@ -36,6 +38,7 @@ import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.DownloadImageTask;
 import edu.iastate.graysonc.fastfood.PopUps.submitPopUp;
 import edu.iastate.graysonc.fastfood.R;
+import edu.iastate.graysonc.fastfood.database.entities.Ticket;
 import edu.iastate.graysonc.fastfood.view_models.ProfileViewModel;
 
 public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
@@ -67,8 +70,7 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
      * Assigns on click handlers
      * Assigns button ids
      * Assigns other variables to different values
-     */
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+     */ public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         // Configure Dagger 2
@@ -130,16 +132,13 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
      * Uses Google Api To Sign Out
      */
     public void signOut() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        GoogleSignIn.getClient(App.context, gso).signOut()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_profileFragment_to_signInFragment);
-                    }
-                });
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        GoogleSignIn.getClient(App.context, gso).signOut().addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_profileFragment_to_signInFragment);
+            }
+        });
     }
 
     /**
@@ -173,12 +172,11 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
     @Override
     /**
      * Handles different button groups and what to process in a click
-     */
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
+     */ public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.ticketRadioButton:
                 toggleMenuVisible();
-                startActivity(new Intent(getContext(), submitPopUp.class));
+                startActivityForResult(new Intent(getContext(), submitPopUp.class), 1);
                 break;
             case R.id.singOutRadioButton:
                 signOut();
@@ -189,4 +187,13 @@ public class ProfileFragment extends Fragment implements RadioGroup.OnCheckedCha
                 break;
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        ArrayList<String> ticketData = data.getStringArrayListExtra("data");
+         viewModel.submitTicket(new Ticket(viewModel.getGoogleSignInAccount().getEmail(),
+                ticketData.get(0), ticketData.get(1)));
+
+    }
+
 }

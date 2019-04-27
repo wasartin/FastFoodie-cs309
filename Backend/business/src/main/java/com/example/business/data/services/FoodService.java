@@ -17,15 +17,11 @@ import com.example.business.data.repositories.FoodRepository;
  *
  */
 @Service
-@Transactional//new, may really mess things up
+@Transactional
 public class FoodService extends AbstractService<Food, Integer>{
 	
-	FoodRepository foodRepository;
-	
 	@Autowired
-	FoodService(FoodRepository foodRepository){
-		this.foodRepository = foodRepository;
-	}
+	FoodRepository foodRepository;
 
 //	Page<Food> listFoodByKeyword(Pageable pageable){
 //		

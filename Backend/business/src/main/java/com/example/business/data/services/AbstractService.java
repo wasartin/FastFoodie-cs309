@@ -66,7 +66,19 @@ public abstract class AbstractService<E, K> {
 			if(repo.existsById(id)) {
 				throw new IllegalArgumentException();
 			}
-			repo.save(newEntity);
+			return saveNewEntity(newEntity);
+		}catch (IllegalArgumentException e) {
+			resultingStatus = HttpStatus.BAD_REQUEST;
+		}catch (Exception e) {
+		}
+		return new ResponseEntity<Object>(className, headers, resultingStatus);
+	}
+	
+	public ResponseEntity<?> saveNewEntity(E entity){
+		String className = entity.getClass().getSimpleName();
+		HttpStatus resultingStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		try {
+			repo.save(entity);
 			resultingStatus = HttpStatus.OK;
 		}catch (IllegalArgumentException e) {
 			resultingStatus = HttpStatus.BAD_REQUEST;

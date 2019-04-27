@@ -80,6 +80,9 @@ public class Food {
 	@Column(name = "rating")
 	private double rating;
 	
+	/**
+	 * The number of times this food has been rated.
+	 */
 	@Column(name = "rating_count")
 	private int rating_count;
 	

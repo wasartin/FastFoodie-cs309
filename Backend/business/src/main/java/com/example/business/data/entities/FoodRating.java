@@ -13,7 +13,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="foodRating")
+@Table(name="food_rating")
 public class FoodRating {
 	
 	/**

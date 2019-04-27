@@ -90,7 +90,7 @@ public class WebSocketServer {
 		try {
 			foodRatingRepo.save(newRating);
 		}catch(Exception e) {
-			logger.info("There was an error saving the rating in the food_rating table");
+			logger.info("There was an error saving the rating in the foodRating table");
 			logger.info(e.getMessage());
 		}
 		Food foundFood = foodRepo.findById(food_id).get();

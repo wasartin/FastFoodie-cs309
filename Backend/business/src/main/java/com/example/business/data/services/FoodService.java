@@ -19,6 +19,8 @@ import com.example.business.data.repositories.FoodRepository;
 @Service
 @Transactional
 public class FoodService extends AbstractService<Food, Integer>{
+	private int initalPage = 0;
+	private int initalSize = 0;
 	
 	@Autowired
 	FoodRepository foodRepository;
@@ -28,7 +30,7 @@ public class FoodService extends AbstractService<Food, Integer>{
 //	}
 	
 	public Page<Food> listAllByPage(Pageable pageable) {
-		 return foodRepository.findAll(pageable);
+		return foodRepository.findAll(pageable);
 	}
 
 	public Page<Food> findPaginated(int page, int size) {

@@ -53,10 +53,12 @@ public class FoodController {
 		return foods;
 	} 
 	
-	//Better, but still annoying.
+//	//Better, but still annoying.
 	@GetMapping(params = { "page", "size" })
-	public List<Food> findPaginated(@RequestParam("page") int page, 
-									@RequestParam("size") int size, 
+	public List<Food> findPaginated(
+									@RequestParam("page") int page, 
+									//@RequestParam(value = "page", required =false, defaultValue="0") int page, 
+									@RequestParam(value = "size", required=false) int size, 
 									UriComponentsBuilder uriBuilder,
 									HttpServletResponse response) throws Exception {
 	    Page<Food> resultPage = foodService.findPaginated(page, size);
@@ -66,7 +68,34 @@ public class FoodController {
 	    return resultPage.getContent();
 	}
 	
-	//what next?
+	//Take two
+//	@GetMapping("/all")
+//	public List<Food> findPaginated(
+//									@RequestParam("page") int page, 
+//									//@RequestParam(value = "page", required =false, defaultValue="0") int page, 
+//									@RequestParam(value = "size", required=false) Optional<String> size, 
+//									UriComponentsBuilder uriBuilder,
+//									HttpServletResponse response) throws Exception {
+//		int actualSize = (size.isPresent())? Integer.valueOf(size.get()) : 3;
+//	    Page<Food> resultPage = foodService.findPaginated(page, actualSize);
+//	    if (page > resultPage.getTotalPages()) {
+//	        throw new Exception();
+//	    }
+//	    return resultPage.getContent();
+//	}
+	
+	
+	/**
+Pageable sortedByName = 
+  PageRequest.of(0, 3, Sort.by("name"));
+ 
+Pageable sortedByPriceDesc = 
+  PageRequest.of(0, 3, Sort.by("price").descending());
+ 
+Pageable sortedByPriceDescNameAsc = 
+  PageRequest.of(0, 5, Sort.by("price").descending().and(Sort.by("name")));
+	 */
+	//what next? SORTING BABY
 	
 	/**
 	 * returns iterable for all food objects

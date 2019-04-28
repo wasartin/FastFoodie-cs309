@@ -87,8 +87,9 @@ public class FoodController {
 									@PageableDefault Pageable p) {
 		Page<Food> list = foodService.orderBy(sort, p.getPageNumber(), p.getPageSize());
 		return list;
-	}//do mulitple
-	/**sort=name,asc&sort=numberOfHands,desc
+	}
+
+	/**
 	 * returns iterable for all food objects
 	 * @return iterable<food>
 	 */

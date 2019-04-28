@@ -53,10 +53,10 @@ public interface Webservice {
     Call<Double> getAverageRating(@Path("food_id") int foodId);
 
     @POST("foodRatings/create/{user_email}/{food_id}/{rating}")
-    Call<Double> submitRating(@Path("user_email") String userEmail, @Path("food_id") int foodId, @Path("rating") int rating);
+    Call<Object> submitRating(@Path("user_email") String userEmail, @Path("food_id") int foodId, @Path("rating") int rating);
 
     @PUT("foodRatings/edit/{user_email}/{food_id}/{rating}")
-    Call<Double> editRating(@Path("user_email") String userEmail, @Path("food_id") int foodId, @Path("rating") int rating);
+    Call<Object> editRating(@Path("user_email") String userEmail, @Path("food_id") int foodId, @Path("rating") int rating);
 
     @DELETE("foodRatings/delete/{user_email}/{food_id}")
     Call<Double> deleteRating(@Path("user_email") String userEmail, @Path("food_id") int foodId);

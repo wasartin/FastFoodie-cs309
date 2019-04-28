@@ -174,10 +174,22 @@ public class Repository {
                             Log.e(TAG,"Grayson your code doesn't work <3 - refreshFood");
                         } else {
                             for (Food f : favorites) {
-                                f.setIsFavorite(1);
                                 foodDao.delete(f.getId());
+                                webservice.getAverageRating(f.getId()).enqueue(new Callback<Double>() {
+                                    @Override
+                                    public void onResponse(Call<Double> call, Response<Double> response) {
+                                        f.setIsFavorite(1);
+                                        f.setRating(response.body());
+                                        executor.execute(() -> {
+                                            foodDao.insert(f);
+                                        });
+                                    }
+                                    @Override
+                                    public void onFailure(Call<Double> call, Throwable t) {
+                                        t.printStackTrace();
+                                    }
+                                });
                             }
-                            foodDao.insert(favorites);
                         }
                     });
                 }
@@ -226,14 +238,14 @@ public class Repository {
 
     public void submitRating(String userEmail, int foodId, int rating) {
         executor.execute(() -> {
-            webservice.submitRating(userEmail, foodId, rating).enqueue(new Callback<Double>() {
+            webservice.submitRating(userEmail, foodId, rating).enqueue(new Callback<Object>() {
                 @Override
-                public void onResponse(Call<Double> call, Response<Double> response) {
+                public void onResponse(Call<Object> call, Response<Object> response) {
                     Log.d(TAG, "onResponse: Rating submitted successfully");
                     Toast.makeText(App.context, R.string.rating_submitted_toast, Toast.LENGTH_SHORT);
                 }
                 @Override
-                public void onFailure(Call<Double> call, Throwable t) {
+                public void onFailure(Call<Object> call, Throwable t) {
                     t.printStackTrace();
                 }
             });

@@ -1,7 +1,6 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
 import android.app.SearchManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +23,6 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import dagger.android.support.AndroidSupportInjection;
 import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
-import edu.iastate.graysonc.fastfood.activities.SearchActivity;
 import edu.iastate.graysonc.fastfood.recycler_classes.FoodListAdapter;
 import edu.iastate.graysonc.fastfood.view_models.SearchResultsViewModel;
 

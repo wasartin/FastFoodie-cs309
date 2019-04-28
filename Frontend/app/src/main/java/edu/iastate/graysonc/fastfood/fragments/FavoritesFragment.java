@@ -83,16 +83,6 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
     @Override
     public void onResume() {
         super.onResume();
-        mViewModel.getFavoriteFoods().observe(this, f -> {
-            if (f != null) {
-                for (Food tmp : f) {
-                    Log.d(TAG, "onActivityCreated: Current favorites: " + tmp.getName());
-                }
-                refreshLayout.setRefreshing(false);
-                buildRecyclerView(f);
-                mAdapter.notifyDataSetChanged();
-            }
-        });
     }
 
     @Override

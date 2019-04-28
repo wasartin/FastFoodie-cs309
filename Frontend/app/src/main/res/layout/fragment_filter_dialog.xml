@@ -13,43 +13,40 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/close_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_close_black_24dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/food_price" />
-
-        <RadioGroup
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:orientation="horizontal">
 
-            <RadioButton
-                style="@android:style/Widget.Material.CompoundButton.RadioButton"
+            <CheckBox
+                android:id="@+id/checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="less than" />
+                android:text="@string/food_price" />
 
-            <RadioButton
-                style="@android:style/Widget.Material.Light.CompoundButton.RadioButton"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="greater than" />
+                android:text="$" />
 
             <EditText
+                android:id="@+id/price_min"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="number" />
-        </RadioGroup>
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="to $" />
+
+            <EditText
+                android:id="@+id/price_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -57,37 +54,35 @@
             android:layout_margin="8dp"
             android:background="?attr/colorButtonNormal" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/food_calorie_total" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                style="@android:style/Widget.Material.CompoundButton.RadioButton"
+            <CheckBox
+                android:id="@+id/checkBox2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="less than" />
-
-            <RadioButton
-                style="@android:style/Widget.Material.Light.CompoundButton.RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="greater than" />
+                android:text="@string/food_calorie_total" />
 
             <EditText
+                android:id="@+id/calorie_min"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
                 android:inputType="number" />
-        </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" to " />
+
+            <EditText
+                android:id="@+id/calorie_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -95,36 +90,40 @@
             android:layout_margin="8dp"
             android:background="?attr/colorButtonNormal" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/food_protein_total" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                style="@android:style/Widget.Material.CompoundButton.RadioButton"
+            <CheckBox
+                android:id="@+id/checkBox3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="less than" />
-
-            <RadioButton
-                style="@android:style/Widget.Material.Light.CompoundButton.RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="greater than" />
+                android:text="@string/food_protein_total" />
 
             <EditText
+                android:id="@+id/fat_min"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
                 android:inputType="number" />
-        </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g to " />
+
+            <EditText
+                android:id="@+id/fat_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g" />
+        </LinearLayout>
 
         <View
             android:id="@+id/view"
@@ -133,36 +132,40 @@
             android:layout_margin="8dp"
             android:background="?attr/colorButtonNormal" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/food_fat_total" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                style="@android:style/Widget.Material.CompoundButton.RadioButton"
+            <CheckBox
+                android:id="@+id/checkBox4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="less than" />
-
-            <RadioButton
-                style="@android:style/Widget.Material.Light.CompoundButton.RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="greater than" />
+                android:text="@string/food_fat_total" />
 
             <EditText
+                android:id="@+id/protein_min"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
                 android:inputType="number" />
-        </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g to " />
+
+            <EditText
+                android:id="@+id/protein_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -170,75 +173,35 @@
             android:layout_margin="8dp"
             android:background="?attr/colorButtonNormal" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/food_carb_total" />
-
-        <RadioGroup
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:orientation="horizontal">
 
-            <RadioButton
-                style="@android:style/Widget.Material.CompoundButton.RadioButton"
+            <CheckBox
+                android:id="@+id/checkBox5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="less than" />
-
-            <RadioButton
-                style="@android:style/Widget.Material.Light.CompoundButton.RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="greater than" />
+                android:text="@string/food_carb_total" />
 
             <EditText
+                android:id="@+id/carb_min"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
                 android:inputType="number" />
-        </RadioGroup>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="8dp"
-            android:background="?attr/colorButtonNormal" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ratio" />
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <RadioButton
-                style="@android:style/Widget.Material.CompoundButton.RadioButton"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="less than" />
-
-            <RadioButton
-                style="@android:style/Widget.Material.Light.CompoundButton.RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="greater than" />
+                android:text=" to " />
 
             <EditText
+                android:id="@+id/carb_max"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
                 android:inputType="number" />
-        </RadioGroup>
+        </LinearLayout>
 
     </LinearLayout>
 

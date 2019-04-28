@@ -50,13 +50,6 @@ public class FilterDialogFragment extends DialogFragment {
 
         // Configure Dagger 2
         AndroidSupportInjection.inject(this);
-
-        getView().findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
     }
 
     @Override

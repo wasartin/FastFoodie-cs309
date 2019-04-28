@@ -21,10 +21,6 @@
             android:authorities="edu.iastate.graysonc.fastfood.RecentSearchProvider" />
 
 
-        <activity android:name=".activities.SearchActivity">
-
-        </activity>
-
         <activity android:name=".activities.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop">

@@ -50,19 +50,19 @@
                     android:orientation="horizontal"
                     android:paddingLeft="8dp">
 
-                    <ImageView
-                        android:id="@+id/filter_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/ic_filter_list_black_24dp" />
-
-                    <ImageView
+                    <Button
                         android:id="@+id/sort_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/ic_sort_black_24dp" />
+                        android:layout_marginRight="8dp"
+                        android:text="Sort" />
+
+                    <Button
+                        android:id="@+id/filter_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Filter" />
+
                 </LinearLayout>
             </HorizontalScrollView>
 

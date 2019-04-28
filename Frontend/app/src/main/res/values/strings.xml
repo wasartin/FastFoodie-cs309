@@ -35,7 +35,11 @@
 
     <string name="favorite_created_toast">Added to favorites!</string>
     <string name="favorite_deleted_toast">Removed from favorites!</string>
+    <string name="favorite_add">Add to favorites</string>
+    <string name="favorite_remove">Remove from favorites</string>
     <string name="rating_submitted_toast">Rating submitted!</string>
+
+    <string name="find_location">Find near me</string>
 
     <!-- Strings for tickets page-->
     <string name="submit_ticket">Submit Ticket</string>

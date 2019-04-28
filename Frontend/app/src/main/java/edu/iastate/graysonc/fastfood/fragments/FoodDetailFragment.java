@@ -1,6 +1,8 @@
 package edu.iastate.graysonc.fastfood.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +40,7 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
     private RatingBar ratingBar;
     private Button submitRatingButton;
     private View backButton;
-    private ImageView favoriteButton;
+    private Button favoriteButton, findLocationButton;
 
     private RatingDialogFragment ratingDialogFragment;
 
@@ -72,12 +74,15 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
 
         backButton = getView().findViewById(R.id.back_button);
         backButton.setOnClickListener(this);
-        favoriteButton = getView().findViewById(R.id.favorite_icon);
+        favoriteButton = getView().findViewById(R.id.favorite_button);
         if (GoogleSignIn.getLastSignedInAccount(App.context) == null) {
             favoriteButton.setVisibility(View.GONE);
         } else {
             favoriteButton.setOnClickListener(this);
         }
+
+        findLocationButton = getView().findViewById(R.id.find_location_button);
+        findLocationButton.setOnClickListener(this);
 
 
         // Configure ViewModel
@@ -107,7 +112,7 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
                     }
                 });
                 if (f.getIsFavorite() == 1) {
-                    favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                    favoriteButton.setText(R.string.favorite_remove);
                 }
             }
         });
@@ -124,16 +129,36 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
                 ratingBar.setRating((float)mViewModel.getSelectedFood().getValue().getRating());
                 submitRatingButton.setVisibility(View.GONE);
                 break;
-            case R.id.favorite_icon:
+            case R.id.favorite_button:
                 Food f = mViewModel.getSelectedFood().getValue();
                 String email = GoogleSignIn.getLastSignedInAccount(App.context).getEmail();
                 if (f.getIsFavorite() == 0) {
                     mViewModel.addToFavorites(email, f.getId());
-                    favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                    favoriteButton.setText(R.string.favorite_remove);
                 } else if (f.getIsFavorite() == 1) {
                     mViewModel.removeFromFavorites(email, f.getId());
-                    favoriteButton.setImageResource(R.drawable.ic_favorite_empty);
+                    favoriteButton.setText(R.string.favorite_add);
                 }
+                break;
+            case R.id.find_location_button:
+                String restaurantName = "";
+                switch (mViewModel.getSelectedFood().getValue().getLocation()) {
+                    case 0:
+                        restaurantName = "McDonald's";
+                        break;
+                    case 1:
+                        restaurantName = "Chick-fil-a";
+                        break;
+                    case 2:
+                        restaurantName = "Subway";
+                        break;
+                    default:
+                        // Maybe display "Image not found" image
+                        break;
+                }
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("https://www.google.com/maps/search/" + restaurantName));
+                startActivity(intent);
                 break;
         }
     }

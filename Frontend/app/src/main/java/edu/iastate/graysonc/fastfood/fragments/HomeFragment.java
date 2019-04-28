@@ -50,13 +50,11 @@ public class HomeFragment extends Fragment implements FoodListAdapter.OnItemClic
     private FilterDialogFragment filterFragment;
     private SortDialogFragment sortDialogFragment;
 
-
     public HomeFragment() {}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 

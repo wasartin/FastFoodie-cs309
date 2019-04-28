@@ -23,6 +23,12 @@ public class FoodService extends AbstractService<Food, Integer>{
 
 	@Autowired
 	FoodRepository foodRepository;
+	
+	public Page<Food> getQuery(String property, Sort.Direction direction, int page, int size){
+		Sort howToSort = new Sort(direction, property);
+		Pageable pageable = PageRequest.of(page, size, howToSort);
+		return foodRepository.findAll(pageable);
+	}
 
 	public Page<Food> listFoodWithKeyword(String keyword, Pageable pageable){
 		return foodRepository.getFoodListWithKeyword(keyword, pageable);
@@ -45,9 +51,15 @@ public class FoodService extends AbstractService<Food, Integer>{
 		return foodRepository.findAll(PageRequest.of(page, size, sort));
 	}
 	
-	public Page<Food> somethingNew(String property, Sort.Direction direction, int page, int size){
+	public Page<Food> propertySearch(String property, Sort.Direction direction, int page, int size){
 		Sort howToSort = new Sort(direction, property);
 		Pageable pageable = PageRequest.of(page, size, howToSort);
+		return foodRepository.findAll(pageable);
+	}
+	
+	public Page<Food> orderBy(Sort sort, int page, int size){
+		Pageable pageable = PageRequest.of(page, size, sort);
+		
 		return foodRepository.findAll(pageable);
 	}
 }

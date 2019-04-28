@@ -1,4 +1,4 @@
-INSERT INTO food_rating (user_email, food_id, rating) VALUES 
+INSERT INTO food_rating (user_email, fid, rating) VALUES 
 	('grayman98@gmail.com', 50, 4),
 	('grayman98@gmail.com', 66, 3),
 	('newunusedname@gmail.com', 24, 2),

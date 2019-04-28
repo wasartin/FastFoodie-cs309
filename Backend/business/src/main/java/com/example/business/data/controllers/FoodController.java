@@ -1,19 +1,16 @@
 package com.example.business.data.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.http.HttpEntity;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.services.FoodService;
@@ -76,58 +72,23 @@ public class FoodController {
 		Page<Food> foods = foodService.listFoodWithKeyword(keyword, pageable);
 		return foods;
 	} 
-	
-	//sort by calories
-	@RequestMapping(value="/search/num", method=RequestMethod.GET)
-	Page<Food> listFoodByNum(@RequestParam(value = "searchTerm", required = false) String searchTerm,
-											@PageableDefault Pageable p){
-		//PageRequest.of(page, size, direction, properties)
-		Page<Food> result = foodService.listAllByPage(PageRequest.of(p.getPageNumber(), p.getPageSize(), sortByArgumentDesc(searchTerm)));
-		return result;
-	} 
-
-	@GetMapping(params = { "protein_total", "carb_total", "fat_total", "calorie_total", "carb_total", "price", "category", "located_at", "rating", "rating_count" })
-	public List<Food> findPaginated(
-									@RequestParam("page") int page, 
-									//@RequestParam(value = "page", required =false, defaultValue="0") int page, 
-									@RequestParam(value = "size", required=false) int size,
-									@RequestParam(value = "protein_total", required=false) int protein_total, 
-									@RequestParam(value = "carb_total", required=false) int carb_total, 
-									@RequestParam(value = "fat_total", required=false) int fat_total, 
-									@RequestParam(value = "calorie_total", required=false) int calorie_total, 
-									@RequestParam(value = "price", required=false) int price, 
-									@RequestParam(value = "category", required=false) int category, 
-									@RequestParam(value = "located_at", required=false) int located_at, 
-									@RequestParam(value = "rating", required=false) int rating, 
-									@RequestParam(value = "rating_count", required=false) int rating_count, 
-									UriComponentsBuilder uriBuilder,
-									HttpServletResponse response) throws Exception {
-		String selected;
-		//sortByArgumentDesc
-	    Page<Food> resultPage = foodService.findPaginated(page, size);
-	    if (page > resultPage.getTotalPages()) {
-	        throw new Exception();
-	    }
-	    return resultPage.getContent();
-	}
-	
-	@RequestMapping(value="/search/num/other", method=RequestMethod.GET)
-	Page<Food> other(@RequestParam(value = "searchTerm", required = false) String searchTerm,
-											@PageableDefault Pageable p){
-		Page<Food> result = foodService.listAllByPage(PageRequest.of(p.getPageNumber(), p.getPageSize(), sortByArgumentDesc(searchTerm)));
-		return result;
-	} 
 
 	@RequestMapping(value = "/conditionalPagination", method = RequestMethod.GET)
 	public Page<Food> somethingNew(@RequestParam(value="property", required=false) String property,
 									@RequestParam(value="direction", required=false) Optional<String> direction, 
 									@PageableDefault Pageable p) {
 	Sort.Direction wayToGo = Sort.Direction.fromString(direction.orElse("desc"));
-	Page<Food> list = foodService.somethingNew(property, wayToGo, p.getPageNumber(), p.getPageSize());
+	Page<Food> list = foodService.propertySearch(property, wayToGo, p.getPageNumber(), p.getPageSize());
 	return list;
-	}
+	}//do mulitple
 	
-	/**
+	@RequestMapping(value = "/order", method = RequestMethod.GET)
+	public Page<Food> getByOrdering(@SortDefault Sort sort,
+									@PageableDefault Pageable p) {
+		Page<Food> list = foodService.orderBy(sort, p.getPageNumber(), p.getPageSize());
+		return list;
+	}//do mulitple
+	/**sort=name,asc&sort=numberOfHands,desc
 	 * returns iterable for all food objects
 	 * @return iterable<food>
 	 */

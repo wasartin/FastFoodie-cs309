@@ -121,10 +121,9 @@ public class FoodController {
 	@RequestMapping(value = "/conditionalPagination", method = RequestMethod.GET)
 	public Page<Food> somethingNew(@RequestParam(value="property", required=false) String property,
 									@RequestParam(value="direction", required=false) Optional<String> direction, 
-									@RequestParam("page") int page,
-									@RequestParam("size") int size) {
+									@PageableDefault Pageable p) {
 	Sort.Direction wayToGo = Sort.Direction.fromString(direction.orElse("desc"));
-	Page<Food> list = foodService.somethingNew(property, wayToGo, page, size);
+	Page<Food> list = foodService.somethingNew(property, wayToGo, p.getPageNumber(), p.getPageSize());
 	return list;
 	}
 	

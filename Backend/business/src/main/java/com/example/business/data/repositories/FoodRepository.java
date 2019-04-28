@@ -32,8 +32,9 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 	@Query(value =
 			"SELECT *"
 			+" FROM food"
-			+" WHERE food_name LIKE %?1%", nativeQuery = true)
+			+" WHERE fname LIKE %?1%", nativeQuery = true)
 	Page<Food> getFoodListWithKeyword(String keyword, Pageable pageable);//wondering if all args must be page
+	
 
 	//FILTERING
 	//{GT/LT/EQ}, {NUMBER}, {FOOD int} (protein, calorie, etc), can have one arg, or 1+
@@ -46,5 +47,5 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 	
 	Page<Food> findByCarbLessThan(int maxCarb, Pageable pageable);
 	
-	Page<Food> somethingNew(Pageable pageable);
+
 }

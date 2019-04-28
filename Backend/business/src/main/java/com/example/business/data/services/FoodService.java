@@ -45,16 +45,9 @@ public class FoodService extends AbstractService<Food, Integer>{
 		return foodRepository.findAll(PageRequest.of(page, size, sort));
 	}
 	
-	
-	public Page<Food> somethingNew(String property, String direction, int page, int size){
-		Sort howToSort = sortByArgumentAndDirection(property, Sort.Direction.valueOf(direction));
+	public Page<Food> somethingNew(String property, Sort.Direction direction, int page, int size){
+		Sort howToSort = new Sort(direction, property);
 		Pageable pageable = PageRequest.of(page, size, howToSort);
-		return foodRepository.somethingNew(pageable);
-				
+		return foodRepository.findAll(pageable);
 	}
-	
-	private Sort sortByArgumentAndDirection(String property, Sort.Direction dir) {
-		return new Sort(dir, property);
-	}
-	
 }

@@ -118,13 +118,13 @@ public class FoodController {
 		return result;
 	} 
 
-	@RequestMapping(value = "/conditionalPagination", params = { "property", "direction", "page",
-		"size" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/conditionalPagination", method = RequestMethod.GET)
 	public Page<Food> somethingNew(@RequestParam(value="property", required=false) String property,
-									@RequestParam("direction") String direction, 
+									@RequestParam(value="direction", required=false) Optional<String> direction, 
 									@RequestParam("page") int page,
 									@RequestParam("size") int size) {
-	Page<Food> list = foodService.somethingNew(property, direction, page, size);
+	Sort.Direction wayToGo = Sort.Direction.fromString(direction.orElse("desc"));
+	Page<Food> list = foodService.somethingNew(property, wayToGo, page, size);
 	return list;
 	}
 	

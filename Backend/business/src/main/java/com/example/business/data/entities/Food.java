@@ -83,15 +83,15 @@ public class Food {
 	/**
 	 * The number of times this food has been rated.
 	 */
-	@Column(name = "ratingCount")
-	private int ratingCount;
+	@Column(name = "rated")
+	private int rated;
 	
 	public Food() {
 		super();
 	}
 
 	public Food(Integer fid, String fname, @Digits(fraction = 0, integer = 10) int protein, int carb, int fat,
-			int calorie, String price, String category, int located, double rating, int ratingCount) {
+			int calorie, String price, String category, int located, double rating, int rated) {
 		super();
 		this.fid = fid;
 		this.fname = fname;
@@ -103,7 +103,7 @@ public class Food {
 		this.category = category;
 		this.located = located;
 		this.rating = rating;
-		this.ratingCount = ratingCount;
+		this.rated = rated;
 	}
 
 	public Integer getFid() {
@@ -186,12 +186,12 @@ public class Food {
 		this.rating = rating;
 	}
 
-	public int getRatingCount() {
-		return ratingCount;
+	public int getRated() {
+		return rated;
 	}
 
-	public void setRatingCount(int ratingCount) {
-		this.ratingCount = ratingCount;
+	public void setRated(int rated) {
+		this.rated = rated;
 	}
 
 }

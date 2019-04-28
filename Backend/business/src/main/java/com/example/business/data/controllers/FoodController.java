@@ -6,10 +6,10 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.services.FoodService;
+import com.sun.javafx.collections.MappingChange.Map;
 
 /**
  *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the Food repository.
@@ -72,6 +75,39 @@ public class FoodController {
 		Page<Food> foods = foodService.listFoodWithKeyword(keyword, pageable);
 		return foods;
 	} 
+	
+	//sort by calories
+	@RequestMapping(value="/search/num", method=RequestMethod.GET)
+	Page<Food> listFoodByNum(@PageableDefault Pageable p, Sort sort){
+		//PageRequest.of(page, size, direction, properties)
+		Page<Food> result = foodService.listAllByPage(PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
+		return result;
+	} 
+
+//	@GetMapping(params = { "protein_total", "carb_total", "fat_total", "calorie_total", "carb_total", "price", "category", "located_at", "rating", "rating_count" })
+//	public List<Food> findPaginated(
+//									@RequestParam("page") int page, 
+//									//@RequestParam(value = "page", required =false, defaultValue="0") int page, 
+//									@RequestParam(value = "size", required=false) int size,
+//									@RequestParam(value = "protein_total", required=false) int protein_total, 
+//									@RequestParam(value = "carb_total", required=false) int carb_total, 
+//									@RequestParam(value = "fat_total", required=false) int fat_total, 
+//									@RequestParam(value = "calorie_total", required=false) int calorie_total, 
+//									@RequestParam(value = "price", required=false) int price, 
+//									@RequestParam(value = "category", required=false) int category, 
+//									@RequestParam(value = "located_at", required=false) int located_at, 
+//									@RequestParam(value = "rating", required=false) int rating, 
+//									@RequestParam(value = "rating_count", required=false) int rating_count, 
+//									UriComponentsBuilder uriBuilder,
+//									HttpServletResponse response) throws Exception {
+//	    Page<Food> resultPage = foodService.findPaginated(page, size);
+//	    if (page > resultPage.getTotalPages()) {
+//	        throw new Exception();
+//	    }
+//	    return resultPage.getContent();
+//	}
+
+	
 	
 	/**
 	 * returns iterable for all food objects

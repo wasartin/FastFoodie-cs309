@@ -29,10 +29,18 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 			+" FROM food"
 			+" WHERE food_name LIKE %?1%", nativeQuery = true)
 	Page<Food> getFoodListWithKeyword(String keyword, Pageable pageable);//wondering if all args must be page
-	
+
 	//FILTERING
 	//{GT/LT/EQ}, {NUMBER}, {FOOD int} (protein, calorie, etc), can have one arg, or 1+
 	
 	//SORTING
 	//{[ONE ARG]} OR {[ARG_ONE} : {ARG_TWO}]
+	//apprently the code already makes my queiers?
+	
+	
+	
+	
+	
+	
+	
 }

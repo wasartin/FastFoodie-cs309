@@ -36,4 +36,9 @@ public class FoodService extends AbstractService<Food, Integer>{
 	public Page<Food> findPaginated(int page, int size) {
 		return foodRepository.findAll(PageRequest.of(page, size));
 	}
+	
+	public Page<Food> sortByFoodProperties(Pageable pageable, String[] argList){
+		//
+		return null;
+	}
 }

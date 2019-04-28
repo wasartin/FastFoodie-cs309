@@ -95,27 +95,26 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        mViewModel.getSelectedFood().observe(this, f -> {
-            if (f != null) {
-                name.setText(f.getName());
-                price.setText(f.getPrice());
-                calories.setText("" + f.getCalorieTotal());
-                protein.setText(f.getProteinTotal() + "g");
-                carbs.setText("" + f.getCarbTotal());
-                fat.setText(f.getFatTotal() + "g");
-                ratingBar.setRating((float)f.getRating());
-                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                    @Override
-                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                        submitRatingButton.setVisibility(View.VISIBLE);
-                        ratingBar.setStepSize(1);
-                    }
-                });
-                if (f.getIsFavorite() == 1) {
-                    favoriteButton.setText(R.string.favorite_remove);
+        Food f = mViewModel.getSelectedFood();
+        if (f != null) {
+            name.setText(f.getName());
+            price.setText(f.getPrice());
+            calories.setText("" + f.getCalorieTotal());
+            protein.setText(f.getProteinTotal() + "g");
+            carbs.setText("" + f.getCarbTotal());
+            fat.setText(f.getFatTotal() + "g");
+            ratingBar.setRating((float)f.getRating());
+            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    submitRatingButton.setVisibility(View.VISIBLE);
+                    ratingBar.setStepSize(1);
                 }
+            });
+            if (f.getIsFavorite() == 1) {
+                favoriteButton.setText(R.string.favorite_remove);
             }
-        });
+        }
     }
 
     @Override
@@ -125,12 +124,12 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack();
                 break;
             case R.id.submit_rating_button:
-                mViewModel.submitRating(mViewModel.getSelectedFood().getValue().getId(), (int)ratingBar.getRating()); // TODO: Uncomment this when able to test
-                ratingBar.setRating((float)mViewModel.getSelectedFood().getValue().getRating());
+                mViewModel.submitRating(mViewModel.getSelectedFood().getId(), (int)ratingBar.getRating()); // TODO: Uncomment this when able to test
+                ratingBar.setRating((float)mViewModel.getSelectedFood().getRating());
                 submitRatingButton.setVisibility(View.GONE);
                 break;
             case R.id.favorite_button:
-                Food f = mViewModel.getSelectedFood().getValue();
+                Food f = mViewModel.getSelectedFood();
                 String email = GoogleSignIn.getLastSignedInAccount(App.context).getEmail();
                 if (f.getIsFavorite() == 0) {
                     mViewModel.addToFavorites(email, f.getId());
@@ -142,7 +141,7 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.find_location_button:
                 String restaurantName = "";
-                switch (mViewModel.getSelectedFood().getValue().getLocation()) {
+                switch (mViewModel.getSelectedFood().getLocation()) {
                     case 0:
                         restaurantName = "McDonald's";
                         break;

@@ -56,6 +56,12 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+
+    // RxJava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation "io.reactivex.rxjava2:rxjava:2.1.16"
+    implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
 
     // GLIDE
     implementation 'com.github.bumptech.glide:glide:4.8.0'
@@ -80,4 +86,5 @@ dependencies {
     // For debugging the Room database
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.paging:paging-runtime:2.1.0'
 }

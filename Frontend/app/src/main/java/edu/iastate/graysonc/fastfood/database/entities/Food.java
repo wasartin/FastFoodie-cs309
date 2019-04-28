@@ -44,23 +44,25 @@ public class Food {
     @SerializedName("located_at")
     private int location;
 
-    @SerializedName("food_rating")
+    @SerializedName("rating")
     private double rating;
 
     private int isFavorite;
 
     private Date lastRefresh;
 
-    public Food(@NonNull int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, int location) {
+    public Food(int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, String price, String category, int location, double rating, int isFavorite) {
         this.id = id;
         this.name = name;
         this.proteinTotal = proteinTotal;
         this.carbTotal = carbTotal;
         this.fatTotal = fatTotal;
         this.calorieTotal = calorieTotal;
+        this.price = price;
+        this.category = category;
         this.location = location;
-        this.lastRefresh = getLastRefresh();
-        isFavorite = 0;
+        this.rating = rating;
+        this.isFavorite = isFavorite;
     }
 
     public int getId() {
@@ -153,5 +155,9 @@ public class Food {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public boolean equals(Food otherFood) {
+        return super.equals(otherFood);
     }
 }

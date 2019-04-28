@@ -72,7 +72,7 @@ public class FoodController {
 	 * @return page of food
 	 */
 	@RequestMapping(value="/search/keyword/{keyword}", method=RequestMethod.GET)
-	Page<Food> listFoodWithKeyword(@PathVariable String keyword, @PageableDefault(size = PAGE_SIZE, sort="food_name") Pageable pageable){
+	Page<Food> listFoodWithKeyword(@PathVariable String keyword, @PageableDefault(size = PAGE_SIZE, sort="fname") Pageable pageable){
 		Page<Food> foods = foodService.listFoodWithKeyword(keyword, pageable);
 		return foods;
 	} 

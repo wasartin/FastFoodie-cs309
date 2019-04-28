@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,42 +49,10 @@ public class FoodController {
 	
 	//return pages for just all food for now.
 	@RequestMapping(value="/search", method=RequestMethod.GET)
-	Page<Food> listAllFood(Pageable pageable){
+	Page<Food> listAllFood(@PageableDefault(size = 10) Pageable pageable){//@PageableDefault(size = 10, sort = "id")
 		Page<Food> foods = foodService.listAllByPage(pageable);
 		return foods;
 	} 
-	
-//	//Better, but still annoying.
-	@GetMapping(params = { "page", "size" })
-	public List<Food> findPaginated(
-									@RequestParam("page") int page, 
-									//@RequestParam(value = "page", required =false, defaultValue="0") int page, 
-									@RequestParam(value = "size", required=false) int size, 
-									UriComponentsBuilder uriBuilder,
-									HttpServletResponse response) throws Exception {
-	    Page<Food> resultPage = foodService.findPaginated(page, size);
-	    if (page > resultPage.getTotalPages()) {
-	        throw new Exception();
-	    }
-	    return resultPage.getContent();
-	}
-	
-	//Take two
-//	@GetMapping("/all")
-//	public List<Food> findPaginated(
-//									@RequestParam("page") int page, 
-//									//@RequestParam(value = "page", required =false, defaultValue="0") int page, 
-//									@RequestParam(value = "size", required=false) Optional<String> size, 
-//									UriComponentsBuilder uriBuilder,
-//									HttpServletResponse response) throws Exception {
-//		int actualSize = (size.isPresent())? Integer.valueOf(size.get()) : 3;
-//	    Page<Food> resultPage = foodService.findPaginated(page, actualSize);
-//	    if (page > resultPage.getTotalPages()) {
-//	        throw new Exception();
-//	    }
-//	    return resultPage.getContent();
-//	}
-	
 	
 	/**
 Pageable sortedByName = 

@@ -1,5 +1,7 @@
 package com.example.business.data.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,9 +21,7 @@ import com.example.business.data.repositories.FoodRepository;
 @Service
 @Transactional
 public class FoodService extends AbstractService<Food, Integer>{
-	private int initalPage = 0;
-	private int initalSize = 0;
-	
+	private int standardSize = 5;
 	@Autowired
 	FoodRepository foodRepository;
 
@@ -32,8 +32,9 @@ public class FoodService extends AbstractService<Food, Integer>{
 	public Page<Food> listAllByPage(Pageable pageable) {
 		return foodRepository.findAll(pageable);
 	}
-
-	public Page<Food> findPaginated(int page, int size) {
-		 return foodRepository.findAll(PageRequest.of(page, size));
-	}
+//
+//	public Page<Food> findPaginated(int page, Optional<Integer> size) {
+//		int input = size.orElse(standardSize);
+//		return foodRepository.findAll(PageRequest.of(page, input));
+//	}
 }

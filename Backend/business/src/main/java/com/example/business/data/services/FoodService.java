@@ -21,20 +21,19 @@ import com.example.business.data.repositories.FoodRepository;
 @Service
 @Transactional
 public class FoodService extends AbstractService<Food, Integer>{
-	private int standardSize = 5;
+
 	@Autowired
 	FoodRepository foodRepository;
 
-//	Page<Food> listFoodByKeyword(Pageable pageable){
-//		
-//	}
+	public Page<Food> listFoodWithKeyword(String keyword, Pageable pageable){
+		return foodRepository.getFoodListWithKeyword(keyword, pageable);
+	}
 	
 	public Page<Food> listAllByPage(Pageable pageable) {
 		return foodRepository.findAll(pageable);
 	}
 //
-//	public Page<Food> findPaginated(int page, Optional<Integer> size) {
-//		int input = size.orElse(standardSize);
-//		return foodRepository.findAll(PageRequest.of(page, input));
-//	}
+	public Page<Food> findPaginated(int page, int size) {
+		return foodRepository.findAll(PageRequest.of(page, size));
+	}
 }

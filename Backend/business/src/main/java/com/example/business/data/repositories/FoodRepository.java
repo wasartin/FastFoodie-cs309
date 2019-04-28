@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import org.springframework.data.querydsl.binding.QuerydslBindings;
+import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,8 +22,7 @@ import com.example.business.data.entities.Food;
  *
  */
 @Repository
-public interface FoodRepository extends PagingAndSortingRepository<Food, Integer>,
-										QuerydslPredicateExecutor<Food>{
+public interface FoodRepository extends PagingAndSortingRepository<Food, Integer>{
 
 	/**
 	 * Finds foods that contain the keyword
@@ -40,10 +42,9 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 	//{[ONE ARG]} OR {[ARG_ONE} : {ARG_TWO}]
 	//apprently the code already makes my queiers?
 	
+	Page<Food> findByCalorieLessThan(int maxCal, Pageable pageable);
 	
-	//Page<Food> findByCalorieLessThanDesc_maxCal(int maxCal, Pageable pageable);
+	Page<Food> findByCarbLessThan(int maxCarb, Pageable pageable);
 	
-	
-	
-	
+	Page<Food> somethingNew(Pageable pageable);
 }

@@ -10,7 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -100,6 +103,7 @@ public class FoodController {
 									UriComponentsBuilder uriBuilder,
 									HttpServletResponse response) throws Exception {
 		String selected;
+		//sortByArgumentDesc
 	    Page<Food> resultPage = foodService.findPaginated(page, size);
 	    if (page > resultPage.getTotalPages()) {
 	        throw new Exception();
@@ -107,7 +111,22 @@ public class FoodController {
 	    return resultPage.getContent();
 	}
 	
-	
+	@RequestMapping(value="/search/num/other", method=RequestMethod.GET)
+	Page<Food> other(@RequestParam(value = "searchTerm", required = false) String searchTerm,
+											@PageableDefault Pageable p){
+		Page<Food> result = foodService.listAllByPage(PageRequest.of(p.getPageNumber(), p.getPageSize(), sortByArgumentDesc(searchTerm)));
+		return result;
+	} 
+
+	@RequestMapping(value = "/conditionalPagination", params = { "property", "direction", "page",
+		"size" }, method = RequestMethod.GET)
+	public Page<Food> somethingNew(@RequestParam(value="property", required=false) String property,
+									@RequestParam("direction") String direction, 
+									@RequestParam("page") int page,
+									@RequestParam("size") int size) {
+	Page<Food> list = foodService.somethingNew(property, direction, page, size);
+	return list;
+	}
 	
 	/**
 	 * returns iterable for all food objects
@@ -126,7 +145,7 @@ public class FoodController {
 	@RequestMapping(method = RequestMethod.POST, path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> createFood(@RequestBody Food newFood) {
-		return foodService.createEntity(newFood, newFood.getFood_id());
+		return foodService.createEntity(newFood, newFood.getFid());
 	}
 	
 	/**

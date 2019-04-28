@@ -1,11 +1,10 @@
 package com.example.business.data.services;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,17 +34,27 @@ public class FoodService extends AbstractService<Food, Integer>{
 	
 	public Page<Food> listCaloriesLessThan(int max, Pageable pageable) {
 		//return foodRepository.findByCalorieLessThanDesc_maxCal(max, pageable);
-		
+		return null;
 	}
 //
 	public Page<Food> findPaginated(int page, int size) {
 		return foodRepository.findAll(PageRequest.of(page, size));
 	}
 	
-	public Page<Food> sortByFoodProperties(Pageable pageable, String[] argList){
-		//
-		return null;
+	public Page<Food> findPaginatedAndSort(int page, int size, Sort sort) {
+		return foodRepository.findAll(PageRequest.of(page, size, sort));
 	}
 	
+	
+	public Page<Food> somethingNew(String property, String direction, int page, int size){
+		Sort howToSort = sortByArgumentAndDirection(property, Sort.Direction.valueOf(direction));
+		Pageable pageable = PageRequest.of(page, size, howToSort);
+		return foodRepository.somethingNew(pageable);
+				
+	}
+	
+	private Sort sortByArgumentAndDirection(String property, Sort.Direction dir) {
+		return new Sort(dir, property);
+	}
 	
 }

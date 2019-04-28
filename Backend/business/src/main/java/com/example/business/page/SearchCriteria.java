@@ -33,4 +33,11 @@ public class SearchCriteria {
 		this.value = value;
 	}
 	
+	public SearchCriteria of(String toParse) {//Just do one for now., input will either start or be right after a '?' or '&'
+		//find 
+		//[food_property]={FilterOperation}[Num/String]
+		
+		return null;
+	}
+	
 }

@@ -33,8 +33,8 @@ public class FoodRating {
 	/**
 	 * Food id of the food being rated
 	 */
-	@Column(name="food_id")
-	private int food_id; 
+	@Column(name="fid")
+	private int fid; 
 	
 	/**
 	 * The rating given.
@@ -46,11 +46,11 @@ public class FoodRating {
 		super();
 	}
 
-	public FoodRating(int rating_id, String user_email, int food_id, int rating) {
+	public FoodRating(int rating_id, String user_email, int fid, int rating) {
 		super();
 		this.rating_id = rating_id;
 		this.user_email = user_email;
-		this.food_id = food_id;
+		this.fid = fid;
 		this.rating = rating;
 	}
 	
@@ -70,12 +70,12 @@ public class FoodRating {
 		this.user_email = user_email;
 	}
 
-	public int getFood_id() {
-		return food_id;
+	public int getFid() {
+		return fid;
 	}
 
-	public void setFood_id(int food_id) {
-		this.food_id = food_id;
+	public void setFid(int fid) {
+		this.fid = fid;
 	}
 
 	public int getRating() {

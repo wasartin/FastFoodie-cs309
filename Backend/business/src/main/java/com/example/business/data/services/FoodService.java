@@ -1,7 +1,5 @@
 package com.example.business.data.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -13,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.repositories.FoodRepository;
-import com.querydsl.core.BooleanBuilder;
 
 /**
  * The Food service class is where the bulk of the business logic is. 
@@ -65,6 +62,4 @@ public class FoodService extends AbstractService<Food, Integer>{
 		return foodRepository.findAll(pageable);
 	}
 
-	
-	
 }

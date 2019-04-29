@@ -125,7 +125,7 @@ public class FoodRatingController {
 	@ResponseBody
 	public ResponseEntity<?> createFoodRating(@PathVariable String user_email, @PathVariable int food_id, @PathVariable int rating) {
 		FoodRating newRating = new FoodRating();
-		newRating.setFood_id(food_id);
+		newRating.setFid(food_id);
 		newRating.setRating(rating);
 		newRating.setUser_email(user_email);
 		

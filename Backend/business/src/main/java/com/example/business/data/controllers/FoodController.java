@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.services.FoodService;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 
 /**
  *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the Food repository.
@@ -74,9 +71,6 @@ public class FoodController {
 	public Page<Food> lazyFrontEnd(@PathVariable String keyword,
 										@SortDefault Sort sort,
 										@PageableDefault Pageable p) {
-		
-		//something with example. 
-		
 		Page<Food> list = foodService.listWithKeywordAndOrdering(keyword, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
 		return list;
 	}

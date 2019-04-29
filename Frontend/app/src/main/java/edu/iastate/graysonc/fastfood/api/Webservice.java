@@ -72,6 +72,6 @@ public interface Webservice {
     @POST("tickets/create")
     Call<Ticket> submitTicket(Ticket ticket);
 
-    @GET("foods/search/?")
-    Call<ResultList> doSearch(@Query("page") int page);
+    @GET("foods/search/keyword/{keyword}?size=300")
+    Call<ResultList> doSearch(@Path("keyword") String query);
 }

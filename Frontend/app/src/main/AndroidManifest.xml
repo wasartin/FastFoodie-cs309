@@ -18,10 +18,6 @@
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         android:usesCleartextTraffic="true">
 
-        <provider android:name=".RecentSearchProvider"
-            android:authorities="edu.iastate.graysonc.fastfood.RecentSearchProvider" />
-
-
         <activity android:name=".activities.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop">

@@ -87,9 +87,6 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
 
         // Configure ViewModel
         mViewModel = ViewModelProviders.of(getActivity(), mViewModelFactory).get(FoodViewModel.class);
-
-        ratingDialogFragment = new RatingDialogFragment();
-
     }
 
     @Override
@@ -104,13 +101,17 @@ public class FoodDetailFragment extends Fragment implements View.OnClickListener
             carbs.setText("" + f.getCarbTotal());
             fat.setText(f.getFatTotal() + "g");
             ratingBar.setRating((float)f.getRating());
-            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                @Override
-                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                    submitRatingButton.setVisibility(View.VISIBLE);
-                    ratingBar.setStepSize(1);
-                }
-            });
+            if (GoogleSignIn.getLastSignedInAccount(App.context) != null) {
+                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        submitRatingButton.setVisibility(View.VISIBLE);
+                        ratingBar.setStepSize(1);
+                    }
+                });
+            } else {
+                ratingBar.setIsIndicator(true);
+            }
             if (f.getIsFavorite() == 1) {
                 favoriteButton.setText(R.string.favorite_remove);
             }

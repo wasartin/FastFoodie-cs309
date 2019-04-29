@@ -11,10 +11,13 @@ import android.view.MenuInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import javax.inject.Inject;
@@ -22,10 +25,15 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import edu.iastate.graysonc.fastfood.App;
 import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.RecentSearchProvider;
+import edu.iastate.graysonc.fastfood.view_models.FactoryViewModel;
+import edu.iastate.graysonc.fastfood.view_models.FoodViewModel;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+    @Inject
+    FactoryViewModel factoryViewModel;
     private static final String TAG = "MainActivity";
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
@@ -44,6 +52,13 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         BottomNavigationView bottomNavigationView = findViewById(R.id.main_navigation);
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(App.context);
+        if (googleSignInAccount != null) {
+            FoodViewModel viewModel = ViewModelProviders.of(this, factoryViewModel).get(FoodViewModel.class);
+            viewModel.initFavoriteFoods(googleSignInAccount.getEmail());
+            viewModel.loadFavoriteFoods();
+        }
     }
 
     @Override

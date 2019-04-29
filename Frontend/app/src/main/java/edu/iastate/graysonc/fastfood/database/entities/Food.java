@@ -13,26 +13,26 @@ import androidx.room.PrimaryKey;
 public class Food {
     @PrimaryKey
     @NonNull
-    @SerializedName("food_id")
+    @SerializedName("fid")
     private int id;
 
-    @SerializedName("food_name")
+    @SerializedName("fname")
     @Expose
     private String name;
 
-    @SerializedName("protein_total")
+    @SerializedName("protein")
     @Expose
     private int proteinTotal;
 
-    @SerializedName("carb_total")
+    @SerializedName("carb")
     @Expose
     private int carbTotal;
 
-    @SerializedName("fat_total")
+    @SerializedName("fat")
     @Expose
     private int fatTotal;
 
-    @SerializedName("calorie_total")
+    @SerializedName("calorie")
     private int calorieTotal;
 
     @SerializedName("price")
@@ -41,7 +41,7 @@ public class Food {
     @SerializedName("category")
     private String category;
 
-    @SerializedName("located_at")
+    @SerializedName("located")
     private int location;
 
     @SerializedName("rating")

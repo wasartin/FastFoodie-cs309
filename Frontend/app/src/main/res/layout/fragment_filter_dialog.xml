@@ -19,7 +19,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/priceCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -60,7 +60,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/checkBox2"
+                android:id="@+id/calorieCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -138,7 +138,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/checkBox4"
+                android:id="@+id/fatCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -179,7 +179,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/checkBox5"
+                android:id="@+id/carbCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

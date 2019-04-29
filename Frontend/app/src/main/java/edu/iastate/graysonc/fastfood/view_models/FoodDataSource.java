@@ -8,26 +8,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import edu.iastate.graysonc.fastfood.App;
-import edu.iastate.graysonc.fastfood.database.entities.ResultList;
-import io.reactivex.disposables.CompositeDisposable;
-
 import edu.iastate.graysonc.fastfood.database.entities.Food;
+import edu.iastate.graysonc.fastfood.database.entities.ResultList;
 import edu.iastate.graysonc.fastfood.repositories.Repository;
-import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,10 +27,13 @@ public class FoodDataSource extends PageKeyedDataSource<Integer, Food> {
     private int sourceIndex = 0;
     private MutableLiveData<String> progressLiveStatus;
 
+    private String query;
+
     @Inject
-    FoodDataSource(Repository repository) {
+    FoodDataSource(Repository repository, String query) {
         this.repository = repository;
         progressLiveStatus = new MutableLiveData<>();
+        this.query = query;
     }
 
 
@@ -54,7 +45,7 @@ public class FoodDataSource extends PageKeyedDataSource<Integer, Food> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Food> callback) {
         progressLiveStatus.postValue(App.LOADING);
-        repository.getFoodMatches("", sourceIndex).enqueue(new Callback<ResultList>() {
+        repository.getFoodMatches(query, sourceIndex).enqueue(new Callback<ResultList>() {
             @Override
             public void onResponse(Call<ResultList> call, Response<ResultList> response) {
                 if (response.body() != null) {
@@ -65,12 +56,14 @@ public class FoodDataSource extends PageKeyedDataSource<Integer, Food> {
                         repository.getAverageRating(foods.get(i).getId()).enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
-                                double r = 0.0;
-                                if (!response.body().equals("NaN")) {
-                                    r =Double.parseDouble(response.body());
+                                if (response.body() != null) {
+                                    double r = 0.0;
+                                    if (!response.body().equals("NaN")) {
+                                        r = Double.parseDouble(response.body());
+                                    }
+                                    Log.d(TAG, "onResponse: Rating = " + r);
+                                    foods.get(finalI).setRating(r);
                                 }
-                                Log.d(TAG, "onResponse: Rating = " + r);
-                                foods.get(finalI).setRating(r);
                                 if (finalI == foods.size() - 1) {
                                     sourceIndex++;
                                     callback.onResult(foods, null, sourceIndex);
@@ -100,7 +93,7 @@ public class FoodDataSource extends PageKeyedDataSource<Integer, Food> {
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Food> callback) {
 
-        repository.getFoodMatches("", params.key).enqueue(new Callback<ResultList>() {
+        repository.getFoodMatches(query, params.key).enqueue(new Callback<ResultList>() {
             @Override
             public void onResponse(Call<ResultList> call, Response<ResultList> response) {
                 if (response.body() != null) {
@@ -113,12 +106,14 @@ public class FoodDataSource extends PageKeyedDataSource<Integer, Food> {
                         repository.getAverageRating(foods.get(i).getId()).enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
-                                double r = 0.0;
-                                if (!response.body().equals("NaN")) {
-                                    r =Double.parseDouble(response.body());
+                                if (response.body() != null) {
+                                    double r = 0.0;
+                                    if (!response.body().equals("NaN")) {
+                                        r = Double.parseDouble(response.body());
+                                    }
+                                    Log.d(TAG, "onResponse: Rating = " + r);
+                                    foods.get(finalI).setRating(r);
                                 }
-                                Log.d(TAG, "onResponse: Rating = " + r);
-                                foods.get(finalI).setRating(r);
                                 if (finalI == foods.size() - 1) {
                                     callback.onResult(foods, resultList.isLast() ? null : params.key + 1);
                                 }

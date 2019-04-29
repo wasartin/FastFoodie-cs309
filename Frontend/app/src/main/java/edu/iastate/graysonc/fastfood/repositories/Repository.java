@@ -38,6 +38,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static androidx.constraintlayout.motion.widget.MotionScene.TAG;
+
 @Singleton
 public class Repository {
     private String TAG = "Repository";
@@ -60,8 +62,45 @@ public class Repository {
         });// FOR DEBUGGING
     }
 
+    public LiveData<List<Food>> getSearchResults(String query) {
+        MutableLiveData<List<Food>> searchResults = new MutableLiveData<>();
+        webservice.doSearch(query).enqueue(new Callback<ResultList>() {
+            @Override
+            public void onResponse(Call<ResultList> call, Response<ResultList> response) {
+                ResultList resultList = response.body();
+                List<Food> foods = response.body().getContent();
+                for (int i = 0; i < foods.size(); i++) {
+                    int finalI = i;
+                    webservice.getAverageRating(foods.get(i).getId()).enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (response.body() != null) {
+                                double r = 0.0;
+                                if (!response.body().equals("NaN")) {
+                                    r = Double.parseDouble(response.body());
+                                }
+                                Log.d(TAG, "onResponse: Rating = " + r);
+                                foods.get(finalI).setRating(r);
+                            }
+                            searchResults.postValue(foods);
+                        }
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onFailure(Call<ResultList> call, Throwable t) {
+
+            }
+        });
+        return searchResults;
+    }
+
     public Call<ResultList> getFoodMatches(String query, int page) {
-        return webservice.doSearch(page);
+        return webservice.doSearch(query);
     }
 
     public Call<String> getAverageRating(int foodId) {
@@ -188,12 +227,14 @@ public class Repository {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
                                         f.setIsFavorite(1);
-                                        double r = 0.0;
-                                        if (!response.body().equals("NaN")) {
-                                            r =Double.parseDouble(response.body());
+                                        if (response.body() != null) {
+                                            double r = 0.0;
+                                            if (!response.body().equals("NaN")) {
+                                                r = Double.parseDouble(response.body());
+                                            }
+                                            Log.d(TAG, "onResponse: Rating = " + r);
+                                            f.setRating(r);
                                         }
-                                        Log.d(TAG, "onResponse: Rating = " + r);
-                                        f.setRating(r);
                                         executor.execute(() -> {
                                             foodDao.insert(f);
                                         });

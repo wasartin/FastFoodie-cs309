@@ -13,10 +13,13 @@ public class FoodDataSourceFactory extends DataSource.Factory<Integer, Food> {
     private MutableLiveData<FoodDataSource> liveData;
     private Repository repository;
 
+    private String query;
+
     @Inject
-    public FoodDataSourceFactory(Repository repository) {
+    public FoodDataSourceFactory(Repository repository, String query) {
         this.repository = repository;
         liveData = new MutableLiveData<>();
+        this.query = query;
     }
 
     public MutableLiveData<FoodDataSource> getMutableLiveData() {
@@ -25,7 +28,7 @@ public class FoodDataSourceFactory extends DataSource.Factory<Integer, Food> {
 
     @Override
     public DataSource<Integer, Food> create() {
-        FoodDataSource dataSourceClass = new FoodDataSource(repository);
+        FoodDataSource dataSourceClass = new FoodDataSource(repository, query);
         liveData.postValue(dataSourceClass);
         return dataSourceClass;
     }

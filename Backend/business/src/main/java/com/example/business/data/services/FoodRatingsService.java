@@ -35,8 +35,8 @@ public class FoodRatingsService extends AbstractService<FoodRating, Integer>{
 	 * @param food_id
 	 * @return a specific food rating.
 	 */
-	public FoodRating getRatingForUserAndFood(String user_email, int food_id){
-		return repo.getFoodRatingByUserAndFood(user_email, food_id);
+	public FoodRating getRatingForUserAndFood(String user_email, int fid){
+		return repo.getFoodRatingByUserAndFood(user_email, fid);
 	}
 	
 	/**

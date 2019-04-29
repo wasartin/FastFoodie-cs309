@@ -38,6 +38,6 @@ public interface FoodRatingRepository extends CrudRepository<FoodRating, Integer
 	 * @param food_id
 	 * @return a list of all ratings for a specific food.
 	 */
-	@Query(value = "SELECT rating FROM food_rating WHERE food_id = ?1 AND rating > 0 ", nativeQuery = true)
+	@Query(value = "SELECT rating FROM food_rating WHERE fid = ?1 AND rating > 0 ", nativeQuery = true)
 	List<Integer> findAllRatingsForFood(int food_id);
 }

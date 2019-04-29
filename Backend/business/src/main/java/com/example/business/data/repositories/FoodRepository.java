@@ -11,7 +11,9 @@ import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.example.business.data.entities.Food;
+import com.querydsl.core.annotations.QueryDelegate;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanPath;
 
 /**
  * The food repository is the layer that interfaces with the database. It uses the favorites dao and performs general
@@ -36,7 +38,10 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 	Page<Food> getFoodListWithKeyword(String keyword, Pageable pageable);//wondering if all args must be page
 	//FILTERING
 	//{GT/LT/EQ}, {NUMBER}, {FOOD int} (protein, calorie, etc), can have one arg, or 1+
-	
+//	@QueryDelegate(Food.class)
+//	public static BooleanPath isManagedBy(QFood f, Food other){
+//	    return Food.manager.eq(other);
+//	}   
 	//SORTING
 	//{[ONE ARG]} OR {[ARG_ONE} : {ARG_TWO}]
 	//apprently the code already makes my queiers?

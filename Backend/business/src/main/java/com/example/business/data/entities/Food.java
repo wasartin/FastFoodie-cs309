@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 
+import com.querydsl.core.annotations.QueryEntity;
+
 /**
  * An entity (or dao) that maps to the table 'food' in the Database. This represents the model of the object.
  * @author watis

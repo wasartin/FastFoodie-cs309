@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.repositories.FoodRepository;
+import com.example.business.page.FilterOperation;
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -25,13 +26,19 @@ import com.querydsl.core.types.Predicate;
 @Service
 @Transactional
 public class FoodService extends AbstractService<Food, Integer>{
+	
+	final String FID = "fid";
+	final String FNAME="fname";
+	final String PROTEIN = "protein";
+	final String CARB = "carb";
+	final String FAT = "fat";
+	final String CALORIE = "calorie";
+	final String PRICE = "price";
+	final String LESS_THAN_EQ = "<";
+	final String GREATHER_THAN_EQ = ">";
 
 	@Autowired
 	FoodRepository foodRepository;
-	
-	public Page<Food> getQuery(String property, String action, Pageable pageable){
-		return foodRepository.findAll(pageable);
-	}
 	
 	public Page<Food> lazySearch(Example<Food> example, Pageable pageable){
 		return foodRepository.findAll(example, pageable);
@@ -76,13 +83,42 @@ public class FoodService extends AbstractService<Food, Integer>{
 		return null;
 	}
 	
-	final String FID = "fid";
-	final String FNAME="fname";
-	final String PROTEIN = "protein";
-	final String CARB = "carb";
-	final String FAT = "fat";
-	final String CALORIE = "calorie";
-	final String PRICE = "price";
-	final String LESS_THAN_EQ = "<=";
-	final String GREATHER_THAN_EQ = ">=";
+	public Page<Food> getQuery(String property, int num, FilterOperation action, Pageable pageable){
+		if(property.equals(FID)) {
+		}else if(property.equals(PROTEIN)) {
+			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
+				foodRepository.findByProteinLessThan(num, pageable);
+			}else {
+				foodRepository.findByProteinGreaterThan(num, pageable);
+			}
+			
+		}else if(property.equals(CARB)) {
+			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
+				return foodRepository.findByCarbLessThan(num, pageable);
+			}else {
+				return foodRepository.findByCarbGreaterThan(num, pageable);
+			}
+		}else if(property.equals(FAT)) {
+			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
+				return foodRepository.findByFatLessThan(num, pageable);
+			}else {
+				return foodRepository.findByFatGreaterThan(num, pageable);
+			}
+		}else if(property.equals(CALORIE)) {
+			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
+				return foodRepository.findByCalorieLessThan(num, pageable);
+			}else {
+				return foodRepository.findByCalorieGreaterThan(num, pageable);
+			}
+		}else if(property.equals(PRICE)) {
+			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
+				return foodRepository.findByPriceLessThan(num, pageable);
+			}else {
+				return foodRepository.findByPriceGreaterThan(num, pageable);
+			}
+		}
+		return foodRepository.findAll(pageable);
+	}
+
+
 }

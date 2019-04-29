@@ -1,11 +1,8 @@
 package com.example.business.data.repositories;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
@@ -34,6 +31,5 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 			+" FROM food"
 			+" WHERE fname LIKE %?1%", nativeQuery = true)
 	Page<Food> getFoodListWithKeyword(String keyword, Pageable pageable);//wondering if all args must be page
-
 
 }

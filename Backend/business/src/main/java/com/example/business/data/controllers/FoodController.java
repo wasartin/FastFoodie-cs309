@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.services.FoodService;
-import com.example.business.page.FilterOperation;
 
 /**
  *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the Food repository.
@@ -78,6 +77,14 @@ public class FoodController {
 		return list;
 	}
 	
+	@RequestMapping(value = "/search/{keyword}", method = RequestMethod.GET)
+	public Page<Food> lazyFrontEnd(@PathVariable String keyword,
+										@SortDefault Sort sort,
+										@PageableDefault Pageable p) {
+		Page<Food> list = foodService.listWithKeywordAndOrdering(keyword, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
+		return list;
+	}
+
 	@RequestMapping(value = "/conditionalPagination", method = RequestMethod.GET)
 	public Page<Food> somethingNew(@RequestParam(value="property", required=false) String property,
 									@RequestParam(value="direction", required=false) Optional<String> direction, 

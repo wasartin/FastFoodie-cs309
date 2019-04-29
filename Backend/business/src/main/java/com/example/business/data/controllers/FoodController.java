@@ -78,57 +78,6 @@ public class FoodController {
 		return list;
 	}
 	
-	@RequestMapping(value = "/search/{property}", method = RequestMethod.GET)
-	public Page<Food> lazyFrontEnd(@PathVariable String property,
-										@SortDefault Sort sort,
-										@PageableDefault Pageable p) {
-		String defaultValue = property;
-		if(!FOOD_SEARCH_VALUES.contains(property)) {
-			//default value
-			property = FOOD_SEARCH_VALUES.get(0);
-		}
-		//parse q
-		//q=[property_name]:[action]([value])+
-		//some num, with <>=
-		String word = "";
-		String other = "";
-		String action = "";
-		if(property.contains(":")) {
-			word = property.substring(0, property.indexOf(":"));
-			property = property.substring(property.indexOf(":"));
-		}
-		char[] c_arr = property.toCharArray();
-	    for(char c: c_arr) {
-	        if(Character.isDigit(c)) {
-	        	other = other + c;
-	        }
-	        else {
-	            action = action + c;
-	        }
-	    }
-	    if(action.length()!= 0) {//then we have something to do.
-	    	switch(FilterOperation.fromValue(action)){
-	    		case GREATER_THAN:
-	    		case GREATER_THAN_OR_EQUAL_TO:
-	    			return foodRepository.
-	    			break;
-	    		case LESS_THAN:
-	    		case LESS_THAN_OR_EQUAL_TO:
-	    			break;
-	    		default:
-	    			break;
-	    	}
-	    }
-	    
-		//ratio
-		//[one]:[two]
-		//something with example. 
-		
-		//call right program
-		Page<Food> list = foodService.listWithKeywordAndOrdering(property, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
-		return list;
-	}
-
 	@RequestMapping(value = "/conditionalPagination", method = RequestMethod.GET)
 	public Page<Food> somethingNew(@RequestParam(value="property", required=false) String property,
 									@RequestParam(value="direction", required=false) Optional<String> direction, 

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.repositories.FoodRepository;
+import com.example.business.page.FilterOperation;
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -25,13 +26,19 @@ import com.querydsl.core.types.Predicate;
 @Service
 @Transactional
 public class FoodService extends AbstractService<Food, Integer>{
+	
+	final String FID = "fid";
+	final String FNAME="fname";
+	final String PROTEIN = "protein";
+	final String CARB = "carb";
+	final String FAT = "fat";
+	final String CALORIE = "calorie";
+	final String PRICE = "price";
+	final String LESS_THAN_EQ = "<";
+	final String GREATHER_THAN_EQ = ">";
 
 	@Autowired
 	FoodRepository foodRepository;
-	
-	public Page<Food> getQuery(String property, String action, Pageable pageable){
-		return foodRepository.findAll(pageable);
-	}
 	
 	public Page<Food> lazySearch(Example<Food> example, Pageable pageable){
 		return foodRepository.findAll(example, pageable);
@@ -45,11 +52,6 @@ public class FoodService extends AbstractService<Food, Integer>{
 		return foodRepository.findAll(pageable);
 	}
 	
-	public Page<Food> listCaloriesLessThan(int max, Pageable pageable) {
-		//return foodRepository.findByCalorieLessThanDesc_maxCal(max, pageable);
-		return null;
-	}
-//
 	public Page<Food> findPaginated(int page, int size) {
 		return foodRepository.findAll(PageRequest.of(page, size));
 	}
@@ -68,21 +70,5 @@ public class FoodService extends AbstractService<Food, Integer>{
 		Pageable pageable = PageRequest.of(page, size, sort);
 		return foodRepository.findAll(pageable);
 	}
-	
-	public Page<Food> generalPrice(String property, String action, Pageable p, int num){
-		
-		
-		
-		return null;
-	}
-	
-	final String FID = "fid";
-	final String FNAME="fname";
-	final String PROTEIN = "protein";
-	final String CARB = "carb";
-	final String FAT = "fat";
-	final String CALORIE = "calorie";
-	final String PRICE = "price";
-	final String LESS_THAN_EQ = "<=";
-	final String GREATHER_THAN_EQ = ">=";
+
 }

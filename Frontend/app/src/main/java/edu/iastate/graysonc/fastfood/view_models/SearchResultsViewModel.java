@@ -24,7 +24,6 @@ public class SearchResultsViewModel extends ViewModel {
      * @param query - The query to be executed
      */
     public void init(String query) {
-        foods = repo.getFavoriteFoodsForUser(App.account.getEmail());
     }
 
     public LiveData<List<Food>> getFoods() {

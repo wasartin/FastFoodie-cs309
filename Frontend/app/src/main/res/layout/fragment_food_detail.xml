@@ -60,21 +60,32 @@
                 android:text="TextView"
                 android:textSize="30sp" />
 
-            <RatingBar
-                android:id="@+id/rating_bar"
-                style="@style/Widget.AppCompat.RatingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:stepSize="1" />
-
-            <TextView
-                android:id="@+id/price_text"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@android:color/holo_green_dark" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RatingBar
+                    android:id="@+id/rating_bar"
+                    style="@style/Widget.AppCompat.RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="false"
+                    android:numStars="5" />
+
+                <Button
+                    android:id="@+id/submit_rating_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/submit"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="8dp"
+                android:background="@android:color/darker_gray" />
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -84,6 +95,31 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/food_name">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="0"
+                        android:text="@string/food_price"
+                        android:textAlignment="textEnd"
+                        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+
+                    <TextView
+                        android:id="@+id/price_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="TextView"
+                        android:textAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle"
+                        android:textColor="@android:color/holo_green_dark"
+                        android:textSize="16sp" />
+
+                </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -177,25 +213,25 @@
 
             </TableLayout>
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="1dp"
+                android:layout_margin="8dp"
+                android:background="@android:color/darker_gray" />
 
-                <ImageView
-                    android:id="@+id/favorite_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    app:srcCompat="@drawable/ic_favorite_empty" />
+            <Button
+                android:id="@+id/favorite_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/favorite_add"
+                app:icon="@drawable/ic_favorite_empty" />
 
-                <ImageView
-                    android:id="@+id/location_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    app:srcCompat="@drawable/ic_location_on_black_24dp" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/find_location_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/find_location"
+                app:icon="@drawable/ic_location_on_black_24dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

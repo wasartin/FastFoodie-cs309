@@ -13,26 +13,26 @@ import androidx.room.PrimaryKey;
 public class Food {
     @PrimaryKey
     @NonNull
-    @SerializedName("food_id")
+    @SerializedName("fid")
     private int id;
 
-    @SerializedName("food_name")
+    @SerializedName("fname")
     @Expose
     private String name;
 
-    @SerializedName("protein_total")
+    @SerializedName("protein")
     @Expose
     private int proteinTotal;
 
-    @SerializedName("carb_total")
+    @SerializedName("carb")
     @Expose
     private int carbTotal;
 
-    @SerializedName("fat_total")
+    @SerializedName("fat")
     @Expose
     private int fatTotal;
 
-    @SerializedName("calorie_total")
+    @SerializedName("calorie")
     private int calorieTotal;
 
     @SerializedName("price")
@@ -41,26 +41,28 @@ public class Food {
     @SerializedName("category")
     private String category;
 
-    @SerializedName("located_at")
+    @SerializedName("located")
     private int location;
 
-    @SerializedName("food_rating")
+    @SerializedName("rating")
     private double rating;
 
     private int isFavorite;
 
     private Date lastRefresh;
 
-    public Food(@NonNull int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, int location) {
+    public Food(int id, String name, int proteinTotal, int carbTotal, int fatTotal, int calorieTotal, String price, String category, int location, double rating, int isFavorite) {
         this.id = id;
         this.name = name;
         this.proteinTotal = proteinTotal;
         this.carbTotal = carbTotal;
         this.fatTotal = fatTotal;
         this.calorieTotal = calorieTotal;
+        this.price = price;
+        this.category = category;
         this.location = location;
-        this.lastRefresh = getLastRefresh();
-        isFavorite = 0;
+        this.rating = rating;
+        this.isFavorite = isFavorite;
     }
 
     public int getId() {
@@ -153,5 +155,9 @@ public class Food {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public boolean equals(Food otherFood) {
+        return super.equals(otherFood);
     }
 }

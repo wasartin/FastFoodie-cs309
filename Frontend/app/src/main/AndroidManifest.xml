@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.iastate.graysonc.fastfood">
     <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -16,14 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-
-        <provider android:name=".RecentSearchProvider"
-            android:authorities="edu.iastate.graysonc.fastfood.RecentSearchProvider" />
-
-
-        <activity android:name=".activities.SearchActivity">
-
-        </activity>
 
         <activity android:name=".activities.MainActivity"
             android:windowSoftInputMode="adjustPan"

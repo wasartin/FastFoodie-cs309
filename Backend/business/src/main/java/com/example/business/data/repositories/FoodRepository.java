@@ -39,49 +39,5 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 			+" FROM food"
 			+" WHERE fname LIKE %?1%", nativeQuery = true)
 	Page<Food> getFoodListWithKeyword(String keyword, Pageable pageable);//wondering if all args must be page
-	//FILTERING
-	//{GT/LT/EQ}, {NUMBER}, {FOOD int} (protein, calorie, etc), can have one arg, or 1+
-	
-	//SORTING
-	//{[ONE ARG]} OR {[ARG_ONE} : {ARG_TWO}]
-	//apprently the code already makes my queiers?
-
-	Page<Food> findByCalorieLessThan(int maxCal, Pageable pageable);
-	
-	Page<Food> findByCarbLessThan(int maxCarb, Pageable pageable);
-	
-	Page<Food> findByPriceLessThan(int maxPrice, Pageable pageable);
-	
-	
-	
-	//fid
-	//fname
-	//protein
-	///carb
-	//fat
-	//calorie
-	//price
-	//category
-	//located
-	//rating
-	//rated
-	final String FID = "fid";
-	final String FNAME="fname";
-	final String PROTEIN = "protein";
-	final String CARB = "carb";
-	final String FAT = "fat";
-	final String CALORIE = "calorie";
-	final String PRICE = "price";
-	final String CATEGORY = "category";
-
-	//Also best ratio stuff.
-	
-	String q1 = "SELECT * FROM food f WHERE " + PRICE + "";
-	
-	//lessthanorequalto
-	//greaterthenequalto
-	
-	Page<Food> LessThan(int arg, Pageable pageable);
-
 
 }

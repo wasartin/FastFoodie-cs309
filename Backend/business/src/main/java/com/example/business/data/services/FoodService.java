@@ -45,11 +45,6 @@ public class FoodService extends AbstractService<Food, Integer>{
 	public Page<Food> listAllByPage(Pageable pageable) {
 		return foodRepository.findAll(pageable);
 	}
-	
-	public Page<Food> listCaloriesLessThan(int max, Pageable pageable) {
-		//return foodRepository.findByCalorieLessThanDesc_maxCal(max, pageable);
-		return null;
-	}
 //
 	public Page<Food> findPaginated(int page, int size) {
 		return foodRepository.findAll(PageRequest.of(page, size));

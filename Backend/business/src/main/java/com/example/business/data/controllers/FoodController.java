@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
@@ -61,17 +62,27 @@ public class FoodController {
 		return foods;
 	} 
 	
-	/**
-	 * Finds a food by it's keyword and returns a page to the client
-	 * @param keyword
-	 * @param pageable
-	 * @return page of food
-	 */
-	@RequestMapping(value="/search/keyword/{keyword}", method=RequestMethod.GET)
-	Page<Food> listFoodWithKeyword(@PathVariable String keyword, @PageableDefault(size = PAGE_SIZE, sort="fname") Pageable pageable){
-		Page<Food> foods = foodService.listFoodWithKeyword(keyword, pageable);
-		return foods;
-	} 
+//	/**
+//	 * Finds a food by it's keyword and returns a page to the client
+//	 * @param keyword
+//	 * @param pageable
+//	 * @return page of food
+//	 */
+//	@RequestMapping(value="/search/keyword/{keyword}", method=RequestMethod.GET)
+//	Page<Food> listFoodWithKeyword(@PathVariable String keyword, 
+//									@PageableDefault(size = PAGE_SIZE, sort="fname") Pageable pageable){
+//		Page<Food> foods = foodService.listFoodWithKeyword(keyword, pageable);
+//		return foods;
+//	} 
+//	
+	@RequestMapping(value = "/order/{keyword}", method = RequestMethod.GET)
+	public Page<Food> keyWordAndOrdering(@PathVariable String keyword,
+										@SortDefault Sort sort,
+										@PageableDefault Pageable p) {
+		Page<Food> list = foodService.listWithKeywordAndOrdering(keyword, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
+		return list;
+	}
+	
 
 	@RequestMapping(value = "/conditionalPagination", method = RequestMethod.GET)
 	public Page<Food> somethingNew(@RequestParam(value="property", required=false) String property,

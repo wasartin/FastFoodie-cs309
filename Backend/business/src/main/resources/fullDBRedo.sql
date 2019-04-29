@@ -1,4 +1,4 @@
-use test;
+
 DROP TABLE IF EXISTS ticket;
 DROP TABLE IF EXISTS food_rating;
 DROP TABLE IF EXISTS favorites;

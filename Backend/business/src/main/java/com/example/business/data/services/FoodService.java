@@ -34,6 +34,10 @@ public class FoodService extends AbstractService<Food, Integer>{
 		return foodRepository.getFoodListWithKeyword(keyword, pageable);
 	}
 	
+	public Page<Food> listWithKeywordAndOrdering(String keyword, Pageable pageable){
+		return foodRepository.getFoodListWithKeyword(keyword, pageable);
+	}
+	
 	public Page<Food> listAllByPage(Pageable pageable) {
 		return foodRepository.findAll(pageable);
 	}

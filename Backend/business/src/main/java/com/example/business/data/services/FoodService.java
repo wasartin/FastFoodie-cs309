@@ -21,19 +21,20 @@ import com.example.business.data.repositories.FoodRepository;
 @Service
 @Transactional
 public class FoodService extends AbstractService<Food, Integer>{
+	
+	final String FID = "fid";
+	final String FNAME="fname";
+	final String PROTEIN = "protein";
+	final String CARB = "carb";
+	final String FAT = "fat";
+	final String CALORIE = "calorie";
+	final String PRICE = "price";
+	final String LESS_THAN_EQ = "<";
+	final String GREATHER_THAN_EQ = ">";
 
 	@Autowired
 	FoodRepository foodRepository;
-	
-	public Page<Food> getQuery(String property, Sort.Direction direction, int page, int size){
-		Sort howToSort = new Sort(direction, property);
-		Pageable pageable = PageRequest.of(page, size, howToSort);
-		return foodRepository.findAll(pageable);
-	}
-	
-	public Page<Food> lazySearch(Example<Food> example, Pageable pageable){
-		return foodRepository.findAll(example, pageable);
-	}
+
 	
 	public Page<Food> listWithKeywordAndOrdering(String keyword, Pageable pageable){
 		return foodRepository.getFoodListWithKeyword(keyword, pageable);

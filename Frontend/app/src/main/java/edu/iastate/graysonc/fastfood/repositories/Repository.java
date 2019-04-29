@@ -5,10 +5,16 @@ import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.paging.DataSource;
+import androidx.paging.ItemKeyedDataSource;
+import androidx.paging.PagedList;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.util.CrashUtils;
+import com.google.gson.JsonElement;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,16 +24,21 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import edu.iastate.graysonc.fastfood.App;
+import edu.iastate.graysonc.fastfood.R;
 import edu.iastate.graysonc.fastfood.api.Webservice;
 import edu.iastate.graysonc.fastfood.database.dao.FoodDao;
 import edu.iastate.graysonc.fastfood.database.dao.UserDao;
 import edu.iastate.graysonc.fastfood.database.entities.Favorite;
 import edu.iastate.graysonc.fastfood.database.entities.Food;
+import edu.iastate.graysonc.fastfood.database.entities.ResultList;
 import edu.iastate.graysonc.fastfood.database.entities.Ticket;
 import edu.iastate.graysonc.fastfood.database.entities.User;
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static androidx.constraintlayout.motion.widget.MotionScene.TAG;
 
 @Singleton
 public class Repository {
@@ -46,10 +57,54 @@ public class Repository {
         this.userDao = userDao;
         this.foodDao = foodDao;
         this.executor = executor;
+        executor.execute(() -> {
+            foodDao.deleteAll();
+        });// FOR DEBUGGING
     }
 
-    public LiveData<List<Food>> getFoodMatches(String query) {
-        return foodDao.findMatches("%" + query + "%");
+    public LiveData<List<Food>> getSearchResults(String query) {
+        MutableLiveData<List<Food>> searchResults = new MutableLiveData<>();
+        webservice.doSearch(query).enqueue(new Callback<ResultList>() {
+            @Override
+            public void onResponse(Call<ResultList> call, Response<ResultList> response) {
+                ResultList resultList = response.body();
+                List<Food> foods = response.body().getContent();
+                for (int i = 0; i < foods.size(); i++) {
+                    int finalI = i;
+                    webservice.getAverageRating(foods.get(i).getId()).enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (response.body() != null) {
+                                double r = 0.0;
+                                if (!response.body().equals("NaN")) {
+                                    r = Double.parseDouble(response.body());
+                                }
+                                Log.d(TAG, "onResponse: Rating = " + r);
+                                foods.get(finalI).setRating(r);
+                            }
+                            searchResults.postValue(foods);
+                        }
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onFailure(Call<ResultList> call, Throwable t) {
+
+            }
+        });
+        return searchResults;
+    }
+
+    public Call<ResultList> getFoodMatches(String query, int page) {
+        return webservice.doSearch(query);
+    }
+
+    public Call<String> getAverageRating(int foodId) {
+        return webservice.getAverageRating(foodId);
     }
 
     public LiveData<User> getUser(String userEmail) {
@@ -67,7 +122,6 @@ public class Repository {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         Log.d(TAG, "DATA REFRESHED FROM NETWORK");
-                        Toast.makeText(App.context, "Data refreshed from network", Toast.LENGTH_LONG).show();
                         executor.execute(() -> {
                             User user = response.body();
                             if (user == null) {
@@ -131,7 +185,6 @@ public class Repository {
                                                 }
                                             }
                                         }
-
                                         @Override
                                         public void onFailure(Call<List<Food>> call, Throwable t) {
 
@@ -163,17 +216,35 @@ public class Repository {
                 @Override
                 public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
                     Log.d(TAG, "FAVORITES REFRESHED FROM NETWORK");
-                    Toast.makeText(App.context, "Data refreshed from network", Toast.LENGTH_LONG).show();
                     executor.execute(() -> {
                         List<Food> favorites = response.body();
                         if (favorites == null) {
                             Log.e(TAG,"Grayson your code doesn't work <3 - refreshFood");
                         } else {
                             for (Food f : favorites) {
-                                f.setIsFavorite(1);
                                 foodDao.delete(f.getId());
+                                webservice.getAverageRating(f.getId()).enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+                                        f.setIsFavorite(1);
+                                        if (response.body() != null) {
+                                            double r = 0.0;
+                                            if (!response.body().equals("NaN")) {
+                                                r = Double.parseDouble(response.body());
+                                            }
+                                            Log.d(TAG, "onResponse: Rating = " + r);
+                                            f.setRating(r);
+                                        }
+                                        executor.execute(() -> {
+                                            foodDao.insert(f);
+                                        });
+                                    }
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        t.printStackTrace();
+                                    }
+                                });
                             }
-                            foodDao.insert(favorites);
                         }
                     });
                 }
@@ -187,14 +258,23 @@ public class Repository {
 
     public void createFavorite(String userEmail, int foodId) {
         executor.execute(() -> {
-            webservice.createFavorite(userEmail, foodId).enqueue(new Callback<Favorite>() {
+            webservice.createFavorite(userEmail, foodId).enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+                public void onResponse(Call<String> call, Response<String> response) {
                     Log.d(TAG, "FAVORITE ADDED");
-                    //refreshFavoriteFoodsForUser(userEmail);
+                    Toast.makeText(App.context, R.string.favorite_created_toast, Toast.LENGTH_SHORT).show();
+                    executor.execute(() -> {
+                        foodDao.delete(foodId);
+                    });
                 }
                 @Override
-                public void onFailure(Call<Favorite> call, Throwable t) { t.printStackTrace(); }
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(App.context, R.string.favorite_created_toast, Toast.LENGTH_SHORT).show();
+                    executor.execute(() -> {
+                        foodDao.delete(foodId);
+                    });
+                    Log.e(TAG, "onFailure: ", t);
+                }
             });
         });
     }
@@ -202,27 +282,39 @@ public class Repository {
     public void deleteFavorite(String userEmail, int foodId) {
         executor.execute(() -> {
             //foodDao.delete(foodId);
-            webservice.deleteFavorite(userEmail, foodId).enqueue(new Callback<Favorite>() {
+            webservice.deleteFavorite(userEmail, foodId).enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(Call<Favorite> call, Response<Favorite> response) {
-                    Log.d(TAG, "FAVORITE REMOVED");
-                    //refreshFavoriteFoodsForUser(userEmail);
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.d(TAG, "FAVORITE REMOVED - " + foodId);
+                    Toast.makeText(App.context, R.string.favorite_deleted_toast, Toast.LENGTH_SHORT).show();
+                    executor.execute(() -> {
+                        foodDao.delete(foodId);
+                    });
                 }
                 @Override
-                public void onFailure(Call<Favorite> call, Throwable t) { t.printStackTrace(); }
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(App.context, R.string.favorite_deleted_toast, Toast.LENGTH_SHORT).show();
+                    executor.execute(() -> {
+                        foodDao.delete(foodId);
+                    });
+                    t.printStackTrace();
+                }
             });
         });
     }
 
     public void submitRating(String userEmail, int foodId, int rating) {
         executor.execute(() -> {
-            webservice.submitRating(userEmail, foodId, rating).enqueue(new Callback<Double>() {
+            webservice.submitRating(userEmail, foodId, rating).enqueue(new Callback<Object>() {
                 @Override
-                public void onResponse(Call<Double> call, Response<Double> response) {
+                public void onResponse(Call<Object> call, Response<Object> response) {
                     Log.d(TAG, "onResponse: Rating submitted successfully");
+                    Toast.makeText(App.context, R.string.rating_submitted_toast, Toast.LENGTH_SHORT).show();
                 }
                 @Override
-                public void onFailure(Call<Double> call, Throwable t) {
+                public void onFailure(Call<Object> call, Throwable t) {
+                    Log.d(TAG, "onResponse: Rating submitted successfully");
+                    Toast.makeText(App.context, R.string.rating_submitted_toast, Toast.LENGTH_SHORT).show();
                     t.printStackTrace();
                 }
             });
@@ -250,6 +342,7 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Ticket> call, Response<Ticket> response) {
                     Log.d(TAG, "onResponse: Ticket submitted successfully");
+                    Toast.makeText(App.context, "Ticket submitted successfully!", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

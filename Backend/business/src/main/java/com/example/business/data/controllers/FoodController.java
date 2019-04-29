@@ -1,5 +1,7 @@
 package com.example.business.data.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,15 @@ import com.example.business.data.services.FoodService;
 @RestController
 @RequestMapping(value="/foods")
 public class FoodController {
-	
+
+	private final List<String> FOOD_SEARCH_VALUES = new ArrayList<String>(){{
+		   add("fid"); 		   	add("fname");
+		   add("protein");		add("carb");
+		   add("fat"); 		   	add("calorie");
+		   add("price");		add("category");
+		   add("rating");		add("rated");
+	}};
+		
 	private final int PAGE_SIZE = 10;
 	
 	@Autowired

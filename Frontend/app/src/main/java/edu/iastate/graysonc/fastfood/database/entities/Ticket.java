@@ -1,5 +1,6 @@
 package edu.iastate.graysonc.fastfood.database.entities;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -40,6 +41,8 @@ public class Ticket {
         return userId;
     }
 
+    public String getAdminId(){return adminId;}
+
     public Date getDate() {
         return date;
     }
@@ -47,4 +50,6 @@ public class Ticket {
     public String getCategory() {
         return category;
     }
+
+    public int getTicketId(){return ticketId;}
 }

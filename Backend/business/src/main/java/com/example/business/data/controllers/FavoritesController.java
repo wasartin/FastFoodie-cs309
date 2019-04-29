@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.business.data.entities.Favorites;
 import com.example.business.data.services.FavoritesService;
+import com.example.business.data.services.FoodService;
 
 /**
  *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the Favorites repository.
@@ -28,7 +29,7 @@ public class FavoritesController {
 	
 	@Autowired
 	FavoritesService favoritesService;
-	
+
 	/**
 	 * Returns an optional of favorites for the specified fav_id
 	 * @param fav_id
@@ -81,6 +82,8 @@ public class FavoritesController {
 		Favorites toAdd = new Favorites();
 		toAdd.setFid(fid);
 		toAdd.setUser_id(user_id);
+		
+		
 		return favoritesService.createEntity(toAdd, toAdd.getFavorites_id());
 	}
 	

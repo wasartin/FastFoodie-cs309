@@ -81,6 +81,11 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (GoogleSignIn.getLastSignedInAccount(App.context) == null) {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_favoritesFragment_to_signInFragment);
@@ -111,7 +116,16 @@ public class FavoritesFragment extends Fragment implements FoodListAdapter.OnIte
 
     @Override
     public void onItemClick(int position) {
-        mViewModel.setSelectedFood(mViewModel.getFavoriteFoods().getValue().get(position));
+        if (mViewModel.getFavoriteFoods().getValue() == null) {
+            mViewModel.getFavoriteFoods().observeForever(f -> {
+                if (position < f.size()) {
+                    mViewModel.setSelectedFood(f.get(position));
+                    mViewModel.getFavoriteFoods().removeObservers(this);
+                }
+            });
+        } else {
+            mViewModel.setSelectedFood(mViewModel.getFavoriteFoods().getValue().get(position));
+        }
         Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_favoritesFragment_to_foodDetailFragment);
     }
 }

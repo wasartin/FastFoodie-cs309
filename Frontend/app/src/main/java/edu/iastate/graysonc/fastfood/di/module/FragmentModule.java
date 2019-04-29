@@ -3,7 +3,7 @@ package edu.iastate.graysonc.fastfood.di.module;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import edu.iastate.graysonc.fastfood.fragments.FavoritesFragment;
-import edu.iastate.graysonc.fastfood.fragments.FilterFragment;
+import edu.iastate.graysonc.fastfood.fragments.FilterDialogFragment;
 import edu.iastate.graysonc.fastfood.fragments.FoodDetailFragment;
 import edu.iastate.graysonc.fastfood.fragments.HomeFragment;
 import edu.iastate.graysonc.fastfood.fragments.ProfileFragment;
@@ -31,6 +31,6 @@ public abstract class FragmentModule {
     abstract SignInFragment contributeSignInFragment();
 
     @ContributesAndroidInjector
-    abstract FilterFragment contributeFilterFragment();
+    abstract FilterDialogFragment contributeFilterFragment();
 
 }

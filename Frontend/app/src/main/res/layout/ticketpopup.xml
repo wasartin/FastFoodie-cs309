@@ -31,7 +31,6 @@
         android:importantForAutofill="no"
         android:lines="4"
         android:minLines="4"
-        android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,15 +39,16 @@
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="307dp"
-        android:layout_height="30dp"
+        android:layout_width="280dp"
+        android:layout_height="32dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.023"
         app:layout_constraintStart_toEndOf="@+id/CatDisplay"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="109dp" />
 
     <TextView
         android:id="@+id/CatDisplay"
@@ -70,4 +70,5 @@
         android:text="@string/submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/QueryInputBox" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

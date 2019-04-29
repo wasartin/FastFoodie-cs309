@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.business.data.entities.Food;
 import com.example.business.data.entities.FoodRating;
 import com.example.business.data.services.FoodRatingsService;
+import com.example.business.data.services.FoodService;
 
 /**
  *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the FoodRating repository.
@@ -27,6 +29,12 @@ public class FoodRatingController {
 
 	@Autowired
 	FoodRatingsService foodRatingService;
+	
+	
+	@Autowired
+	FoodService foodServ;
+	
+	
 	
 	/**
 	 * Uses Repo class to return a rating in the DB
@@ -128,8 +136,23 @@ public class FoodRatingController {
 		newRating.setFid(food_id);
 		newRating.setRating(rating);
 		newRating.setUser_email(user_email);
+		ResponseEntity<?> result = foodRatingService.createEntity(newRating, newRating.getRating_id());
 		
-		return foodRatingService.createEntity(newRating, newRating.getRating_id());
+		//get food and reset ratings.
+		Food temp = foodServ.getEntityByID(food_id).get();
+		if(temp.getRating() < 1) {
+			temp.setRating(1);
+			temp.setRated(temp.getRated() + 1);
+		}else {
+			temp.setRated(temp.getRated() + 1);
+			Double oldRating = temp.getRating();
+			int numRated = temp.getRated();
+			Double something = oldRating / numRated;
+			temp.setRating(something);
+		}
+		foodServ.editEntity(temp, food_id);
+		
+		return result;
 	}
 	
 	/**

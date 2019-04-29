@@ -61,5 +61,8 @@ public class FoodService extends AbstractService<Food, Integer>{
 		Pageable pageable = PageRequest.of(page, size, sort);
 		return foodRepository.findAll(pageable);
 	}
-
+	
+	public Page<Food> categorySearch(String category, Pageable pageable){
+		return foodRepository.getFoodListWithCategory(category, pageable);
+	}
 }

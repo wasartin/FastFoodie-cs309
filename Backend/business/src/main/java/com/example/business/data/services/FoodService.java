@@ -1,5 +1,7 @@
 package com.example.business.data.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +34,9 @@ public class FoodService extends AbstractService<Food, Integer>{
 
 	public Page<Food> listFoodWithKeyword(String keyword, Pageable pageable){
 		return foodRepository.getFoodListWithKeyword(keyword, pageable);
+	}
+	public List<Food> getListKeyWordOrder(String keyword, Pageable pageable){
+		return foodRepository.getListKeyWordOrder(keyword, pageable);
 	}
 	
 	public Page<Food> listWithKeywordAndOrdering(String keyword, Pageable pageable){

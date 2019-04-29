@@ -30,7 +30,7 @@ public interface FoodRatingRepository extends CrudRepository<FoodRating, Integer
 	 * @param food_id
 	 * @return a specific rating a user has made on a specific food.
 	 */
-	@Query(value="SELECT * FROM food_rating r WHERE r.user_email = ?1 AND r.food_id = ?2", nativeQuery = true)
+	@Query(value="SELECT * FROM food_rating r WHERE r.user_email = ?1 AND r.fid = ?2", nativeQuery = true)
 	FoodRating getFoodRatingByUserAndFood(String user_email, int food_id);
 	
 	/**

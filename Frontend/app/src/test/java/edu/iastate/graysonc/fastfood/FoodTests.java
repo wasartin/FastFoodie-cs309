@@ -20,7 +20,7 @@ public class FoodTests {
     public void testConstructor(){
         food = mock(Food.class);
         doReturn(new Date()).when(food).getLastRefresh();
-        food = new Food(2,"a",2,1,3,4,5);
+        food = new Food(2,"a",2,1,3,4,"b", "c", 5,4.5, 0);
         Mockito.validateMockitoUsage();
     }
 }

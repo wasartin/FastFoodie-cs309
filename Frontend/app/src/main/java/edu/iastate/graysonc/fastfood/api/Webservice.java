@@ -70,7 +70,7 @@ public interface Webservice {
     Call<Double> deleteRating(@Path("user_email") String userEmail, @Path("food_id") int foodId);
 
     @POST("tickets/create")
-    Call<Ticket> submitTicket(Ticket ticket);
+    Call<Ticket> submitTicket(@Body Ticket ticket);
 
     @GET("foods/search/keyword/{keyword}?size=300")
     Call<ResultList> doSearch(@Path("keyword") String query);

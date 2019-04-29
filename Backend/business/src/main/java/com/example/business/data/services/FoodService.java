@@ -3,6 +3,7 @@ package com.example.business.data.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.repositories.FoodRepository;
+import com.querydsl.core.BooleanBuilder;
 
 /**
  * The Food service class is where the bulk of the business logic is. 
@@ -31,12 +33,9 @@ public class FoodService extends AbstractService<Food, Integer>{
 		Pageable pageable = PageRequest.of(page, size, howToSort);
 		return foodRepository.findAll(pageable);
 	}
-
-	public Page<Food> listFoodWithKeyword(String keyword, Pageable pageable){
-		return foodRepository.getFoodListWithKeyword(keyword, pageable);
-	}
-	public List<Food> getListKeyWordOrder(String keyword, Pageable pageable){
-		return foodRepository.getListKeyWordOrder(keyword, pageable);
+	
+	public Page<Food> lazySearch(Example<Food> example, Pageable pageable){
+		return foodRepository.findAll(example, pageable);
 	}
 	
 	public Page<Food> listWithKeywordAndOrdering(String keyword, Pageable pageable){
@@ -70,4 +69,7 @@ public class FoodService extends AbstractService<Food, Integer>{
 		Pageable pageable = PageRequest.of(page, size, sort);
 		return foodRepository.findAll(pageable);
 	}
+
+	
+	
 }

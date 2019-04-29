@@ -2,6 +2,7 @@ package com.example.business.data.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -11,6 +12,7 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.example.business.data.entities.Food;
@@ -22,7 +24,8 @@ import com.example.business.data.entities.Food;
  *
  */
 @Repository
-public interface FoodRepository extends PagingAndSortingRepository<Food, Integer>{
+public interface FoodRepository extends PagingAndSortingRepository<Food, Integer>,
+										QueryByExampleExecutor<Food>{
 
 	/**
 	 * Finds foods that contain the keyword
@@ -34,23 +37,37 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 			+" FROM food"
 			+" WHERE fname LIKE %?1%", nativeQuery = true)
 	Page<Food> getFoodListWithKeyword(String keyword, Pageable pageable);//wondering if all args must be page
-	
-	@Query(value =
-			"SELECT *"
-			+" FROM food"
-			+" WHERE fname LIKE %?1%", nativeQuery = true)
-	List<Food> getListKeyWordOrder(String keyword, Pageable pageable);//wondering if all args must be page
-
 	//FILTERING
 	//{GT/LT/EQ}, {NUMBER}, {FOOD int} (protein, calorie, etc), can have one arg, or 1+
 	
 	//SORTING
 	//{[ONE ARG]} OR {[ARG_ONE} : {ARG_TWO}]
 	//apprently the code already makes my queiers?
-	
+
 	Page<Food> findByCalorieLessThan(int maxCal, Pageable pageable);
 	
 	Page<Food> findByCarbLessThan(int maxCarb, Pageable pageable);
 	
+	Page<Food> findByPriceLessThan(int maxPrice, Pageable pageable);
+	
+	
+	
+	//fid
+	//fname
+	//protein
+	///carb
+	//fat
+	//calorie
+	//price
+	//category
+	//located
+	//rating
+	//rated
+	
+	//lessthanorequalto
+	//greaterthenequalto
+	
+	Page<Food> LessThan(int arg, Pageable pageable);
+
 
 }

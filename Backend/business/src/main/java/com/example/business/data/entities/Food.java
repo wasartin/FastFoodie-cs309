@@ -60,7 +60,7 @@ public class Food {
 	 * Price in dollars
 	 */
 	@Column(name="price")
-	private String price;
+	private Double price;
 	
 	/**
 	 * A restaurant specific category.
@@ -91,7 +91,7 @@ public class Food {
 	}
 
 	public Food(Integer fid, String fname, @Digits(fraction = 0, integer = 10) int protein, int carb, int fat,
-			int calorie, String price, String category, int located, double rating, int rated) {
+			int calorie, Double price, String category, int located, double rating, int rated) {
 		super();
 		this.fid = fid;
 		this.fname = fname;
@@ -154,11 +154,11 @@ public class Food {
 		this.calorie = calorie;
 	}
 
-	public String getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 

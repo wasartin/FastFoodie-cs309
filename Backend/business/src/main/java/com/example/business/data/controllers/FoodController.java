@@ -6,9 +6,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.services.FoodService;
+import com.example.business.page.FilterOperation;
 
 /**
  *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the Food repository.
@@ -33,7 +34,15 @@ import com.example.business.data.services.FoodService;
 @RestController
 @RequestMapping(value="/foods")
 public class FoodController {
-	
+
+	private final List<String> FOOD_SEARCH_VALUES = new ArrayList<String>(){{
+		   add("fid"); 		   	add("fname");
+		   add("protein");		add("carb");
+		   add("fat"); 		   	add("calorie");
+		   add("price");		add("category");
+		   add("rating");		add("rated");
+	}};
+		
 	private final int PAGE_SIZE = 10;
 	
 	@Autowired
@@ -61,26 +70,73 @@ public class FoodController {
 		return foods;
 	} 
 	
-	/**
-	 * Finds a food by it's keyword and returns a page to the client
-	 * @param keyword
-	 * @param pageable
-	 * @return page of food
-	 */
-	@RequestMapping(value="/search/keyword/{keyword}", method=RequestMethod.GET)
-	Page<Food> listFoodWithKeyword(@PathVariable String keyword, @PageableDefault(size = PAGE_SIZE, sort="fname") Pageable pageable){
-		Page<Food> foods = foodService.listFoodWithKeyword(keyword, pageable);
-		return foods;
-	} 
+	@RequestMapping(value = "/order/{keyword}", method = RequestMethod.GET)
+	public Page<Food> keyWordAndOrdering(@PathVariable String keyword,
+										@SortDefault Sort sort,
+										@PageableDefault Pageable p) {
+		Page<Food> list = foodService.listWithKeywordAndOrdering(keyword, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
+		return list;
+	}
+	
+	@RequestMapping(value = "/search/{property}", method = RequestMethod.GET)
+	public Page<Food> lazyFrontEnd(@PathVariable String property,
+										@SortDefault Sort sort,
+										@PageableDefault Pageable p) {
+		String defaultValue = property;
+		if(!FOOD_SEARCH_VALUES.contains(property)) {
+			//default value
+			property = FOOD_SEARCH_VALUES.get(0);
+		}
+		//parse q
+		//q=[property_name]:[action]([value])+
+		//some num, with <>=
+		String word = "";
+		String other = "";
+		String action = "";
+		if(property.contains(":")) {
+			word = property.substring(0, property.indexOf(":"));
+			property = property.substring(property.indexOf(":"));
+		}
+		char[] c_arr = property.toCharArray();
+	    for(char c: c_arr) {
+	        if(Character.isDigit(c)) {
+	        	other = other + c;
+	        }
+	        else {
+	            action = action + c;
+	        }
+	    }
+	    if(action.length()!= 0) {//then we have something to do.
+	    	switch(FilterOperation.fromValue(action)){
+	    		case GREATER_THAN:
+	    		case GREATER_THAN_OR_EQUAL_TO:
+	    			return foodRepository.
+	    			break;
+	    		case LESS_THAN:
+	    		case LESS_THAN_OR_EQUAL_TO:
+	    			break;
+	    		default:
+	    			break;
+	    	}
+	    }
+	    
+		//ratio
+		//[one]:[two]
+		//something with example. 
+		
+		//call right program
+		Page<Food> list = foodService.listWithKeywordAndOrdering(property, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
+		return list;
+	}
 
 	@RequestMapping(value = "/conditionalPagination", method = RequestMethod.GET)
 	public Page<Food> somethingNew(@RequestParam(value="property", required=false) String property,
 									@RequestParam(value="direction", required=false) Optional<String> direction, 
 									@PageableDefault Pageable p) {
-	Sort.Direction wayToGo = Sort.Direction.fromString(direction.orElse("desc"));
-	Page<Food> list = foodService.propertySearch(property, wayToGo, p.getPageNumber(), p.getPageSize());
-	return list;
-	}//do mulitple
+		Sort.Direction wayToGo = Sort.Direction.fromString(direction.orElse("desc"));
+		Page<Food> list = foodService.propertySearch(property, wayToGo, p.getPageNumber(), p.getPageSize());
+		return list;
+	}
 	
 	@RequestMapping(value = "/order", method = RequestMethod.GET)
 	public Page<Food> getByOrdering(@SortDefault Sort sort,
@@ -130,18 +186,7 @@ public class FoodController {
 		return foodService.editEntity(newFood, food_id);
 	}
 	
-	/**
-	 * Get all the foods that contain this keyword
-	 */
-	@RequestMapping(method = RequestMethod.GET, path = "/{keyword}")
-	@ResponseBody
-	public List<Food> getFood(@PathVariable String keyword){
-
-		return null;
-	}
 	
-	private Sort sortByArgumentDesc(String input) {
-		return new Sort(Sort.Direction.DESC, input);
-	}
+	
 	
 }

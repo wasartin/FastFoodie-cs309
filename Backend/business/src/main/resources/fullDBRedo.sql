@@ -1,3 +1,4 @@
+use test;
 DROP TABLE IF EXISTS ticket;
 DROP TABLE IF EXISTS food_rating;
 DROP TABLE IF EXISTS favorites;
@@ -19,24 +20,24 @@ INSERT INTO restaurant VALUES
     (3, 'Seabass Bar and Grill', DATE'1991-06-03');
 	
 CREATE TABLE food(
-	food_id INT NOT NULL AUTO_INCREMENT,
-	food_name VARCHAR(80),
-	protein_total INT,
-	carb_total INT,
-	fat_total INT,
-	calorie_total INT,
+	fid INT NOT NULL AUTO_INCREMENT,
+	fname VARCHAR(80),
+	protein INT,
+	carb INT,
+	fat INT,
+	calorie INT,
 	price VARCHAR(20),
 	category varchar(80),
-	located_at INT NOT NULL,
+	located INT NOT NULL,
 	rating DOUBLE DEFAULT 0,
-	rating_count INT DEFAULT 0,
-	PRIMARY KEY(food_id),
-	FOREIGN KEY(located_at) REFERENCES restaurant(restaurant_id)
+	rated INT DEFAULT 0,
+	PRIMARY KEY(fid),
+	FOREIGN KEY(located) REFERENCES restaurant(restaurant_id)
 );
 
 ALTER TABLE food AUTO_INCREMENT=0;
 
-INSERT INTO food (food_name, protein_total, carb_total, fat_total, calorie_total, price, category, located_at) VALUES 
+INSERT INTO food (fname, protein, carb, fat, calorie, price, category, located) VALUES 
 	('6-inch Bacon, Egg and Cheese', 25, 44, 18, 450, '$4.23', 'Breakfast', 2),
 	('6-inch Bacon, Egg White and Cheese', 26, 45, 13, 410, '$3.35', 'Breakfast', 2),
 	('6-inch Black Forest Ham, Egg and Cheese', 24, 45, 14, 400, '$4.32', 'Breakfast', 2),
@@ -95,8 +96,8 @@ INSERT INTO food (food_name, protein_total, carb_total, fat_total, calorie_total
 	('Hotcakes and Sausage', 15, 55, 25, 510, '$5.72', 'Breakfast', 0),
 	('McChicken, no mayo', 14, 40, 11, 320, '$6.16', 'Chicken', 0),
 	('McDouble', 22, 34, 18, 390, '$5.31', 'Beef', 0),
-	('McNuggets (10)', 22, 30, 30, 470, '$5.06', 'Chicken', 0),
-	('McNuggets (20)', 44, 59, 59, 940, '$3.16', 'Chicken', 0),
+	('McNuggets (10)', 22, 30, 30, 470, '$3.16', 'Chicken', 0),
+	('McNuggets (20)', 44, 59, 59, 940, '$5.06', 'Chicken', 0),
 	('McNuggets (4)', 9, 12, 12, 190, '$4.81', 'Chicken', 0),
 	('McNuggets (6)', 13, 18, 18, 280, '$5.18', 'Chicken', 0),
 	('Quarter Pounder with Cheese', 31, 42, 28, 540, '$4.99', 'Beef', 0),
@@ -161,7 +162,7 @@ CREATE TABLE favorites(
 	fid INT NOT NULL,
 	PRIMARY KEY(favorites_id),
 	FOREIGN KEY(user_id) REFERENCES user(user_email),
-	FOREIGN KEY(fid) REFERENCES food(food_id)
+	FOREIGN KEY(fid) REFERENCES food(fid)
 );
 
 ALTER TABLE favorites AUTO_INCREMENT=0;
@@ -189,16 +190,16 @@ INSERT INTO favorites(user_id, fid) VALUES
 CREATE TABLE food_rating(
 	rating_id INT AUTO_INCREMENT,
 	user_email VARCHAR(50),
-	food_id INT,
+	fid INT,
     rating INT,
 	PRIMARY KEY(rating_id),
 	FOREIGN KEY(user_email) REFERENCES user(user_email),
-	FOREIGN KEY(food_id) REFERENCES food(food_id)
+	FOREIGN KEY(fid) REFERENCES food(fid)
 );
 
 ALTER TABLE food_rating AUTO_INCREMENT=0;
 
-INSERT INTO food_rating (user_email, food_id, rating) VALUES 
+INSERT INTO food_rating (user_email, fid, rating) VALUES 
 	('grayman98@gmail.com', 50, 4),
 	('grayman98@gmail.com', 66, 3),
 	('newunusedname@gmail.com', 24, 2),

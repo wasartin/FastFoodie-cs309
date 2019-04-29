@@ -1,5 +1,7 @@
 package com.example.business.data.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
@@ -23,8 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.services.FoodService;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
+import com.example.business.page.FilterOperation;
 
 /**
  *  A (REST Api) Controller class that "receives" HTTP requests from the front end for interacting with the Food repository.
@@ -34,7 +34,15 @@ import com.querydsl.core.types.Predicate;
 @RestController
 @RequestMapping(value="/foods")
 public class FoodController {
-	
+
+	private final List<String> FOOD_SEARCH_VALUES = new ArrayList<String>(){{
+		   add("fid"); 		   	add("fname");
+		   add("protein");		add("carb");
+		   add("fat"); 		   	add("calorie");
+		   add("price");		add("category");
+		   add("rating");		add("rated");
+	}};
+		
 	private final int PAGE_SIZE = 10;
 	
 	@Autowired
@@ -70,14 +78,54 @@ public class FoodController {
 		return list;
 	}
 	
-	@RequestMapping(value = "/search/{keyword}", method = RequestMethod.GET)
-	public Page<Food> lazyFrontEnd(@PathVariable String keyword,
+	@RequestMapping(value = "/search/{property}", method = RequestMethod.GET)
+	public Page<Food> lazyFrontEnd(@PathVariable String property,
 										@SortDefault Sort sort,
 										@PageableDefault Pageable p) {
-		
+		String defaultValue = property;
+		if(!FOOD_SEARCH_VALUES.contains(property)) {
+			//default value
+			property = FOOD_SEARCH_VALUES.get(0);
+		}
+		//parse q
+		//q=[property_name]:[action]([value])+
+		//some num, with <>=
+		String word = "";
+		String other = "";
+		String action = "";
+		if(property.contains(":")) {
+			word = property.substring(0, property.indexOf(":"));
+			property = property.substring(property.indexOf(":"));
+		}
+		char[] c_arr = property.toCharArray();
+	    for(char c: c_arr) {
+	        if(Character.isDigit(c)) {
+	        	other = other + c;
+	        }
+	        else {
+	            action = action + c;
+	        }
+	    }
+	    if(action.length()!= 0) {//then we have something to do.
+	    	switch(FilterOperation.fromValue(action)){
+	    		case GREATER_THAN:
+	    		case GREATER_THAN_OR_EQUAL_TO:
+	    			return foodRepository.
+	    			break;
+	    		case LESS_THAN:
+	    		case LESS_THAN_OR_EQUAL_TO:
+	    			break;
+	    		default:
+	    			break;
+	    	}
+	    }
+	    
+		//ratio
+		//[one]:[two]
 		//something with example. 
 		
-		Page<Food> list = foodService.listWithKeywordAndOrdering(keyword, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
+		//call right program
+		Page<Food> list = foodService.listWithKeywordAndOrdering(property, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
 		return list;
 	}
 

@@ -2,20 +2,16 @@ package com.example.business.data.repositories;
 
 import java.util.List;
 
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
-import org.springframework.data.querydsl.binding.QuerydslBindings;
-import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.example.business.data.entities.Food;
+import com.querydsl.core.types.Predicate;
 
 /**
  * The food repository is the layer that interfaces with the database. It uses the favorites dao and performs general
@@ -25,9 +21,8 @@ import com.example.business.data.entities.Food;
  */
 @Repository
 public interface FoodRepository extends PagingAndSortingRepository<Food, Integer>,
-										QueryByExampleExecutor<Food>{
-	
-	
+										QueryByExampleExecutor<Food>,
+										QuerydslPredicateExecutor<Food>{
 	
 	/**
 	 * Finds foods that contain the keyword
@@ -45,14 +40,18 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 	//SORTING
 	//{[ONE ARG]} OR {[ARG_ONE} : {ARG_TWO}]
 	//apprently the code already makes my queiers?
+	
+	Page<Food> generalQuery(Pageable pageable);
 
-	Page<Food> findByCalorieLessThan(int maxCal, Pageable pageable);
-	
-	Page<Food> findByCarbLessThan(int maxCarb, Pageable pageable);
-	
-	Page<Food> findByPriceLessThan(int maxPrice, Pageable pageable);
 	
 	
+	Page<Food> findByCalorieLessThan(int max, Pageable p);	Page<Food> findByCalorieGreaterThan(int min, Pageable p);
+	Page<Food> findByCarbLessThan(int max, Pageable p);		Page<Food> findByCarbGreaterThan(int min, Pageable p);
+	Page<Food> findByFatLessThan(int max, Pageable p);		Page<Food> findByFatGreaterThan(int min, Pageable p);
+	Page<Food> findByProteinLessThan(int max, Pageable p);	Page<Food> findByProteinGreaterThan(int max, Pageable p);
+	Page<Food> findByPriceLessThan(int max, Pageable p);	Page<Food> findByPriceGreaterThan(int min, Pageable p);
+	
+	Page<Food> genQ(Predicate predicate, Pageable pageable);
 	
 	//fid
 	//fname
@@ -72,11 +71,18 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 	final String FAT = "fat";
 	final String CALORIE = "calorie";
 	final String PRICE = "price";
-	final String CATEGORY = "category";
+	final String LESS_THAN_EQ = "<=";
+	final String GREATHER_THAN_EQ = ">=";
 
-	//Also best ratio stuff.
+	//Also best ratio stuff.//query two names?
+	String BASE = "SELECT * FROM food WHERE "; 
+	String ARG_1 = "?1";
+	String priceLess = BASE + PRICE + LESS_THAN_EQ + ARG_1; 		String priceMore = BASE + PRICE + GREATHER_THAN_EQ + ARG_1;
+	String proLess = BASE + PROTEIN + LESS_THAN_EQ + ARG_1;			String proMORE = BASE + PROTEIN + GREATHER_THAN_EQ + ARG_1;
+	String carbLess = BASE + CARB + LESS_THAN_EQ + ARG_1;			String carbMORE = BASE + CARB + GREATHER_THAN_EQ + ARG_1;
+	String fatLess = BASE + FAT + LESS_THAN_EQ + ARG_1;				String fatMore = BASE + FAT + GREATHER_THAN_EQ + ARG_1;
+	String calLess = BASE + CALORIE + LESS_THAN_EQ + ARG_1;			String calMore = BASE + CALORIE + GREATHER_THAN_EQ + ARG_1;
 	
-	String q1 = "SELECT * FROM food f WHERE " + PRICE + "";
 	
 	//lessthanorequalto
 	//greaterthenequalto

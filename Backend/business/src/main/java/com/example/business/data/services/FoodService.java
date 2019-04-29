@@ -1,5 +1,6 @@
 package com.example.business.data.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.repositories.FoodRepository;
-import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 
 /**
  * The Food service class is where the bulk of the business logic is. 
@@ -28,9 +29,7 @@ public class FoodService extends AbstractService<Food, Integer>{
 	@Autowired
 	FoodRepository foodRepository;
 	
-	public Page<Food> getQuery(String property, Sort.Direction direction, int page, int size){
-		Sort howToSort = new Sort(direction, property);
-		Pageable pageable = PageRequest.of(page, size, howToSort);
+	public Page<Food> getQuery(String property, String action, Pageable pageable){
 		return foodRepository.findAll(pageable);
 	}
 	
@@ -69,7 +68,21 @@ public class FoodService extends AbstractService<Food, Integer>{
 		Pageable pageable = PageRequest.of(page, size, sort);
 		return foodRepository.findAll(pageable);
 	}
-
 	
+	public Page<Food> generalPrice(String property, String action, Pageable p, int num){
+		
+		
+		
+		return null;
+	}
 	
+	final String FID = "fid";
+	final String FNAME="fname";
+	final String PROTEIN = "protein";
+	final String CARB = "carb";
+	final String FAT = "fat";
+	final String CALORIE = "calorie";
+	final String PRICE = "price";
+	final String LESS_THAN_EQ = "<=";
+	final String GREATHER_THAN_EQ = ">=";
 }

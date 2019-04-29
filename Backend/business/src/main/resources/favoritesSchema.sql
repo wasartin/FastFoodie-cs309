@@ -4,7 +4,7 @@ CREATE TABLE favorites(
 	fid INT NOT NULL,
 	PRIMARY KEY(favorites_id),
 	FOREIGN KEY(user_id) REFERENCES user(user_email),
-	FOREIGN KEY(fid) REFERENCES food(food_id)
+	FOREIGN KEY(fid) REFERENCES food(fid)
 );
 
 ALTER TABLE favorites AUTO_INCREMENT=0;

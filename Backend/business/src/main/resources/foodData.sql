@@ -1,4 +1,4 @@
-INSERT INTO food (food_name, protein_total, carb_total, fat_total, calorie_total, price, category, located_at) VALUES 
+INSERT INTO food (fname, protein, carb, fat, calorie, price, category, located) VALUES 
 	('6-inch Bacon, Egg and Cheese', 25, 44, 18, 450, '$4.23', 'Breakfast', 2),
 	('6-inch Bacon, Egg White and Cheese', 26, 45, 13, 410, '$3.35', 'Breakfast', 2),
 	('6-inch Black Forest Ham, Egg and Cheese', 24, 45, 14, 400, '$4.32', 'Breakfast', 2),

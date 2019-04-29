@@ -1,16 +1,17 @@
 CREATE TABLE food(
-	food_id INT NOT NULL AUTO_INCREMENT,
-	food_name VARCHAR(80),
-	protein_total INT,
-	carb_total INT,
-	fat_total INT,
-	calorie_total INT,
+	fid INT NOT NULL AUTO_INCREMENT,
+	fname VARCHAR(80),
+	protein INT,
+	carb INT,
+	fat INT,
+	calorie INT,
 	price VARCHAR(20),
 	category varchar(80),
-	located_at INT NOT NULL,
+	located INT NOT NULL,
 	rating DOUBLE DEFAULT 0,
-	PRIMARY KEY(food_id),
-	FOREIGN KEY(located_at) REFERENCES restaurant(restaurant_id)
+	rated INT DEFAULT 0,
+	PRIMARY KEY(fid),
+	FOREIGN KEY(located) REFERENCES restaurant(restaurant_id)
 );
 
 ALTER TABLE food AUTO_INCREMENT=0;

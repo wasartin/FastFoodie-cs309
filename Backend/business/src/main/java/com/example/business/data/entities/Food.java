@@ -22,39 +22,39 @@ public class Food {
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="food_id")
-	private Integer food_id; 
+	@Column(name="fid")
+	private Integer fid; 
 	
 	/**
 	 * For displaying an easy to understand name to the user.
 	 */
-	@Column(name="food_name")
-	private String food_name; 
+	@Column(name="fname")
+	private String fname; 
 	
 	/**
 	 * Grams of protein
 	 */
 	@Digits(fraction = 0, integer = 10)
-	@Column(name="protein_total")
-	private int protein_total;
+	@Column(name="protein")
+	private int protein;
 	
 	/**
 	 * Grams of carbs
 	 */
-	@Column(name="carb_total")
-	private int carb_total;
+	@Column(name="carb")
+	private int carb;
 	
 	/**
 	 * Grams of fat
 	 */
-	@Column(name="fat_total")
-	private int fat_total;
+	@Column(name="fat")
+	private int fat;
 	
 	/**
 	 * Total number of calories
 	 */
-	@Column(name="calorie_total")
-	private int calorie_total;
+	@Column(name="calorie")
+	private int calorie;
 	
 	/**
 	 * Price in dollars
@@ -71,8 +71,8 @@ public class Food {
 	/**
 	 * The id of the restaurant it is located at.
 	 */
-	@Column (name="located_at")
-	private int located_at;
+	@Column (name="located")
+	private int located;
 	
 	/**
 	 * Average rating of food.
@@ -80,79 +80,78 @@ public class Food {
 	@Column(name = "rating")
 	private double rating;
 	
+	/**
+	 * The number of times this food has been rated.
+	 */
+	@Column(name = "rated")
+	private int rated;
+	
 	public Food() {
 		super();
 	}
 
-	public Food(int food_id, String food_name, int protein_total, int carb_total, int fat_total, int calorie_total,
-			String price, String category, int located_at, double rating) {
+	public Food(Integer fid, String fname, @Digits(fraction = 0, integer = 10) int protein, int carb, int fat,
+			int calorie, String price, String category, int located, double rating, int rated) {
 		super();
-		this.food_id = food_id;
-		this.food_name = food_name;
-		this.protein_total = protein_total;
-		this.carb_total = carb_total;
-		this.fat_total = fat_total;
-		this.calorie_total = calorie_total;
+		this.fid = fid;
+		this.fname = fname;
+		this.protein = protein;
+		this.carb = carb;
+		this.fat = fat;
+		this.calorie = calorie;
 		this.price = price;
 		this.category = category;
-		this.located_at = located_at;
+		this.located = located;
 		this.rating = rating;
-	}
-	
-	public int getLocated_at() {
-		return located_at;
+		this.rated = rated;
 	}
 
-	public void setLocated_at(int located_at) {
-		this.located_at = located_at;
-	}
-	
-	public int getFood_id() {
-		return food_id;
+	public Integer getFid() {
+		return fid;
 	}
 
-	public void setFood_id(int food_id) {
-		this.food_id = food_id;
-	}
-	
-	public String getFood_name() {
-		return food_name;
+	public void setFid(Integer fid) {
+		this.fid = fid;
 	}
 
-	public void setFood_name(String food_name) {
-		this.food_name = food_name;
+	public String getFname() {
+		return fname;
 	}
 
-	public int getProtein_total() {
-		return protein_total;
+	public void setFname(String fname) {
+		this.fname = fname;
 	}
 
-	public void setProtein_total(int protein_total) {
-		this.protein_total = protein_total;
+	public int getProtein() {
+		return protein;
 	}
 
-	public int getCarb_total() {
-		return carb_total;
+	public void setProtein(int protein) {
+		this.protein = protein;
 	}
 
-	public void setCarb_total(int carb_total) {
-		this.carb_total = carb_total;
+	public int getCarb() {
+		return carb;
 	}
 
-	public int getFat_total() {
-		return fat_total;
+	public void setCarb(int carb) {
+		this.carb = carb;
 	}
 
-	public void setFat_total(int fat_total) {
-		this.fat_total = fat_total;
+	public int getFat() {
+		return fat;
 	}
 
-	public int getCalorie_total() {
-		return calorie_total;
+	public void setFat(int fat) {
+		this.fat = fat;
 	}
 
-	public void setCalorie_total(int calorie_total) {
-		this.calorie_total = calorie_total;
+	public int getCalorie() {
+		return calorie;
+	}
+
+	public void setCalorie(int calorie) {
+		this.calorie = calorie;
 	}
 
 	public String getPrice() {
@@ -170,13 +169,29 @@ public class Food {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
+
+	public int getLocated() {
+		return located;
+	}
+
+	public void setLocated(int located) {
+		this.located = located;
+	}
+
 	public double getRating() {
 		return rating;
 	}
 
 	public void setRating(double rating) {
 		this.rating = rating;
+	}
+
+	public int getRated() {
+		return rated;
+	}
+
+	public void setRated(int rated) {
+		this.rated = rated;
 	}
 
 }

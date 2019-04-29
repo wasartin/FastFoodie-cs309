@@ -38,7 +38,7 @@ public class FoodServiceTest {
 	
 	@Test
 	public void getFoodByIdTest() {
-		Food found = new Food(64, "Royal with Cheese", 31, 42, 28, 540, "$5.00", "Beef", 0, 0);
+		Food found = new Food(64, "Royal with Cheese", 31, 42, 28, 540, "$5.00", "Beef", 0, 0, 0);
 		
 		when(repo.findById(64)).thenReturn((Optional.of(found)));
 		
@@ -57,11 +57,11 @@ public class FoodServiceTest {
 	
 	@Test
 	public void createFoodTest() {
-		Food toAdd = new Food(100, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
-		when(repo.existsById(toAdd.getFood_id())).thenReturn(false);
+		Food toAdd = new Food(100, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0, 0);
+		when(repo.existsById(toAdd.getFid())).thenReturn(false);
 		when(repo.save(toAdd)).thenReturn(new Food());
 		
-		ResponseEntity<?> response = foodService.createEntity(toAdd, toAdd.getFood_id());
+		ResponseEntity<?> response = foodService.createEntity(toAdd, toAdd.getFid());
 		
 		verify(repo, times(1)).save(toAdd);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
@@ -71,10 +71,10 @@ public class FoodServiceTest {
 	
 	@Test
 	public void createFoodTest_Fail() {
-		Food toAdd = new Food(100, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
-		when(repo.existsById(toAdd.getFood_id())).thenReturn(true);
+		Food toAdd = new Food(100, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0, 0);
+		when(repo.existsById(toAdd.getFid())).thenReturn(true);
 		
-		ResponseEntity<?> response = foodService.createEntity(toAdd, toAdd.getFood_id());
+		ResponseEntity<?> response = foodService.createEntity(toAdd, toAdd.getFid());
 		verify(repo, never()).save(toAdd);
 		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 		assertEquals(response.getHeaders().getContentType(), MediaType.APPLICATION_JSON);
@@ -83,9 +83,9 @@ public class FoodServiceTest {
 	
 	@Test
 	public void editFoodTest() {
-		Food toEdit = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$26.00", "Pizza", 2, 0);
-		when(repo.existsById(toEdit.getFood_id())).thenReturn(true);
-		when(repo.findById(50)).thenReturn(Optional.of(new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0)));
+		Food toEdit = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$26.00", "Pizza", 2, 0, 0);
+		when(repo.existsById(toEdit.getFid())).thenReturn(true);
+		when(repo.findById(50)).thenReturn(Optional.of(new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0, 0)));
 		
 		when(repo.save(toEdit)).thenReturn(new Food());
 		
@@ -99,8 +99,8 @@ public class FoodServiceTest {
 	
 	@Test
 	public void editFoodTest_Fail() {
-		Food toAdd = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
-		when(repo.existsById(toAdd.getFood_id())).thenReturn(false);
+		Food toAdd = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0, 0);
+		when(repo.existsById(toAdd.getFid())).thenReturn(false);
 		
 		ResponseEntity<?> response = foodService.editEntity(toAdd, 50);
 		
@@ -112,7 +112,7 @@ public class FoodServiceTest {
 	
 	@Test
 	public void deleteFoodTest() {
-		Food toDelete = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0);
+		Food toDelete = new Food(50, "PacMan Pizza", 31, 42, 28, 540, "$25.00", "Pizza", 2, 0, 0);
 		when(repo.existsById(50)).thenReturn(true);
 		when(repo.findById(50)).thenReturn(Optional.of(toDelete));
 

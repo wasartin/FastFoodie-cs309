@@ -26,7 +26,9 @@ import com.example.business.data.entities.Food;
 @Repository
 public interface FoodRepository extends PagingAndSortingRepository<Food, Integer>,
 										QueryByExampleExecutor<Food>{
-
+	
+	
+	
 	/**
 	 * Finds foods that contain the keyword
 	 * @param keyword
@@ -63,6 +65,18 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 	//located
 	//rating
 	//rated
+	final String FID = "fid";
+	final String FNAME="fname";
+	final String PROTEIN = "protein";
+	final String CARB = "carb";
+	final String FAT = "fat";
+	final String CALORIE = "calorie";
+	final String PRICE = "price";
+	final String CATEGORY = "category";
+
+	//Also best ratio stuff.
+	
+	String q1 = "SELECT * FROM food f WHERE " + PRICE + "";
 	
 	//lessthanorequalto
 	//greaterthenequalto

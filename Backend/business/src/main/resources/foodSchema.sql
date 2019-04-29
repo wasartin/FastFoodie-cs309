@@ -5,7 +5,7 @@ CREATE TABLE food(
 	carb INT,
 	fat INT,
 	calorie INT,
-	price VARCHAR(20),
+	price DOUBLE,
 	category varchar(80),
 	located INT NOT NULL,
 	rating DOUBLE DEFAULT 0,

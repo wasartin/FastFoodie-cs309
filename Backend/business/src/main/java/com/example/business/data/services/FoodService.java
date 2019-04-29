@@ -52,11 +52,6 @@ public class FoodService extends AbstractService<Food, Integer>{
 		return foodRepository.findAll(pageable);
 	}
 	
-	public Page<Food> listCaloriesLessThan(int max, Pageable pageable) {
-		//return foodRepository.findByCalorieLessThanDesc_maxCal(max, pageable);
-		return null;
-	}
-//
 	public Page<Food> findPaginated(int page, int size) {
 		return foodRepository.findAll(PageRequest.of(page, size));
 	}
@@ -75,50 +70,5 @@ public class FoodService extends AbstractService<Food, Integer>{
 		Pageable pageable = PageRequest.of(page, size, sort);
 		return foodRepository.findAll(pageable);
 	}
-	
-	public Page<Food> generalPrice(String property, String action, Pageable p, int num){
-		
-		
-		
-		return null;
-	}
-	
-	public Page<Food> getQuery(String property, int num, FilterOperation action, Pageable pageable){
-		if(property.equals(FID)) {
-		}else if(property.equals(PROTEIN)) {
-			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
-				foodRepository.findByProteinLessThan(num, pageable);
-			}else {
-				foodRepository.findByProteinGreaterThan(num, pageable);
-			}
-			
-		}else if(property.equals(CARB)) {
-			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
-				return foodRepository.findByCarbLessThan(num, pageable);
-			}else {
-				return foodRepository.findByCarbGreaterThan(num, pageable);
-			}
-		}else if(property.equals(FAT)) {
-			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
-				return foodRepository.findByFatLessThan(num, pageable);
-			}else {
-				return foodRepository.findByFatGreaterThan(num, pageable);
-			}
-		}else if(property.equals(CALORIE)) {
-			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
-				return foodRepository.findByCalorieLessThan(num, pageable);
-			}else {
-				return foodRepository.findByCalorieGreaterThan(num, pageable);
-			}
-		}else if(property.equals(PRICE)) {
-			if(action==FilterOperation.LESS_THAN_OR_EQUAL_TO) {
-				return foodRepository.findByPriceLessThan(num, pageable);
-			}else {
-				return foodRepository.findByPriceGreaterThan(num, pageable);
-			}
-		}
-		return foodRepository.findAll(pageable);
-	}
-
 
 }

@@ -22,9 +22,7 @@ import com.querydsl.core.types.dsl.BooleanPath;
  *
  */
 @Repository
-public interface FoodRepository extends PagingAndSortingRepository<Food, Integer>,
-										QueryByExampleExecutor<Food>,
-										QuerydslPredicateExecutor<Food>{
+public interface FoodRepository extends PagingAndSortingRepository<Food, Integer>{
 	
 	/**
 	 * Finds foods that contain the keyword
@@ -36,14 +34,6 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 			+" FROM food"
 			+" WHERE fname LIKE %?1%", nativeQuery = true)
 	Page<Food> getFoodListWithKeyword(String keyword, Pageable pageable);//wondering if all args must be page
-
-	
-	Page<Food> generalQuery(Pageable pageable);
-	
-	//lessthanorequalto
-	//greaterthenequalto
-	
-	Page<Food> LessThan(int arg, Pageable pageable);
 
 
 }

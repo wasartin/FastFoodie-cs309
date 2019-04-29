@@ -39,10 +39,7 @@ public class FoodService extends AbstractService<Food, Integer>{
 
 	@Autowired
 	FoodRepository foodRepository;
-	
-	public Page<Food> lazySearch(Example<Food> example, Pageable pageable){
-		return foodRepository.findAll(example, pageable);
-	}
+
 	
 	public Page<Food> listWithKeywordAndOrdering(String keyword, Pageable pageable){
 		return foodRepository.getFoodListWithKeyword(keyword, pageable);

@@ -34,14 +34,6 @@ import com.example.business.data.services.FoodService;
 @RequestMapping(value="/foods")
 public class FoodController {
 
-	private final List<String> FOOD_SEARCH_VALUES = new ArrayList<String>(){{
-		   add("fid"); 		   	add("fname");
-		   add("protein");		add("carb");
-		   add("fat"); 		   	add("calorie");
-		   add("price");		add("category");
-		   add("rating");		add("rated");
-	}};
-		
 	private final int PAGE_SIZE = 10;
 	
 	@Autowired
@@ -77,13 +69,21 @@ public class FoodController {
 		return list;
 	}
 	
-	@RequestMapping(value = "/search/{keyword}", method = RequestMethod.GET)
-	public Page<Food> lazyFrontEnd(@PathVariable String keyword,
+	@RequestMapping(value = "/search/{category}", method = RequestMethod.GET)
+	public Page<Food> categoryAndOrdering(@PathVariable String category,
 										@SortDefault Sort sort,
 										@PageableDefault Pageable p) {
-		Page<Food> list = foodService.listWithKeywordAndOrdering(keyword, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
+		Page<Food> list = foodService.categorySearch(category, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
 		return list;
 	}
+	
+//	@RequestMapping(value = "/search/{keyword}", method = RequestMethod.GET)
+//	public Page<Food> lazyFrontEnd(@PathVariable String keyword,
+//										@SortDefault Sort sort,
+//										@PageableDefault Pageable p) {
+//		Page<Food> list = foodService.listWithKeywordAndOrdering(keyword, PageRequest.of(p.getPageNumber(), p.getPageSize(), sort));
+//		return list;
+//	}
 
 	@RequestMapping(value = "/conditionalPagination", method = RequestMethod.GET)
 	public Page<Food> somethingNew(@RequestParam(value="property", required=false) String property,

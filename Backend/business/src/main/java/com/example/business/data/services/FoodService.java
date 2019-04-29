@@ -1,7 +1,6 @@
 package com.example.business.data.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -62,5 +61,8 @@ public class FoodService extends AbstractService<Food, Integer>{
 		Pageable pageable = PageRequest.of(page, size, sort);
 		return foodRepository.findAll(pageable);
 	}
-
+	
+	public Page<Food> categorySearch(String category, Pageable pageable){
+		return foodRepository.getFoodListWithCategory(category, pageable);
+	}
 }

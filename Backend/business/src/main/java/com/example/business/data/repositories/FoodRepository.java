@@ -28,4 +28,10 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Integer
 			+" WHERE fname LIKE %?1%", nativeQuery = true)
 	Page<Food> getFoodListWithKeyword(String keyword, Pageable pageable);//wondering if all args must be page
 
+	@Query(value =
+			"SELECT *"
+			+" FROM food"
+			+" WHERE category LIKE %?1%", nativeQuery = true)
+	Page<Food> getFoodListWithCategory(String category, Pageable pageable);//wondering if all args must be page
+
 }

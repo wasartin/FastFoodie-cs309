@@ -1,19 +1,12 @@
 package com.example.business.data.repositories;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.example.business.data.entities.Food;
-import com.querydsl.core.annotations.QueryDelegate;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanPath;
 
 /**
  * The food repository is the layer that interfaces with the database. It uses the favorites dao and performs general

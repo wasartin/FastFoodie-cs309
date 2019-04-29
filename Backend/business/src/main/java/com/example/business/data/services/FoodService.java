@@ -1,10 +1,6 @@
 package com.example.business.data.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.business.data.entities.Food;
 import com.example.business.data.repositories.FoodRepository;
-import com.example.business.page.FilterOperation;
-import com.querydsl.core.types.Predicate;
 
 /**
  * The Food service class is where the bulk of the business logic is. 

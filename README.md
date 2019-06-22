@@ -2,4 +2,4 @@
 
 ## Architecture of the Program
 
-![UML](/ReadMeContents/fastFoodieBlockDiagram.html)
+![UML](/ReadMeContents/cs309BlockDiagram.png)

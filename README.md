@@ -4,4 +4,4 @@
 
 ![UML](/ReadMeContents/cs309BlockDiagram.png)
 
-[image](/ReadMeContents/appBeingUsed.PNG)
+![image](/ReadMeContents/appBeingUsed.PNG)
